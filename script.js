@@ -29,6 +29,8 @@ const ICON_NIL = `<svg class="diff-icon" viewBox="0 0 100 100"><polygon points="
 
 const ICON_ERROR = `<svg class="diff-icon" viewBox="0 0 100 100"><rect x="8" y="8" width="84" height="84" rx="4" fill="#cc2222" stroke="#991111" stroke-width="6"/></svg>`;
 
+const ICON_ROBLOX = `<svg class="place-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M4.24 0L0 19.76 19.76 24 24 4.24 4.24 0zM9.6 8.4l6 1.4-1.4 6-6-1.4 1.4-6z"/></svg>`;
+
 // --- Difficulty parsing ---
 function parseDifficulty(raw) {
   if (!raw) return { prefix: "", base: "", full: "" };
@@ -196,32 +198,40 @@ function toggleRow(li, level) {
   const verifierDisplay = (level.verifier || "").trim() || "—";
   const statusDisplay = verifierDisplay !== "—" ? "Verified" : "Unverified";
 
+  const robloxLink = (level.robloxLink || "").trim();
+  const placeMarkup = robloxLink
+    ? `<a href="${escapeHtml(robloxLink)}" class="place-link" target="_blank" rel="noopener">${ICON_ROBLOX}<span>Play this tower ↗</span></a>`
+    : `<div class="place-link place-link-missing">${ICON_ROBLOX}<span>No Roblox place link added</span></div>`;
+
   const detail = document.createElement("div");
   detail.className = "row-detail";
   detail.innerHTML = `
     <div class="detail-video">${videoMarkup}</div>
-    <dl class="detail-meta">
-      <div class="meta-item">
-        <dt>Creator</dt>
-        <dd>${escapeHtml(level.creator || "—")}</dd>
-      </div>
-      <div class="meta-item">
-        <dt>Verifier</dt>
-        <dd>${escapeHtml(verifierDisplay)}</dd>
-      </div>
-      <div class="meta-item">
-        <dt>Difficulty</dt>
-        <dd>${escapeHtml(diffDisplay)}</dd>
-      </div>
-      <div class="meta-item">
-        <dt>World Record</dt>
-        <dd>${escapeHtml(wrDisplay)}</dd>
-      </div>
-      <div class="meta-item">
-        <dt>Status</dt>
-        <dd>${escapeHtml(statusDisplay)}</dd>
-      </div>
-    </dl>
+    <div class="detail-side">
+      <dl class="detail-meta">
+        <div class="meta-item">
+          <dt>Creator</dt>
+          <dd>${escapeHtml(level.creator || "—")}</dd>
+        </div>
+        <div class="meta-item">
+          <dt>Verifier</dt>
+          <dd>${escapeHtml(verifierDisplay)}</dd>
+        </div>
+        <div class="meta-item">
+          <dt>Difficulty</dt>
+          <dd>${escapeHtml(diffDisplay)}</dd>
+        </div>
+        <div class="meta-item">
+          <dt>World Record</dt>
+          <dd>${escapeHtml(wrDisplay)}</dd>
+        </div>
+        <div class="meta-item">
+          <dt>Status</dt>
+          <dd>${escapeHtml(statusDisplay)}</dd>
+        </div>
+      </dl>
+      ${placeMarkup}
+    </div>
   `;
   li.appendChild(detail);
 }
