@@ -1,305 +1,719 @@
 /* =========================================================
-   IMPOSSIBLE TOWER LIST — script.js
-   English, smooth animations, EToH difficulty icons.
+   IMPOSSIBLE TOWER LIST — style.css
+   Dark theme, smooth animations, EToH difficulty icons.
    ========================================================= */
 
-const TIERS = [
-  { id: "verified",   label: "Verified",   max: Infinity },
-  { id: "unverified", label: "Unverified", max: Infinity },
-];
+:root {
+  --bg-0:        #070709;
+  --bg-1:        #0d0d10;
+  --bg-2:        #131318;
+  --bg-3:        #1a1a20;
+  --bg-hover:    #1e1e26;
+  --border:      #272730;
+  --border-hover:#353540;
 
-const PAGE_SIZE = 50;
+  --text:        #e8e6f0;
+  --text-dim:    #8a8699;
+  --text-muted:  #5c5866;
 
-function tierForLevel(level) {
-  // A tower is "verified" if it has a verifier (non-empty string)
-  // "unverified" if verifier is empty or missing
-  const verifier = (level.verifier || "").trim();
-  if (verifier.length > 0) {
-    return TIERS.find(t => t.id === "verified");
-  }
-  return TIERS.find(t => t.id === "unverified");
+  --accent:      #ff6b4a;
+  --accent-2:    #ff9e5e;
+  --accent-gold: #f0c040;
+
+  --tier-verified:   #4ade80;
+  --tier-unverified: #f87171;
+
+  /* EToH Difficulty Colors */
+  --diff-horrific:    #b388ff;
+  --diff-unreal:      #7c3aed;
+  --diff-nil:         #888888;
+  --diff-error:       #cc2222;
+
+  --font-body:  'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono:  'JetBrains Mono', 'IBM Plex Mono', monospace;
+
+  --radius: 8px;
 }
 
-// --- SVG Icons ---
-const ICON_HORRIFIC = `<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="7" stroke-linejoin="round"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38"/></svg>`;
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-const ICON_UNREAL = `<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"><polygon points="50,2 60,35 98,35 68,56 78,90 50,70 22,90 32,56 2,35 40,35"/></svg>`;
+html { scroll-behavior: smooth; }
 
-const ICON_NIL = `<svg class="diff-icon" viewBox="0 0 100 100"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38" fill="#0a0a0a" stroke="#555555" stroke-width="5" stroke-linejoin="round"/><g transform="translate(50,50) rotate(45) translate(-50,-50)"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38" fill="#0a0a0a" stroke="#999999" stroke-width="5" stroke-linejoin="round"/></g></svg>`;
-
-const ICON_ERROR = `<svg class="diff-icon" viewBox="0 0 100 100"><rect x="8" y="8" width="84" height="84" rx="4" fill="#cc2222" stroke="#991111" stroke-width="6"/></svg>`;
-
-const ICON_ROBLOX = `<svg class="place-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M4.24 0L0 19.76 19.76 24 24 4.24 4.24 0zM9.6 8.4l6 1.4-1.4 6-6-1.4 1.4-6z"/></svg>`;
-
-// --- Difficulty parsing ---
-function parseDifficulty(raw) {
-  if (!raw) return { prefix: "", base: "", full: "" };
-  const str = String(raw).trim();
-  const lowered = str.toLowerCase();
-
-  const prefixMatch = lowered.match(/^(low-mid|mid-high|bottom-low|bottom|low|mid|high|peak)(?:\s+|-)/);
-  let prefix = "";
-  let base = lowered;
-
-  if (prefixMatch) {
-    prefix = prefixMatch[1];
-    base = lowered.slice(prefixMatch[0].length).trim();
-  }
-
-  const capPrefix = prefix ? prefix.charAt(0).toUpperCase() + prefix.slice(1) : "";
-  const capBase = base.charAt(0).toUpperCase() + base.slice(1);
-  const full = capPrefix ? capPrefix + " " + capBase : capBase;
-
-  return { prefix: capPrefix, base: capBase, full };
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation: none !important; transition: none !important; }
 }
 
-function difficultyClass(base) {
-  const map = {
-    "horrific": "horrific",
-    "unreal": "unreal",
-    "nil": "nil",
-    "error": "error",
-  };
-  return map[base.toLowerCase()] || "";
+body {
+  background: var(--bg-0);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
 }
 
-function difficultyIcon(base) {
-  const b = base.toLowerCase();
-  if (b === "horrific") return ICON_HORRIFIC;
-  if (b === "unreal") return ICON_UNREAL;
-  if (b === "nil") return ICON_NIL;
-  if (b === "error") return ICON_ERROR;
-  return "";
+/* ---------------- Header ---------------- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(7,7,9,0.82);
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  border-bottom: 1px solid var(--border);
 }
 
-// --- state ---
-let visibleCount = PAGE_SIZE;
-let activeTierId = "all";
-let query = "";
-
-const listEl = document.getElementById("levelList");
-const emptyStateEl = document.getElementById("emptyState");
-const loadMoreBtn = document.getElementById("loadMoreBtn");
-const searchInput = document.getElementById("searchInput");
-const tierFiltersEl = document.getElementById("tierFilters");
-const statTotal = document.getElementById("statTotal");
-const statUpdated = document.getElementById("statUpdated");
-
-const CHEVRON_SVG = `<svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>`;
-
-function getFilteredLevels() {
-  const q = query.trim().toLowerCase();
-  return LEVELS
-    .slice()
-    .sort((a, b) => a.rank - b.rank)
-    .filter((lvl) => {
-      const tier = tierForLevel(lvl);
-      if (activeTierId !== "all" && tier.id !== activeTierId) return false;
-      if (!q) return true;
-      const name = (lvl.name || "").toLowerCase();
-      const creator = (lvl.creator || "").toLowerCase();
-      const diff = (lvl.difficulty || "").toLowerCase();
-      return name.includes(q) || creator.includes(q) || diff.includes(q);
-    });
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 18px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
-function extractYouTubeId(input) {
-  if (!input) return "";
-  if (/^[a-zA-Z0-9_-]{11}$/.test(input)) return input;
-  const match = input.match(/(?:youtu\.be\/|v=|embed\/)([a-zA-Z0-9_-]{11})/);
-  return match ? match[1] : "";
+.header-brand h1 {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
 }
 
-function buildDifficultyBadge(rawDifficulty) {
-  const parsed = parseDifficulty(rawDifficulty);
-  if (!parsed.base) return `<span class="row-difficulty">—</span>`;
-
-  const cls = difficultyClass(parsed.base);
-  const icon = difficultyIcon(parsed.base);
-  const badgeClass = cls ? `diff-${cls}` : "";
-
-  return `
-    <span class="row-difficulty">
-      <span class="diff-badge ${badgeClass}">
-        ${icon}
-        ${escapeHtml(parsed.full)}
-      </span>
-    </span>
-  `;
+.header-sub {
+  display: block;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-top: 2px;
+  letter-spacing: 0.02em;
 }
 
-function buildCreatorSummary(creatorStr) {
-  const raw = (creatorStr || "").trim();
-  if (!raw) return `<span class="row-creator">—</span>`;
-
-  const names = raw.split(",").map(n => n.trim()).filter(Boolean);
-  const first = escapeHtml(names[0] || raw);
-  const extra = names.length - 1;
-
-  if (extra <= 0) {
-    return `<span class="row-creator">${first}</span>`;
-  }
-
-  return `<span class="row-creator"><span class="creator-first">${first}</span><span class="creator-more">+${extra}</span></span>`;
+.header-meta {
+  display: flex;
+  gap: 14px;
+  align-items: center;
 }
 
-function buildRow(level, index) {
-  const tier = tierForLevel(level);
-  const diffParsed = parseDifficulty(level.difficulty);
-  const diffClass = difficultyClass(diffParsed.base);
-
-  const li = document.createElement("li");
-  li.className = "level-row";
-  li.dataset.tier = tier.id;
-  li.dataset.diff = diffClass || "none";
-  li.style.animationDelay = `${Math.min(index, 19) * 30}ms`;
-
-  const rankStr = String(level.rank).padStart(3, "0");
-  const diffBadge = buildDifficultyBadge(level.difficulty);
-
-  li.innerHTML = `
-    <button class="row-main" type="button" aria-expanded="false">
-      <span class="row-rank">#${rankStr}</span>
-      <span class="row-name">${escapeHtml(level.name || "Unnamed")}</span>
-      ${diffBadge}
-      ${buildCreatorSummary(level.creator)}
-      ${CHEVRON_SVG}
-    </button>
-  `;
-
-  const btn = li.querySelector(".row-main");
-  btn.addEventListener("click", () => toggleRow(li, level));
-
-  return li;
+.roblox-play-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 100px;
+  transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+  letter-spacing: 0.01em;
 }
 
-function toggleRow(li, level) {
-  const btn = li.querySelector(".row-main");
-  const isExpanded = li.classList.contains("expanded");
-
-  if (isExpanded) {
-    li.classList.remove("expanded");
-    btn.setAttribute("aria-expanded", "false");
-    return;
-  }
-
-  document.querySelectorAll(".level-row.expanded").forEach(other => {
-    if (other !== li) {
-      other.classList.remove("expanded");
-      other.querySelector(".row-main").setAttribute("aria-expanded", "false");
-    }
-  });
-
-  li.classList.add("expanded");
-  btn.setAttribute("aria-expanded", "true");
-
-  if (li.querySelector(".row-detail")) return;
-
-  const videoId = extractYouTubeId(level.videoId);
-  let videoMarkup;
-
-  if (videoId) {
-    videoMarkup = `
-      <iframe src="https://www.youtube.com/embed/${videoId}" title="Verification: ${escapeHtml(level.name || "")}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-      <a href="https://www.youtube.com/watch?v=${videoId}" class="video-fallback" target="_blank" rel="noopener">Watch on YouTube ↗</a>
-    `;
-  } else {
-    videoMarkup = `<div class="detail-video-missing">No video added for this tower.</div>`;
-  }
-
-  const diffParsed = parseDifficulty(level.difficulty);
-  const diffDisplay = diffParsed.full || "—";
-  const wrDisplay = level.worldRecord != null ? String(level.worldRecord) : "N/A";
-  const verifierDisplay = (level.verifier || "").trim() || "—";
-  const statusDisplay = verifierDisplay !== "—" ? "Verified" : "Unverified";
-
-  const robloxLink = (level.robloxLink || "").trim();
-  const placeMarkup = robloxLink
-    ? `<a href="${escapeHtml(robloxLink)}" class="place-link" target="_blank" rel="noopener">${ICON_ROBLOX}<span>Play this tower ↗</span></a>`
-    : `<div class="place-link place-link-missing">${ICON_ROBLOX}<span>No Roblox place link added</span></div>`;
-
-  const detail = document.createElement("div");
-  detail.className = "row-detail";
-  detail.innerHTML = `
-    <div class="detail-video">${videoMarkup}</div>
-    <div class="detail-side">
-      <dl class="detail-meta">
-        <div class="meta-item">
-          <dt>Creator</dt>
-          <dd>${escapeHtml(level.creator || "—")}</dd>
-        </div>
-        <div class="meta-item">
-          <dt>Verifier</dt>
-          <dd>${escapeHtml(verifierDisplay)}</dd>
-        </div>
-        <div class="meta-item">
-          <dt>Difficulty</dt>
-          <dd>${escapeHtml(diffDisplay)}</dd>
-        </div>
-        <div class="meta-item">
-          <dt>World Record</dt>
-          <dd>${escapeHtml(wrDisplay)}</dd>
-        </div>
-        <div class="meta-item">
-          <dt>Status</dt>
-          <dd>${escapeHtml(statusDisplay)}</dd>
-        </div>
-      </dl>
-      ${placeMarkup}
-    </div>
-  `;
-  li.appendChild(detail);
+.roblox-play-btn:hover {
+  background: var(--bg-3);
+  border-color: var(--border-hover);
+  transform: scale(1.03);
 }
 
-function escapeHtml(str) {
-  const div = document.createElement("div");
-  div.textContent = str;
-  return div.innerHTML;
+.roblox-icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
 }
 
-function render() {
-  const filtered = getFilteredLevels();
-  const toShow = filtered.slice(0, visibleCount);
-
-  listEl.innerHTML = "";
-  const fragment = document.createDocumentFragment();
-  toShow.forEach((level, i) => fragment.appendChild(buildRow(level, i)));
-  listEl.appendChild(fragment);
-
-  emptyStateEl.hidden = filtered.length !== 0;
-  loadMoreBtn.hidden = filtered.length <= visibleCount;
+.meta-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  padding: 7px 14px;
+  border-radius: 100px;
+  font-size: 12px;
 }
 
-function setupControls() {
-  searchInput.addEventListener("input", (e) => {
-    query = e.target.value;
-    visibleCount = PAGE_SIZE;
-    render();
-  });
-
-  tierFiltersEl.addEventListener("click", (e) => {
-    const btn = e.target.closest(".tier-btn");
-    if (!btn) return;
-    tierFiltersEl.querySelectorAll(".tier-btn").forEach((b) => b.classList.remove("active"));
-    btn.classList.add("active");
-    activeTierId = btn.dataset.tier;
-    visibleCount = PAGE_SIZE;
-    render();
-  });
-
-  loadMoreBtn.addEventListener("click", () => {
-    visibleCount += PAGE_SIZE;
-    render();
-  });
+.meta-num {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--accent);
 }
 
-function setupStats() {
-  statTotal.textContent = LEVELS.length;
-  statUpdated.textContent = typeof LAST_UPDATE !== "undefined" ? LAST_UPDATE : "—";
+.meta-label {
+  color: var(--text-muted);
+  font-weight: 500;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  setupControls();
-  setupStats();
-  render();
-});
+.meta-date {
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+  font-weight: 500;
+}
+
+/* ---------------- Controls bar ---------------- */
+
+.controls-bar {
+  position: sticky;
+  top: 72px;
+  z-index: 90;
+  background: rgba(7,7,9,0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 0;
+}
+
+.controls-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 28px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.search-box {
+  position: relative;
+  flex: 1 1 260px;
+  max-width: 340px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+#searchInput {
+  width: 100%;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 11px 14px 11px 40px;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  transition: border-color 200ms, box-shadow 200ms;
+}
+
+#searchInput::placeholder { color: var(--text-muted); }
+
+#searchInput:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(255,107,74,0.12);
+}
+
+.tier-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tier-btn {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 180ms ease;
+  letter-spacing: 0.01em;
+}
+
+.tier-btn:hover {
+  color: var(--text);
+  border-color: var(--border-hover);
+  background: var(--bg-3);
+}
+
+.tier-btn.active {
+  color: var(--bg-0);
+  background: var(--text);
+  border-color: var(--text);
+}
+
+/* ---------------- List section ---------------- */
+
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 28px 80px;
+}
+
+.list-section { padding-top: 8px; }
+
+.list-head {
+  display: grid;
+  grid-template-columns: 64px 1fr 180px 180px 40px;
+  align-items: center;
+  padding: 12px 20px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+}
+
+.level-list {
+  list-style: none;
+  border-top: none;
+}
+
+/* ---------------- Level row ---------------- */
+
+.level-row {
+  border-bottom: 1px solid var(--border);
+  opacity: 0;
+  transform: translateY(12px);
+  animation: rowIn 400ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes rowIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.row-main {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 64px 1fr 180px 180px 40px;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 20px;
+  background: none;
+  border: none;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: background 180ms ease;
+  border-radius: 0;
+  position: relative;
+}
+
+.row-main::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: transparent;
+  transition: background 200ms ease;
+}
+
+.row-main:hover {
+  background: var(--bg-hover);
+}
+
+.row-main:hover::before {
+  background: var(--accent);
+}
+
+/* Verified / Unverified colored left borders */
+.level-row[data-tier="verified"] .row-main::before   { background: var(--tier-verified); }
+.level-row[data-tier="unverified"] .row-main::before { background: var(--tier-unverified); }
+
+/* Difficulty colored left borders (override tier colors when difficulty is present) */
+.level-row[data-diff="horrific"] .row-main::before  { background: var(--diff-horrific); }
+.level-row[data-diff="unreal"] .row-main::before    { background: var(--diff-unreal); }
+.level-row[data-diff="nil"] .row-main::before       { background: var(--diff-nil); }
+.level-row[data-diff="error"] .row-main::before     { background: var(--diff-error); }
+
+.row-rank {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-dim);
+  padding-left: 12px;
+}
+
+.level-row[data-diff="horrific"] .row-rank  { color: var(--diff-horrific); }
+.level-row[data-diff="unreal"] .row-rank    { color: var(--diff-unreal); }
+.level-row[data-diff="nil"] .row-rank       { color: var(--diff-nil); }
+.level-row[data-diff="error"] .row-rank     { color: var(--diff-error); }
+
+.row-name {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+/* Difficulty badge with icon */
+.row-difficulty {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.diff-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 5px 12px 5px 9px;
+  border-radius: 100px;
+  border: 1px solid transparent;
+  text-transform: uppercase;
+  transition: transform 150ms ease, box-shadow 200ms ease;
+}
+
+.diff-badge:hover {
+  transform: scale(1.04);
+}
+
+/* SVG Icons */
+.diff-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* Horrific — 4-pointed X star, light purple */
+.diff-horrific {
+  color: var(--diff-horrific);
+  border-color: rgba(179,136,255,0.35);
+  background: rgba(179,136,255,0.08);
+}
+.diff-horrific .diff-icon {
+  filter: drop-shadow(0 0 4px rgba(179,136,255,0.5));
+}
+
+/* Unreal — 8-pointed star, deep purple */
+.diff-unreal {
+  color: var(--diff-unreal);
+  border-color: rgba(124,58,237,0.35);
+  background: rgba(124,58,237,0.08);
+}
+.diff-unreal .diff-icon {
+  filter: drop-shadow(0 0 4px rgba(124,58,237,0.5));
+}
+
+/* Nil — two overlapping gray stars */
+.diff-nil {
+  color: var(--diff-nil);
+  border-color: rgba(136,136,136,0.30);
+  background: rgba(136,136,136,0.08);
+}
+.diff-nil .diff-icon {
+  filter: drop-shadow(0 0 3px rgba(136,136,136,0.4));
+}
+
+/* Error — red square with dark border (icon has baked-in colors) */
+.diff-error {
+  color: #ff5555;
+  border-color: rgba(204,34,34,0.40);
+  background: rgba(204,34,34,0.10);
+}
+.diff-error .diff-icon {
+  filter: drop-shadow(0 0 5px rgba(204,34,34,0.5));
+}
+
+.row-creator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  overflow: hidden;
+}
+
+.creator-first {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.creator-more {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  padding: 2px 7px;
+  border-radius: 100px;
+}
+
+.row-chevron {
+  width: 18px;
+  height: 18px;
+  justify-self: end;
+  color: var(--text-muted);
+  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1), color 200ms;
+}
+
+.level-row.expanded .row-chevron {
+  transform: rotate(180deg);
+  color: var(--text);
+}
+
+/* ---------------- Detail panel ---------------- */
+
+.row-detail {
+  display: grid;
+  grid-template-columns: minmax(0, 480px) 1fr;
+  gap: 28px;
+  padding: 0 20px 24px;
+  background: transparent;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 350ms cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 250ms ease 50ms,
+              padding 350ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.level-row.expanded .row-detail {
+  max-height: 600px;
+  opacity: 1;
+  padding: 4px 20px 28px;
+}
+
+.detail-video {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.detail-video iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.video-fallback {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: rgba(204,34,34,0.9);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 100px;
+  text-decoration: none;
+  z-index: 10;
+  transition: background 180ms ease;
+}
+
+.video-fallback:hover {
+  background: rgba(204,34,34,1);
+}
+
+.detail-video-missing {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-family: var(--font-mono);
+  text-align: center;
+  padding: 16px;
+}
+
+.detail-side {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.detail-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 20px;
+  align-content: start;
+}
+
+.place-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--accent);
+  color: var(--bg-0);
+  text-decoration: none;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  transition: transform 180ms ease, background 180ms ease;
+  width: fit-content;
+}
+
+.place-link:hover {
+  background: var(--accent-2);
+  transform: scale(1.02);
+}
+
+.place-link .place-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.place-link-missing {
+  background: var(--bg-2);
+  border: 1px dashed var(--border-hover);
+  color: var(--text-muted);
+  cursor: default;
+}
+
+.place-link-missing:hover {
+  transform: none;
+  background: var(--bg-2);
+}
+
+.meta-item dt {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 5px;
+}
+
+.meta-item dd {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text);
+  font-weight: 500;
+  word-break: break-word;
+}
+
+/* ---------------- Empty state / load more ---------------- */
+
+.empty-state {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 70px 0;
+  font-size: 15px;
+}
+
+.load-more {
+  display: block;
+  margin: 32px auto 0;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 12px 28px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 180ms ease;
+}
+
+.load-more:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--bg-3);
+}
+
+/* ---------------- Footer ---------------- */
+
+.site-footer {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px 28px 60px;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+.site-footer p { margin: 4px 0; }
+
+.footer-note code {
+  font-family: var(--font-mono);
+  background: var(--bg-2);
+  padding: 2px 7px;
+  border-radius: 4px;
+  color: var(--text-dim);
+  font-size: 12px;
+}
+
+/* ---------------- Mobile ---------------- */
+
+@media (max-width: 720px) {
+  .header-inner { padding: 14px 18px; }
+  .header-brand h1 { font-size: 18px; }
+  .header-meta { gap: 8px; }
+  .meta-pill { padding: 6px 10px; font-size: 11px; }
+  .roblox-play-btn span { display: none; }
+  .roblox-play-btn { padding: 8px 10px; }
+
+  .controls-inner { padding: 0 18px; }
+  .search-box { max-width: 100%; flex: 1 1 100%; }
+  .tier-filters { width: 100%; }
+
+  main { padding: 0 18px 60px; }
+
+  .list-head { display: none; }
+  .row-main { grid-template-columns: 52px 1fr 24px; padding: 14px 16px; }
+  .row-difficulty { display: none; }
+  .row-creator { display: none; }
+  .row-rank { padding-left: 8px; font-size: 13px; }
+  .row-name { font-size: 14px; }
+
+  .row-detail { grid-template-columns: 1fr; padding: 0 16px 20px; gap: 20px; }
+  .level-row.expanded .row-detail { padding: 4px 16px 24px; }
+  .detail-meta { grid-template-columns: 1fr 1fr; gap: 14px 16px; }
+}
+
+/* Stagger animation delays */
+.level-row:nth-child(1)  { animation-delay: 0ms; }
+.level-row:nth-child(2)  { animation-delay: 30ms; }
+.level-row:nth-child(3)  { animation-delay: 60ms; }
+.level-row:nth-child(4)  { animation-delay: 90ms; }
+.level-row:nth-child(5)  { animation-delay: 120ms; }
+.level-row:nth-child(6)  { animation-delay: 150ms; }
+.level-row:nth-child(7)  { animation-delay: 180ms; }
+.level-row:nth-child(8)  { animation-delay: 210ms; }
+.level-row:nth-child(9)  { animation-delay: 240ms; }
+.level-row:nth-child(10) { animation-delay: 270ms; }
+.level-row:nth-child(11) { animation-delay: 300ms; }
+.level-row:nth-child(12) { animation-delay: 330ms; }
+.level-row:nth-child(13) { animation-delay: 360ms; }
+.level-row:nth-child(14) { animation-delay: 390ms; }
+.level-row:nth-child(15) { animation-delay: 420ms; }
+.level-row:nth-child(16) { animation-delay: 450ms; }
+.level-row:nth-child(17) { animation-delay: 480ms; }
+.level-row:nth-child(18) { animation-delay: 510ms; }
+.level-row:nth-child(19) { animation-delay: 540ms; }
+.level-row:nth-child(20) { animation-delay: 570ms; }
