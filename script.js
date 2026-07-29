@@ -37,7 +37,7 @@ function parseDifficulty(raw) {
   const str = String(raw).trim();
   const lowered = str.toLowerCase();
 
-  const prefixMatch = lowered.match(/^(bottom|low-mid|mid-high|low|mid|high|peak)(?:\s+|-)/);
+  const prefixMatch = lowered.match(/^(low-mid|mid-high|bottom-low|bottom|low|mid|high|peak)(?:\s+|-)/);
   let prefix = "";
   let base = lowered;
 
