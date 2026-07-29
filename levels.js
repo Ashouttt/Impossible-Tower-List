@@ -6,25 +6,21 @@
    Fields:
 
      rank       (required) — position in ranking, 1 = hardest
-                              (lower number = higher in the tower)
      name       (required) — level name
      creator    (required) — level creator
      verifier   (optional) — who verified the level
-     difficulty (optional) — EToH-style difficulty. Examples:
-                              "Low Unreal", "Mid Unreal", "High Unreal",
-                              "Peak Unreal", "Low Nil", "Mid Nil",
-                              "High Horrific", "Low Terrifying",
-                              "Mid Catastrophic", "Catastrophic"
+     difficulty (optional) — EToH-style difficulty. Full list:
+                              Low Horrific, Mid Horrific, High Horrific, Peak Horrific
+                              Low Unreal, Mid Unreal, High Unreal, Peak Unreal
+                              Low Nil, Mid Nil, High Nil, Peak Nil
+                              Low Error, Mid Error, High Error, Peak Error
                               The prefix (Low/Mid/High/Peak) is optional.
      videoId    (optional) — YouTube link OR 11-character video ID
-                              e.g. "https://youtube.com/watch?v=dQw4w9WgXcQ"
-                              or just "dQw4w9WgXcQ"
      levelId    (optional) — numeric Geometry Dash level ID
      points     (optional) — list points, if you track them
 
    Tier thresholds (Summit / Upper / Middle / Foundations)
-   are set in script.js in the TIERS object — just give
-   each level the correct "rank" here.
+   are set in script.js in the TIERS object.
 
    Order of objects in the array doesn't matter — the page
    sorts them by "rank". You can have 1 to 1000 entries.
@@ -38,7 +34,7 @@ const LEVELS = [
     name: "Example Level #1",
     creator: "CreatorA",
     verifier: "VerifierA",
-    difficulty: "Peak Nil",
+    difficulty: "Peak Error",
     videoId: "",
     levelId: null,
     points: 1000,
@@ -48,7 +44,7 @@ const LEVELS = [
     name: "Example Level #2",
     creator: "CreatorB",
     verifier: "CreatorB",
-    difficulty: "High Nil",
+    difficulty: "High Error",
     videoId: "",
     levelId: null,
     points: 950,
@@ -58,7 +54,7 @@ const LEVELS = [
     name: "Example Level #3",
     creator: "CreatorC",
     verifier: "VerifierC",
-    difficulty: "Mid Nil",
+    difficulty: "Mid Error",
     videoId: "",
     levelId: null,
     points: 900,
@@ -68,7 +64,7 @@ const LEVELS = [
     name: "Example Level #4",
     creator: "CreatorD",
     verifier: "VerifierD",
-    difficulty: "Low Nil",
+    difficulty: "Low Error",
     videoId: "",
     levelId: null,
     points: 875,
@@ -78,7 +74,7 @@ const LEVELS = [
     name: "Example Level #5",
     creator: "CreatorE",
     verifier: "VerifierE",
-    difficulty: "Peak Unreal",
+    difficulty: "Peak Nil",
     videoId: "",
     levelId: null,
     points: 850,
@@ -88,7 +84,7 @@ const LEVELS = [
     name: "Example Level #6",
     creator: "CreatorF",
     verifier: "VerifierF",
-    difficulty: "High Unreal",
+    difficulty: "High Nil",
     videoId: "",
     levelId: null,
     points: 825,
@@ -98,7 +94,7 @@ const LEVELS = [
     name: "Example Level #7",
     creator: "CreatorG",
     verifier: "VerifierG",
-    difficulty: "Mid Unreal",
+    difficulty: "Mid Nil",
     videoId: "",
     levelId: null,
     points: 800,
@@ -108,7 +104,7 @@ const LEVELS = [
     name: "Example Level #8",
     creator: "CreatorH",
     verifier: "VerifierH",
-    difficulty: "Low Unreal",
+    difficulty: "Low Nil",
     videoId: "",
     levelId: null,
     points: 775,
@@ -118,7 +114,7 @@ const LEVELS = [
     name: "Example Level #9",
     creator: "CreatorI",
     verifier: "VerifierI",
-    difficulty: "High Horrific",
+    difficulty: "Peak Unreal",
     videoId: "",
     levelId: null,
     points: 750,
@@ -128,7 +124,7 @@ const LEVELS = [
     name: "Example Level #10",
     creator: "CreatorJ",
     verifier: "VerifierJ",
-    difficulty: "Mid Horrific",
+    difficulty: "High Unreal",
     videoId: "",
     levelId: null,
     points: 725,
@@ -138,46 +134,66 @@ const LEVELS = [
     name: "Example Level #11",
     creator: "CreatorK",
     verifier: "VerifierK",
-    difficulty: "Low Horrific",
+    difficulty: "Mid Unreal",
     videoId: "",
     levelId: null,
     points: 600,
   },
   {
-    rank: 51,
-    name: "Example Level #51",
+    rank: 12,
+    name: "Example Level #12",
     creator: "CreatorL",
     verifier: "CreatorL",
-    difficulty: "Mid Terrifying",
+    difficulty: "Low Unreal",
     videoId: "",
     levelId: null,
-    points: 300,
+    points: 580,
   },
   {
-    rank: 201,
-    name: "Example Level #201",
+    rank: 13,
+    name: "Example Level #13",
     creator: "CreatorM",
     verifier: "VerifierM",
-    difficulty: "Low Catastrophic",
+    difficulty: "Peak Horrific",
     videoId: "",
     levelId: null,
-    points: 50,
+    points: 560,
   },
   {
-    rank: 1000,
-    name: "Example Level #1000",
+    rank: 14,
+    name: "Example Level #14",
     creator: "CreatorN",
     verifier: "VerifierN",
-    difficulty: "Catastrophic",
+    difficulty: "High Horrific",
     videoId: "",
     levelId: null,
-    points: 1,
+    points: 540,
+  },
+  {
+    rank: 15,
+    name: "Example Level #15",
+    creator: "CreatorO",
+    verifier: "VerifierO",
+    difficulty: "Mid Horrific",
+    videoId: "",
+    levelId: null,
+    points: 520,
+  },
+  {
+    rank: 16,
+    name: "Example Level #16",
+    creator: "CreatorP",
+    verifier: "VerifierP",
+    difficulty: "Low Horrific",
+    videoId: "",
+    levelId: null,
+    points: 500,
   },
 
   // Add more levels below, in this exact format:
   //
   // {
-  //   rank: 4,
+  //   rank: 17,
   //   name: "Level Name",
   //   creator: "Creator",
   //   verifier: "Verifier",
