@@ -2,22 +2,19 @@
    IMPOSSIBLE TOWER LIST — levels.js
    THIS IS THE ONLY FILE YOU NEED TO EDIT.
 
-   Each level is one object { ... } in the LEVELS array below.
+   Each tower is one object { ... } in the LEVELS array below.
    Fields:
 
      rank         (required) — position in ranking, 1 = hardest
-     name         (required) — level name
-     creator      (required) — level creator(s)
-     verifier     (optional) — who verified the level
+     name         (required) — tower name
+     creator      (required) — tower creator(s)
+     verifier     (optional) — who verified the tower (empty = unverified)
      difficulty   (optional) — EToH-style difficulty
      videoId      (optional) — YouTube link OR 11-character video ID
      worldRecord  (optional) — best completion, e.g. "Floor 7", "N/A"
 
-   Tier thresholds (Summit / Upper / Middle / Foundations)
-   are set in script.js in the TIERS object.
-
    Order of objects in the array doesn't matter — the page
-   sorts them by "rank". You can have 1 to 1000 entries.
+   sorts them by "rank". You can have unlimited entries.
    ========================================================= */
 
 const LAST_UPDATE = "29.07.2026";
