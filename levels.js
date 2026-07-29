@@ -1,23 +1,7 @@
 /* =========================================================
    IMPOSSIBLE TOWER LIST — levels.js
-   THIS IS THE ONLY FILE YOU NEED TO EDIT.
-
-   Each tower is one object { ... } in the LEVELS array below.
-   Fields:
-
-     rank         (required) — position in ranking, 1 = hardest
-     name         (required) — tower name
-     creator      (required) — tower creator(s)
-     verifier     (optional) — who verified the tower (empty = unverified)
-     difficulty   (optional) — EToH-style difficulty
-     videoId      (optional) — YouTube link OR 11-character video ID
-     worldRecord  (optional) — best completion, e.g. "Floor 7", "N/A"
-     robloxLink   (optional) — link to the Roblox place where this
-                                tower is located, e.g.
-                                "https://www.roblox.com/games/XXXXXXXX/Place-Name"
-
-   Order of objects in the array doesn't matter — the page
-   sorts them by "rank". You can have unlimited entries.
+   Default towers. Edit via Admin Panel on the site,
+   or modify this file directly.
    ========================================================= */
 
 const LAST_UPDATE = "29.07.2026";
