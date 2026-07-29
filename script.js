@@ -127,9 +127,13 @@ function buildDifficultyBadge(rawDifficulty) {
 
 function buildRow(level, index) {
   const tier = tierForRank(level.rank);
+  const diffParsed = parseDifficulty(level.difficulty);
+  const diffClass = difficultyClass(diffParsed.base);
+
   const li = document.createElement("li");
   li.className = "level-row";
   li.dataset.tier = tier.id;
+  li.dataset.diff = diffClass || "none";
   li.style.animationDelay = `${Math.min(index, 19) * 30}ms`;
 
   const rankStr = String(level.rank).padStart(3, "0");
