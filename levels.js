@@ -38,4 +38,13 @@ const LEVELS = [
     videoId: "bJPgQlqkQxI",
     worldRecord: "Floor 7",
   },
+  {
+    rank: 3,
+    name: "Tower of It Never Ends",
+    creator: "ciel_azulsky",
+    verifier: "MonsterIsABlock",
+    difficulty: "Mid Unreal",
+    videoId: "bwDpQOuQaGg",
+    worldRecord: "Winpad",
+  },
 ];
