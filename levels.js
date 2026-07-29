@@ -31,7 +31,7 @@ const LEVELS = [
     difficulty: "Mid-High Error",
     videoId: "B0VpzdvwrC0",
     worldRecord: "N/A",
-    robloxLink: "",
+    robloxLink: "https://www.roblox.com/games/99982773118045/Tower-of-Jungle-Gyms-The-Big-Climb",
   },
   {
     rank: 2,
@@ -41,7 +41,7 @@ const LEVELS = [
     difficulty: "Peak Nil",
     videoId: "bJPgQlqkQxI",
     worldRecord: "Floor 7",
-    robloxLink: "",
+    robloxLink: "https://www.roblox.com/games/4597361034/Citadel-of-Void-OFFICIAL",
   },
   {
     rank: 3,
@@ -51,6 +51,6 @@ const LEVELS = [
     difficulty: "Mid Unreal",
     videoId: "bwDpQOuQaGg",
     worldRecord: "Winpad",
-    robloxLink: "",
+    robloxLink: "https://www.roblox.com/games/107705095969573/tower-of-IT-NEVER-ENDS",
   },
 ];
