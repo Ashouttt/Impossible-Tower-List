@@ -28,6 +28,7 @@
   --diff-unreal:      #7c3aed;
   --diff-nil:         #888888;
   --diff-error:       #cc2222;
+  --diff-high-peak:   #a855f7;
 
   --font-body:  'Inter', system-ui, -apple-system, sans-serif;
   --font-mono:  'JetBrains Mono', 'IBM Plex Mono', monospace;
@@ -338,6 +339,7 @@ main {
 .level-row[data-diff="unreal"] .row-main::before    { background: var(--diff-unreal); }
 .level-row[data-diff="nil"] .row-main::before       { background: var(--diff-nil); }
 .level-row[data-diff="error"] .row-main::before     { background: var(--diff-error); }
+.level-row[data-diff="high-peak"] .row-main::before { background: var(--diff-high-peak); }
 
 .row-rank {
   font-family: var(--font-mono);
@@ -351,6 +353,7 @@ main {
 .level-row[data-diff="unreal"] .row-rank    { color: var(--diff-unreal); }
 .level-row[data-diff="nil"] .row-rank       { color: var(--diff-nil); }
 .level-row[data-diff="error"] .row-rank     { color: var(--diff-error); }
+.level-row[data-diff="high-peak"] .row-rank { color: var(--diff-high-peak); }
 
 .row-name {
   font-weight: 600;
@@ -430,6 +433,16 @@ main {
 }
 .diff-error .diff-icon {
   filter: drop-shadow(0 0 5px rgba(204,34,34,0.5));
+}
+
+/* High-Peak — bright purple, uses Unreal star icon */
+.diff-high-peak {
+  color: var(--diff-high-peak);
+  border-color: rgba(168,85,247,0.35);
+  background: rgba(168,85,247,0.08);
+}
+.diff-high-peak .diff-icon {
+  filter: drop-shadow(0 0 4px rgba(168,85,247,0.5));
 }
 
 .row-creator {
