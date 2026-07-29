@@ -1,17 +1,13 @@
 /* =========================================================
    IMPOSSIBLE TOWER LIST — script.js
-   Nie musisz nic tu zmieniać, żeby dodać poziomy —
-   wszystkie dane edytujesz w pliku levels.js.
-   Tutaj można ewentualnie zmienić progi "pięter" wieży
-   (obiekt TIERS poniżej) albo liczbę wierszy ładowanych
-   naraz (PAGE_SIZE).
+   Simplified, smooth, no tower SVG nonsense.
    ========================================================= */
 
 const TIERS = [
   { id: "summit",      label: "Szczyt",           max: 10   },
-  { id: "upper",        label: "Górne Piętra",      max: 50   },
-  { id: "middle",       label: "Środkowe Piętra",   max: 200  },
-  { id: "foundations",  label: "Fundamenty",        max: Infinity },
+  { id: "upper",       label: "Górne Piętra",      max: 50   },
+  { id: "middle",      label: "Środkowe Piętra",   max: 200  },
+  { id: "foundations", label: "Fundamenty",        max: Infinity },
 ];
 
 const PAGE_SIZE = 50;
@@ -23,7 +19,7 @@ function tierForRank(rank) {
   return TIERS[TIERS.length - 1];
 }
 
-// --- stan strony ---
+// --- state ---
 let visibleCount = PAGE_SIZE;
 let activeTierId = "all";
 let query = "";
@@ -35,9 +31,8 @@ const searchInput = document.getElementById("searchInput");
 const tierFiltersEl = document.getElementById("tierFilters");
 const statTotal = document.getElementById("statTotal");
 const statUpdated = document.getElementById("statUpdated");
-const spineMarker = document.getElementById("spineMarker");
 
-const CHEVRON_SVG = `<svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>`;
+const CHEVRON_SVG = `<svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>`;
 
 function getFilteredLevels() {
   const q = query.trim().toLowerCase();
@@ -56,17 +51,17 @@ function getFilteredLevels() {
 
 function extractYouTubeId(input) {
   if (!input) return "";
-  // Jeśli to już samo ID (11 znaków, bez ukośników), zwróć bez zmian.
   if (/^[a-zA-Z0-9_-]{11}$/.test(input)) return input;
   const match = input.match(/(?:youtu\.be\/|v=|embed\/)([a-zA-Z0-9_-]{11})/);
   return match ? match[1] : "";
 }
 
-function buildRow(level) {
+function buildRow(level, index) {
   const tier = tierForRank(level.rank);
   const li = document.createElement("li");
   li.className = "level-row";
   li.dataset.tier = tier.id;
+  li.style.animationDelay = `${Math.min(index, 19) * 30}ms`;
 
   const rankStr = String(level.rank).padStart(3, "0");
 
@@ -74,7 +69,7 @@ function buildRow(level) {
     <button class="row-main" type="button" aria-expanded="false">
       <span class="row-rank">#${rankStr}</span>
       <span class="row-name">${escapeHtml(level.name || "Bez nazwy")}</span>
-      <span class="row-creator">${escapeHtml(level.creator || "&mdash;")}</span>
+      <span class="row-creator">${escapeHtml(level.creator || "—")}</span>
       ${CHEVRON_SVG}
     </button>
   `;
@@ -92,13 +87,22 @@ function toggleRow(li, level) {
   if (isExpanded) {
     li.classList.remove("expanded");
     btn.setAttribute("aria-expanded", "false");
-    const detail = li.querySelector(".row-detail");
-    if (detail) detail.remove();
     return;
   }
 
+  // Close any other expanded row for cleaner UX
+  document.querySelectorAll(".level-row.expanded").forEach(other => {
+    if (other !== li) {
+      other.classList.remove("expanded");
+      other.querySelector(".row-main").setAttribute("aria-expanded", "false");
+    }
+  });
+
   li.classList.add("expanded");
   btn.setAttribute("aria-expanded", "true");
+
+  // Only build detail once
+  if (li.querySelector(".row-detail")) return;
 
   const videoId = extractYouTubeId(level.videoId);
   const videoMarkup = videoId
@@ -112,19 +116,19 @@ function toggleRow(li, level) {
     <dl class="detail-meta">
       <div class="meta-item">
         <dt>Twórca</dt>
-        <dd>${escapeHtml(level.creator || "&mdash;")}</dd>
+        <dd>${escapeHtml(level.creator || "—")}</dd>
       </div>
       <div class="meta-item">
         <dt>Weryfikacja</dt>
-        <dd>${escapeHtml(level.verifier || "&mdash;")}</dd>
+        <dd>${escapeHtml(level.verifier || "—")}</dd>
       </div>
       <div class="meta-item">
         <dt>ID poziomu</dt>
-        <dd>${escapeHtml(level.levelId != null ? String(level.levelId) : "&mdash;")}</dd>
+        <dd>${escapeHtml(level.levelId != null ? String(level.levelId) : "—")}</dd>
       </div>
       <div class="meta-item">
         <dt>Punkty</dt>
-        <dd>${escapeHtml(level.points != null ? String(level.points) : "&mdash;")}</dd>
+        <dd>${escapeHtml(level.points != null ? String(level.points) : "—")}</dd>
       </div>
     </dl>
   `;
@@ -143,7 +147,7 @@ function render() {
 
   listEl.innerHTML = "";
   const fragment = document.createDocumentFragment();
-  toShow.forEach((level) => fragment.appendChild(buildRow(level)));
+  toShow.forEach((level, i) => fragment.appendChild(buildRow(level, i)));
   listEl.appendChild(fragment);
 
   emptyStateEl.hidden = filtered.length !== 0;
@@ -175,27 +179,11 @@ function setupControls() {
 
 function setupStats() {
   statTotal.textContent = LEVELS.length;
-  statUpdated.textContent = typeof LAST_UPDATE !== "undefined" ? LAST_UPDATE : "&mdash;";
-}
-
-function setupSpine() {
-  const spine = document.getElementById("towerSpine");
-  if (!spine || !spineMarker) return;
-
-  function updateMarker() {
-    const scrollTop = window.scrollY;
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = docHeight > 0 ? Math.min(1, Math.max(0, scrollTop / docHeight)) : 0;
-    spineMarker.style.top = `${progress * 100}%`;
-  }
-
-  window.addEventListener("scroll", updateMarker, { passive: true });
-  updateMarker();
+  statUpdated.textContent = typeof LAST_UPDATE !== "undefined" ? LAST_UPDATE : "—";
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   setupControls();
   setupStats();
-  setupSpine();
   render();
 });
