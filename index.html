@@ -12,7 +12,6 @@
 
 <link rel="stylesheet" href="style.css">
 <base target="_blank">
-<base target="_blank">
 </head>
 <body>
 
@@ -35,9 +34,116 @@
         <span class="meta-label">updated</span>
         <span class="meta-date" id="statUpdated">—</span>
       </div>
+      <button class="admin-toggle-btn" id="adminToggleBtn" title="Open Admin Panel">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
     </div>
   </div>
 </header>
+
+<!-- Admin Panel -->
+<div class="admin-panel" id="adminPanel">
+  <div class="admin-panel-inner">
+    <div class="admin-header">
+      <h2>🛠️ Admin Panel</h2>
+      <button class="admin-close" id="adminCloseBtn">&times;</button>
+    </div>
+
+    <div class="admin-tabs">
+      <button class="admin-tab active" data-tab="add">➕ Add Tower</button>
+      <button class="admin-tab" data-tab="list">📋 Tower List</button>
+      <button class="admin-tab" data-tab="import">📤 Import / Export</button>
+    </div>
+
+    <!-- Add Tower Tab -->
+    <div class="admin-tab-content active" data-tab="add">
+      <form class="admin-form" id="addTowerForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="towerRank">Rank (position)</label>
+            <input type="number" id="towerRank" min="1" required placeholder="e.g. 5">
+            <small>Towers at this rank and below will shift down automatically</small>
+          </div>
+          <div class="form-group">
+            <label for="towerName">Tower Name *</label>
+            <input type="text" id="towerName" required placeholder="e.g. Tower of Example">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="towerCreator">Creator(s) *</label>
+            <input type="text" id="towerCreator" required placeholder="e.g. Player1, Player2">
+          </div>
+          <div class="form-group">
+            <label for="towerVerifier">Verifier (leave empty = Unverified)</label>
+            <input type="text" id="towerVerifier" placeholder="e.g. SomePlayer">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="towerDifficulty">Difficulty</label>
+            <input type="text" id="towerDifficulty" placeholder="e.g. Mid Unreal, Peak Nil">
+          </div>
+          <div class="form-group">
+            <label for="towerWorldRecord">World Record</label>
+            <input type="text" id="towerWorldRecord" placeholder="e.g. Floor 7, N/A">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="towerVideoId">YouTube Video ID or URL</label>
+            <input type="text" id="towerVideoId" placeholder="e.g. dQw4w9WgXcQ or full URL">
+          </div>
+          <div class="form-group">
+            <label for="towerRobloxLink">Roblox Place Link</label>
+            <input type="url" id="towerRobloxLink" placeholder="https://www.roblox.com/games/...">
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">➕ Add Tower</button>
+          <button type="button" class="btn-secondary" id="clearFormBtn">Clear</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Tower List Tab -->
+    <div class="admin-tab-content" data-tab="list">
+      <div class="admin-list-controls">
+        <input type="text" id="adminSearch" placeholder="Search towers...">
+        <span class="admin-count" id="adminCount">0 towers</span>
+      </div>
+      <div class="admin-tower-list" id="adminTowerList"></div>
+    </div>
+
+    <!-- Import/Export Tab -->
+    <div class="admin-tab-content" data-tab="import">
+      <div class="import-export-section">
+        <h3>📤 Export Data</h3>
+        <p>Copy this code and replace the contents of your <code>levels.js</code> file, or save it as backup.</p>
+        <textarea class="code-export" id="exportCode" readonly></textarea>
+        <button class="btn-primary" id="copyExportBtn">📋 Copy to Clipboard</button>
+        <button class="btn-secondary" id="downloadExportBtn">💾 Download levels.js</button>
+      </div>
+
+      <div class="import-export-section">
+        <h3>📥 Import Data</h3>
+        <p>Paste <code>levels.js</code> content here to replace all towers. <strong>This will overwrite everything!</strong></p>
+        <textarea class="code-import" id="importCode" placeholder="Paste levels.js content here..."></textarea>
+        <button class="btn-danger" id="importBtn">⚠️ Import & Overwrite</button>
+      </div>
+
+      <div class="import-export-section">
+        <h3>🗑️ Reset</h3>
+        <p>Clear all data and restore default towers from <code>levels.js</code>.</p>
+        <button class="btn-danger" id="resetBtn">🗑️ Reset to Default</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <main>
   <section class="controls-bar" id="controlsBar">
@@ -70,7 +176,7 @@
 
 <footer class="site-footer">
   <p>Impossible Tower List — community-maintained ranking.</p>
-  <p class="footer-note">To add or edit towers, modify <code>levels.js</code>.</p>
+  <p class="footer-note">Data is saved automatically in your browser. Use the Admin Panel to manage towers.</p>
 </footer>
 
 <script src="levels.js"></script>
