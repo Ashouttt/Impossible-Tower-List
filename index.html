@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Impossible Tower List</title>
+<meta name="description" content="Ranking 1000 poziomów Geometry Dash uznanych za praktycznie niemożliwe do przejścia.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Boczny wskaźnik "wieży" - widoczny tylko na szerokich ekranach -->
+<aside class="tower-spine" id="towerSpine" aria-hidden="true">
+  <div class="spine-track">
+    <div class="spine-fill" id="spineFill"></div>
+    <div class="spine-marker" id="spineMarker"></div>
+  </div>
+  <div class="spine-labels">
+    <span class="spine-label" style="top:0%">SZCZYT</span>
+    <span class="spine-label" style="top:100%">BAZA</span>
+  </div>
+</aside>
+
+<header class="hero">
+  <div class="hero-text">
+    <p class="eyebrow">Geometry Dash &mdash; ranking poziomów</p>
+    <h1 class="hero-title">IMPOSSIBLE<br><span>TOWER LIST</span></h1>
+    <p class="hero-tagline">Tysiąc poziomów, które prawie nikt nie jest w stanie ukończyć.<br>Im wyżej w wieży, tym bliżej niemożliwego.</p>
+
+    <div class="hero-stats" id="heroStats">
+      <div class="stat">
+        <span class="stat-value" id="statTotal">0</span>
+        <span class="stat-label">poziomów na liście</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value" id="statUpdated">&mdash;</span>
+        <span class="stat-label">ostatnia aktualizacja</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-tower" aria-hidden="true">
+    <svg viewBox="0 0 240 480" class="tower-svg">
+      <defs>
+        <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">
+          <feGaussianBlur stdDeviation="6" result="blur"/>
+          <feMerge>
+            <feMergeNode in="blur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+      </defs>
+      <polygon class="seg seg-foundations" points="20,480 220,480 200,360 40,360" />
+      <polygon class="seg seg-middle" points="40,360 200,360 180,240 60,240" />
+      <polygon class="seg seg-upper" points="60,240 180,240 155,120 85,120" />
+      <polygon class="seg seg-summit" points="85,120 155,120 120,20" />
+      <line class="seg-divider" x1="40" y1="360" x2="200" y2="360"/>
+      <line class="seg-divider" x1="60" y1="240" x2="180" y2="240"/>
+      <line class="seg-divider" x1="85" y1="120" x2="155" y2="120"/>
+      <circle cx="120" cy="20" r="5" class="summit-glow" filter="url(#glow)"/>
+    </svg>
+  </div>
+</header>
+
+<main>
+  <section class="legend" aria-label="Legenda poziomów wieży">
+    <div class="legend-item">
+      <span class="swatch swatch-summit"></span>
+      <span>Szczyt <em>1&ndash;10</em></span>
+    </div>
+    <div class="legend-item">
+      <span class="swatch swatch-upper"></span>
+      <span>Górne Piętra <em>11&ndash;50</em></span>
+    </div>
+    <div class="legend-item">
+      <span class="swatch swatch-middle"></span>
+      <span>Środkowe Piętra <em>51&ndash;200</em></span>
+    </div>
+    <div class="legend-item">
+      <span class="swatch swatch-foundations"></span>
+      <span>Fundamenty <em>201&ndash;1000</em></span>
+    </div>
+  </section>
+
+  <section class="controls">
+    <div class="search-wrap">
+      <input type="text" id="searchInput" placeholder="Szukaj poziomu lub twórcy&hellip;" autocomplete="off">
+    </div>
+    <div class="tier-filters" id="tierFilters">
+      <button class="tier-btn active" data-tier="all">Wszystkie</button>
+      <button class="tier-btn" data-tier="summit">Szczyt</button>
+      <button class="tier-btn" data-tier="upper">Górne Piętra</button>
+      <button class="tier-btn" data-tier="middle">Środkowe Piętra</button>
+      <button class="tier-btn" data-tier="foundations">Fundamenty</button>
+    </div>
+  </section>
+
+  <section class="list-head" aria-hidden="true">
+    <span class="col-rank">#</span>
+    <span class="col-name">Poziom</span>
+    <span class="col-creator">Twórca</span>
+    <span class="col-chevron"></span>
+  </section>
+
+  <ol class="level-list" id="levelList"></ol>
+
+  <p class="empty-state" id="emptyState" hidden>Brak poziomów spełniających kryteria wyszukiwania.</p>
+
+  <button class="load-more" id="loadMoreBtn" hidden>Pokaż więcej</button>
+</main>
+
+<footer class="site-footer">
+  <p>Impossible Tower List &mdash; lista prowadzona ręcznie przez społeczność.</p>
+  <p class="footer-note">Aby dodać lub zmienić poziom, edytuj plik <code>levels.js</code>.</p>
+</footer>
+
+<script src="levels.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
