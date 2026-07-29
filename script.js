@@ -26,10 +26,10 @@ const ICON_HORRIFIC = `<svg class="diff-icon" viewBox="0 0 100 100" fill="none" 
 // Unreal: 8-pointed star, deep purple outline, transparent fill
 const ICON_UNREAL = `<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"><polygon points="50,2 60,35 98,35 68,56 78,90 50,70 22,90 32,56 2,35 40,35"/></svg>`;
 
-// Nil: two same-size overlapping 8-pointed stars
+// Nil: two same-size overlapping 4-pointed stars (X shape)
 // Bottom: black fill, dark gray stroke
-// Top: same size, rotated, black fill, lighter gray stroke
-const ICON_NIL = `<svg class="diff-icon" viewBox="0 0 100 100"><polygon points="50,2 60,35 98,35 68,56 78,90 50,70 22,90 32,56 2,35 40,35" fill="#0a0a0a" stroke="#555555" stroke-width="5" stroke-linejoin="round"/><g transform="translate(50,50) rotate(22.5) translate(-50,-50)"><polygon points="50,2 60,35 98,35 68,56 78,90 50,70 22,90 32,56 2,35 40,35" fill="#0a0a0a" stroke="#999999" stroke-width="5" stroke-linejoin="round"/></g></svg>`;
+// Top: same size, rotated 45deg, black fill, lighter gray stroke
+const ICON_NIL = `<svg class="diff-icon" viewBox="0 0 100 100"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38" fill="#0a0a0a" stroke="#555555" stroke-width="5" stroke-linejoin="round"/><g transform="translate(50,50) rotate(45) translate(-50,-50)"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38" fill="#0a0a0a" stroke="#999999" stroke-width="5" stroke-linejoin="round"/></g></svg>`;
 
 // Error: red square with dark red border, exactly like the image
 const ICON_ERROR = `<svg class="diff-icon" viewBox="0 0 100 100"><rect x="8" y="8" width="84" height="84" rx="4" fill="#cc2222" stroke="#991111" stroke-width="6"/></svg>`;
