@@ -172,9 +172,6 @@ function toggleRow(li, level) {
       detail.offsetHeight; // force reflow
       detail.style.maxHeight = "0px";
       detail.style.opacity = "0";
-      detail.style.paddingTop = "0";
-      detail.style.paddingBottom = "0";
-      detail.style.gap = "0";
     }
     li.classList.remove("expanded");
     btn.setAttribute("aria-expanded", "false");
@@ -190,9 +187,6 @@ function toggleRow(li, level) {
       if (d) {
         d.style.maxHeight = "0px";
         d.style.opacity = "0";
-        d.style.paddingTop = "0";
-        d.style.paddingBottom = "0";
-        d.style.gap = "0";
       }
     }
   });
@@ -234,9 +228,6 @@ function toggleRow(li, level) {
   // First reset to natural height to measure
   detail.style.maxHeight = "none";
   detail.style.opacity = "0";
-  detail.style.paddingTop = "0";
-  detail.style.paddingBottom = "0";
-  detail.style.gap = "0";
   const targetH = detail.scrollHeight;
 
   // Start from 0
@@ -246,9 +237,6 @@ function toggleRow(li, level) {
   // Animate to exact measured height
   detail.style.maxHeight = targetH + "px";
   detail.style.opacity = "1";
-  detail.style.paddingTop = "4px";
-  detail.style.paddingBottom = "28px";
-  detail.style.gap = "28px";
 }
 
 function escapeHtml(str) {
