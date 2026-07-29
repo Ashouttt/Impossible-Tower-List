@@ -1,6 +1,7 @@
 /* =========================================================
    IMPOSSIBLE TOWER LIST — script.js
    English, smooth animations, EToH difficulty icons.
+   NOW WITH IN-PAGE ADMIN PANEL & LOCALSTORAGE!
    ========================================================= */
 
 const TIERS = [
@@ -9,6 +10,7 @@ const TIERS = [
 ];
 
 const PAGE_SIZE = 50;
+const STORAGE_KEY = 'impossible_tower_list_data';
 
 function tierForLevel(level) {
   const verifier = (level.verifier || "").trim();
@@ -72,6 +74,495 @@ function difficultyIcon(parsed) {
   return "";
 }
 
+// =========================================================
+// LOCALSTORAGE DATA MANAGEMENT
+// =========================================================
+
+function loadData() {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (parsed.levels && Array.isArray(parsed.levels)) {
+        return parsed;
+      }
+    }
+  } catch (e) {
+    console.warn("Failed to load from localStorage:", e);
+  }
+  // Return default data from levels.js
+  return {
+    levels: typeof LEVELS !== "undefined" ? [...LEVELS] : [],
+    lastUpdate: typeof LAST_UPDATE !== "undefined" ? LAST_UPDATE : new Date().toLocaleDateString("pl-PL")
+  };
+}
+
+function saveData(data) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    return true;
+  } catch (e) {
+    console.error("Failed to save to localStorage:", e);
+    showToast("Failed to save data! Storage might be full.", "error");
+    return false;
+  }
+}
+
+function getLevels() {
+  return loadData().levels;
+}
+
+function setLevels(levels, lastUpdate) {
+  const data = loadData();
+  data.levels = levels;
+  if (lastUpdate) data.lastUpdate = lastUpdate;
+  saveData(data);
+}
+
+function exportToLevelsJs() {
+  const data = loadData();
+  const levelsStr = JSON.stringify(data.levels, null, 2);
+  return `/* =========================================================
+   IMPOSSIBLE TOWER LIST — levels.js
+   AUTO-GENERATED FROM ADMIN PANEL
+   ========================================================= */
+
+const LAST_UPDATE = "${data.lastUpdate}";
+
+const LEVELS = ${levelsStr};`;
+}
+
+function importFromLevelsJs(code) {
+  // Try to extract LEVELS array and LAST_UPDATE
+  const levelsMatch = code.match(/const\s+LEVELS\s*=\s*(\[.*?\]);?\s*$/s);
+  const updateMatch = code.match(/const\s+LAST_UPDATE\s*=\s*"([^"]+)"/);
+
+  if (!levelsMatch) {
+    // Try simpler approach - just JSON
+    try {
+      const parsed = JSON.parse(code);
+      if (Array.isArray(parsed)) {
+        setLevels(parsed, new Date().toLocaleDateString("pl-PL"));
+        return true;
+      }
+    } catch (e) {
+      return false;
+    }
+    return false;
+  }
+
+  try {
+    const levels = eval(levelsMatch[1]);
+    const lastUpdate = updateMatch ? updateMatch[1] : new Date().toLocaleDateString("pl-PL");
+    setLevels(levels, lastUpdate);
+    return true;
+  } catch (e) {
+    console.error("Import error:", e);
+    return false;
+  }
+}
+
+// =========================================================
+// ADMIN PANEL
+// =========================================================
+
+function initAdminPanel() {
+  const adminToggleBtn = document.getElementById("adminToggleBtn");
+  const adminPanel = document.getElementById("adminPanel");
+  const adminCloseBtn = document.getElementById("adminCloseBtn");
+  const tabs = document.querySelectorAll(".admin-tab");
+  const tabContents = document.querySelectorAll(".admin-tab-content");
+
+  // Open/Close panel
+  adminToggleBtn.addEventListener("click", () => {
+    adminPanel.classList.add("open");
+    refreshAdminList();
+    refreshExportCode();
+    document.body.style.overflow = "hidden";
+  });
+
+  function closePanel() {
+    adminPanel.classList.remove("open");
+    document.body.style.overflow = "";
+    // Close edit modal if open
+    const editModal = document.querySelector(".edit-modal-overlay.open");
+    if (editModal) editModal.classList.remove("open");
+  }
+
+  adminCloseBtn.addEventListener("click", closePanel);
+  adminPanel.addEventListener("click", (e) => {
+    if (e.target === adminPanel) closePanel();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closePanel();
+  });
+
+  // Tabs
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      tabs.forEach(t => t.classList.remove("active"));
+      tabContents.forEach(c => c.classList.remove("active"));
+      tab.classList.add("active");
+      document.querySelector(`.admin-tab-content[data-tab="${tab.dataset.tab}"]`).classList.add("active");
+
+      if (tab.dataset.tab === "list") refreshAdminList();
+      if (tab.dataset.tab === "import") refreshExportCode();
+    });
+  });
+
+  // Add Tower Form
+  const addForm = document.getElementById("addTowerForm");
+  addForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    addTowerFromForm();
+  });
+
+  document.getElementById("clearFormBtn").addEventListener("click", () => {
+    addForm.reset();
+  });
+
+  // Admin search
+  document.getElementById("adminSearch").addEventListener("input", () => {
+    refreshAdminList();
+  });
+
+  // Export buttons
+  document.getElementById("copyExportBtn").addEventListener("click", () => {
+    const code = document.getElementById("exportCode").value;
+    navigator.clipboard.writeText(code).then(() => {
+      showToast("Copied to clipboard!", "success");
+    }).catch(() => {
+      showToast("Failed to copy", "error");
+    });
+  });
+
+  document.getElementById("downloadExportBtn").addEventListener("click", () => {
+    const code = exportToLevelsJs();
+    const blob = new Blob([code], { type: "text/javascript" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "levels.js";
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast("Downloaded levels.js!", "success");
+  });
+
+  // Import
+  document.getElementById("importBtn").addEventListener("click", () => {
+    const code = document.getElementById("importCode").value.trim();
+    if (!code) {
+      showToast("Paste some code first!", "error");
+      return;
+    }
+    if (confirm("This will overwrite ALL towers. Are you sure?")) {
+      if (importFromLevelsJs(code)) {
+        showToast("Import successful!", "success");
+        document.getElementById("importCode").value = "";
+        render();
+        refreshAdminList();
+        refreshExportCode();
+        setupStats();
+      } else {
+        showToast("Import failed! Check the format.", "error");
+      }
+    }
+  });
+
+  // Reset
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    if (confirm("This will delete ALL your changes and restore defaults. Are you sure?")) {
+      localStorage.removeItem(STORAGE_KEY);
+      showToast("Reset to defaults!", "success");
+      render();
+      refreshAdminList();
+      refreshExportCode();
+      setupStats();
+    }
+  });
+}
+
+function addTowerFromForm() {
+  const rank = parseInt(document.getElementById("towerRank").value, 10);
+  const name = document.getElementById("towerName").value.trim();
+  const creator = document.getElementById("towerCreator").value.trim();
+  const verifier = document.getElementById("towerVerifier").value.trim();
+  const difficulty = document.getElementById("towerDifficulty").value.trim();
+  const worldRecord = document.getElementById("towerWorldRecord").value.trim();
+  const videoId = document.getElementById("towerVideoId").value.trim();
+  const robloxLink = document.getElementById("towerRobloxLink").value.trim();
+
+  if (!name || !creator) {
+    showToast("Name and Creator are required!", "error");
+    return;
+  }
+
+  const newTower = {
+    rank: rank,
+    name: name,
+    creator: creator,
+    verifier: verifier,
+    difficulty: difficulty,
+    videoId: videoId,
+    worldRecord: worldRecord || "N/A",
+    robloxLink: robloxLink
+  };
+
+  let levels = getLevels();
+
+  // If rank is specified and conflicts, shift everything down
+  if (rank && rank > 0) {
+    // Check if any tower already has this rank
+    const existingAtRank = levels.find(l => l.rank === rank);
+    if (existingAtRank) {
+      // Shift all towers at this rank and below down by 1
+      levels = levels.map(l => {
+        if (l.rank >= rank) {
+          return { ...l, rank: l.rank + 1 };
+        }
+        return l;
+      });
+    }
+    newTower.rank = rank;
+  } else {
+    // Auto-assign rank at the end
+    const maxRank = levels.length > 0 ? Math.max(...levels.map(l => l.rank)) : 0;
+    newTower.rank = maxRank + 1;
+  }
+
+  levels.push(newTower);
+
+  // Sort by rank
+  levels.sort((a, b) => a.rank - b.rank);
+
+  setLevels(levels, new Date().toLocaleDateString("pl-PL"));
+
+  showToast(`Added "${name}" at rank #${newTower.rank}!`, "success");
+
+  // Clear form
+  document.getElementById("addTowerForm").reset();
+
+  // Refresh everything
+  render();
+  refreshAdminList();
+  refreshExportCode();
+  setupStats();
+}
+
+function deleteTower(rank) {
+  if (!confirm(`Delete tower at rank #${rank}?`)) return;
+
+  let levels = getLevels();
+  levels = levels.filter(l => l.rank !== rank);
+
+  // Re-sort and re-rank to fill gaps
+  levels.sort((a, b) => a.rank - b.rank);
+  levels = levels.map((l, i) => ({ ...l, rank: i + 1 }));
+
+  setLevels(levels, new Date().toLocaleDateString("pl-PL"));
+
+  showToast("Tower deleted!", "success");
+  render();
+  refreshAdminList();
+  refreshExportCode();
+  setupStats();
+}
+
+function editTower(rank) {
+  const levels = getLevels();
+  const tower = levels.find(l => l.rank === rank);
+  if (!tower) return;
+
+  // Create edit modal
+  let modal = document.querySelector(".edit-modal-overlay");
+  if (modal) modal.remove();
+
+  modal = document.createElement("div");
+  modal.className = "edit-modal-overlay";
+  modal.innerHTML = `
+    <div class="edit-modal">
+      <h3>✏️ Edit Tower</h3>
+      <form id="editForm" class="admin-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Rank</label>
+            <input type="number" id="editRank" value="${tower.rank}" min="1" required>
+          </div>
+          <div class="form-group">
+            <label>Name *</label>
+            <input type="text" id="editName" value="${escapeHtml(tower.name)}" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Creator(s) *</label>
+            <input type="text" id="editCreator" value="${escapeHtml(tower.creator)}" required>
+          </div>
+          <div class="form-group">
+            <label>Verifier</label>
+            <input type="text" id="editVerifier" value="${escapeHtml(tower.verifier || "")}">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Difficulty</label>
+            <input type="text" id="editDifficulty" value="${escapeHtml(tower.difficulty || "")}">
+          </div>
+          <div class="form-group">
+            <label>World Record</label>
+            <input type="text" id="editWorldRecord" value="${escapeHtml(tower.worldRecord != null ? String(tower.worldRecord) : "N/A")}">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>YouTube Video ID/URL</label>
+            <input type="text" id="editVideoId" value="${escapeHtml(tower.videoId || "")}">
+          </div>
+          <div class="form-group">
+            <label>Roblox Link</label>
+            <input type="url" id="editRobloxLink" value="${escapeHtml(tower.robloxLink || "")}">
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">💾 Save Changes</button>
+          <button type="button" class="btn-secondary" id="editCancelBtn">Cancel</button>
+        </div>
+      </form>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  // Show modal
+  requestAnimationFrame(() => modal.classList.add("open"));
+
+  // Close on backdrop click
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) modal.classList.remove("open");
+  });
+
+  document.getElementById("editCancelBtn").addEventListener("click", () => {
+    modal.classList.remove("open");
+  });
+
+  document.getElementById("editForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const newRank = parseInt(document.getElementById("editRank").value, 10);
+    const oldRank = tower.rank;
+
+    let levels = getLevels();
+
+    // Remove the old tower first
+    levels = levels.filter(l => l.rank !== oldRank);
+
+    // If rank changed, handle shifting
+    if (newRank !== oldRank) {
+      // Check if new rank is occupied
+      const existingAtNewRank = levels.find(l => l.rank === newRank);
+      if (existingAtNewRank) {
+        if (newRank > oldRank) {
+          // Moving down: shift towers between old+1 and new down by 1 (toward old rank)
+          levels = levels.map(l => {
+            if (l.rank > oldRank && l.rank <= newRank) {
+              return { ...l, rank: l.rank - 1 };
+            }
+            return l;
+          });
+        } else {
+          // Moving up: shift towers between new and old-1 up by 1
+          levels = levels.map(l => {
+            if (l.rank >= newRank && l.rank < oldRank) {
+              return { ...l, rank: l.rank + 1 };
+            }
+            return l;
+          });
+        }
+      }
+    }
+
+    // Update tower
+    tower.rank = newRank;
+    tower.name = document.getElementById("editName").value.trim();
+    tower.creator = document.getElementById("editCreator").value.trim();
+    tower.verifier = document.getElementById("editVerifier").value.trim();
+    tower.difficulty = document.getElementById("editDifficulty").value.trim();
+    tower.worldRecord = document.getElementById("editWorldRecord").value.trim();
+    tower.videoId = document.getElementById("editVideoId").value.trim();
+    tower.robloxLink = document.getElementById("editRobloxLink").value.trim();
+
+    levels.push(tower);
+    levels.sort((a, b) => a.rank - b.rank);
+
+    setLevels(levels, new Date().toLocaleDateString("pl-PL"));
+
+    modal.classList.remove("open");
+    showToast("Tower updated!", "success");
+    render();
+    refreshAdminList();
+    refreshExportCode();
+    setupStats();
+  });
+}
+
+function refreshAdminList() {
+  const container = document.getElementById("adminTowerList");
+  const search = document.getElementById("adminSearch").value.trim().toLowerCase();
+  const levels = getLevels().sort((a, b) => a.rank - b.rank);
+
+  const filtered = search
+    ? levels.filter(l => 
+        (l.name || "").toLowerCase().includes(search) ||
+        (l.creator || "").toLowerCase().includes(search) ||
+        (l.difficulty || "").toLowerCase().includes(search)
+      )
+    : levels;
+
+  document.getElementById("adminCount").textContent = `${filtered.length} tower${filtered.length !== 1 ? 's' : ''}`;
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 20px;">No towers found.</p>';
+    return;
+  }
+
+  container.innerHTML = filtered.map(l => `
+    <div class="admin-tower-item">
+      <span class="admin-tower-rank">#${l.rank}</span>
+      <div class="admin-tower-info">
+        <span class="admin-tower-name">${escapeHtml(l.name || "Unnamed")}</span>
+        <span class="admin-tower-meta">${escapeHtml(l.creator || "—")} · ${escapeHtml(l.difficulty || "—")} · ${l.verifier ? "✓ Verified" : "○ Unverified"}</span>
+      </div>
+      <div class="admin-tower-actions">
+        <button class="btn-edit" title="Edit" onclick="editTower(${l.rank})">✏️</button>
+        <button class="btn-delete" title="Delete" onclick="deleteTower(${l.rank})">🗑️</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+function refreshExportCode() {
+  const textarea = document.getElementById("exportCode");
+  if (textarea) {
+    textarea.value = exportToLevelsJs();
+  }
+}
+
+function showToast(message, type = "success") {
+  let toast = document.querySelector(".toast");
+  if (toast) toast.remove();
+
+  toast = document.createElement("div");
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  document.body.appendChild(toast);
+
+  requestAnimationFrame(() => toast.classList.add("show"));
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.remove(), 300);
+  }, 2500);
+}
+
 // --- state ---
 let visibleCount = PAGE_SIZE;
 let activeTierId = "all";
@@ -89,7 +580,8 @@ const CHEVRON_SVG = '<svg class="row-chevron" viewBox="0 0 24 24" fill="none" st
 
 function getFilteredLevels() {
   const q = query.trim().toLowerCase();
-  return LEVELS
+  const levels = getLevels();
+  return levels
     .slice()
     .sort((a, b) => a.rank - b.rank)
     .filter((lvl) => {
@@ -118,7 +610,14 @@ function buildDifficultyBadge(rawDifficulty) {
   const icon = difficultyIcon(parsed);
   const badgeClass = cls ? 'diff-' + cls : "";
 
-  return '\n    <span class="row-difficulty">\n      <span class="diff-badge ' + badgeClass + '">\n        ' + icon + '\n        ' + escapeHtml(parsed.full) + '\n      </span>\n    </span>\n  ';
+  return `
+    <span class="row-difficulty">
+      <span class="diff-badge ${badgeClass}">
+        ${icon}
+        ${escapeHtml(parsed.full)}
+      </span>
+    </span>
+  `;
 }
 
 function buildCreatorSummary(creatorStr) {
@@ -150,7 +649,15 @@ function buildRow(level, index) {
   const rankStr = String(level.rank);
   const diffBadge = buildDifficultyBadge(level.difficulty);
 
-  li.innerHTML = '\n    <button class="row-main" type="button" aria-expanded="false">\n      <span class="row-rank">#' + rankStr + '</span>\n      <span class="row-name">' + escapeHtml(level.name || "Unnamed") + '</span>\n      ' + diffBadge + '\n      ' + buildCreatorSummary(level.creator) + '\n      ' + CHEVRON_SVG + '\n    </button>\n  ';
+  li.innerHTML = `
+    <button class="row-main" type="button" aria-expanded="false">
+      <span class="row-rank">#${rankStr}</span>
+      <span class="row-name">${escapeHtml(level.name || "Unnamed")}</span>
+      ${diffBadge}
+      ${buildCreatorSummary(level.creator)}
+      ${CHEVRON_SVG}
+    </button>
+  `;
 
   const btn = li.querySelector(".row-main");
   btn.addEventListener("click", () => toggleRow(li, level));
@@ -208,7 +715,10 @@ function toggleRow(li, level) {
     let videoMarkup;
 
     if (videoId) {
-      videoMarkup = '\n      <iframe src="https://www.youtube.com/embed/' + videoId + '" title="Verification: ' + escapeHtml(level.name || "") + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>\n      <a href="https://www.youtube.com/watch?v=' + videoId + '" class="video-fallback" target="_blank" rel="noopener">Watch on YouTube ↗</a>\n    ';
+      videoMarkup = `
+      <iframe src="https://www.youtube.com/embed/${videoId}" title="Verification: ${escapeHtml(level.name || "")}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <a href="https://www.youtube.com/watch?v=${videoId}" class="video-fallback" target="_blank" rel="noopener">Watch on YouTube ↗</a>
+    `;
     } else {
       videoMarkup = '<div class="detail-video-missing">No video added for this tower.</div>';
     }
@@ -226,7 +736,34 @@ function toggleRow(li, level) {
 
     detail = document.createElement("div");
     detail.className = "row-detail";
-    detail.innerHTML = '\n      <div class="detail-video">' + videoMarkup + '</div>\n      <div class="detail-side">\n        <dl class="detail-meta">\n          <div class="meta-item">\n            <dt>Creator</dt>\n            <dd>' + escapeHtml(level.creator || "—") + '</dd>\n          </div>\n          <div class="meta-item">\n            <dt>Verifier</dt>\n            <dd>' + escapeHtml(verifierDisplay) + '</dd>\n          </div>\n          <div class="meta-item">\n            <dt>Difficulty</dt>\n            <dd>' + escapeHtml(diffDisplay) + '</dd>\n          </div>\n          <div class="meta-item">\n            <dt>World Record</dt>\n            <dd>' + escapeHtml(wrDisplay) + '</dd>\n          </div>\n          <div class="meta-item">\n            <dt>Status</dt>\n            <dd>' + escapeHtml(statusDisplay) + '</dd>\n          </div>\n        </dl>\n        ' + placeMarkup + '\n      </div>\n    ';
+    detail.innerHTML = `
+      <div class="detail-video">${videoMarkup}</div>
+      <div class="detail-side">
+        <dl class="detail-meta">
+          <div class="meta-item">
+            <dt>Creator</dt>
+            <dd>${escapeHtml(level.creator || "—")}</dd>
+          </div>
+          <div class="meta-item">
+            <dt>Verifier</dt>
+            <dd>${escapeHtml(verifierDisplay)}</dd>
+          </div>
+          <div class="meta-item">
+            <dt>Difficulty</dt>
+            <dd>${escapeHtml(diffDisplay)}</dd>
+          </div>
+          <div class="meta-item">
+            <dt>World Record</dt>
+            <dd>${escapeHtml(wrDisplay)}</dd>
+          </div>
+          <div class="meta-item">
+            <dt>Status</dt>
+            <dd>${escapeHtml(statusDisplay)}</dd>
+          </div>
+        </dl>
+        ${placeMarkup}
+      </div>
+    `;
     li.appendChild(detail);
   }
 
@@ -294,12 +831,14 @@ function setupControls() {
 }
 
 function setupStats() {
-  statTotal.textContent = LEVELS.length;
-  statUpdated.textContent = typeof LAST_UPDATE !== "undefined" ? LAST_UPDATE : "—";
+  const data = loadData();
+  statTotal.textContent = data.levels.length;
+  statUpdated.textContent = data.lastUpdate || "—";
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   setupControls();
   setupStats();
+  initAdminPanel();
   render();
 });
