@@ -35,8 +35,6 @@ function parseDifficulty(raw) {
   const str = String(raw).trim();
   const lowered = str.toLowerCase();
 
-  // FIX: high-peak MUST come before high in the alternation,
-  // otherwise "high-peak" gets matched as prefix="high" + base="peak..."
   const prefixMatch = lowered.match(/^(low-mid|mid-high|bottom-low|baseline|bottom|low|mid|high-peak|high|peak|base)(?:\s+|-)/);
   let prefix = "";
   let base = lowered;
@@ -54,7 +52,6 @@ function parseDifficulty(raw) {
 }
 
 function difficultyClass(parsed) {
-  // High-Peak gets its own class for distinct styling
   if (parsed.prefix === "High-Peak") return "high-peak";
   const map = {
     "horrific": "horrific",
@@ -66,7 +63,6 @@ function difficultyClass(parsed) {
 }
 
 function difficultyIcon(parsed) {
-  // High-Peak uses the Unreal star icon
   if (parsed.prefix === "High-Peak") return ICON_UNREAL;
   const b = parsed.base.toLowerCase();
   if (b === "horrific") return ICON_HORRIFIC;
@@ -166,48 +162,93 @@ function toggleRow(li, level) {
   const btn = li.querySelector(".row-main");
   const isExpanded = li.classList.contains("expanded");
 
+  // Collapse this row if already expanded
   if (isExpanded) {
+    const detail = li.querySelector(".row-detail");
+    if (detail) {
+      // Measure current height for smooth collapse
+      const h = detail.scrollHeight;
+      detail.style.maxHeight = h + "px";
+      detail.offsetHeight; // force reflow
+      detail.style.maxHeight = "0px";
+      detail.style.opacity = "0";
+      detail.style.paddingTop = "0";
+      detail.style.paddingBottom = "0";
+      detail.style.gap = "0";
+    }
     li.classList.remove("expanded");
     btn.setAttribute("aria-expanded", "false");
     return;
   }
 
+  // Collapse any other expanded rows
   document.querySelectorAll(".level-row.expanded").forEach(other => {
     if (other !== li) {
       other.classList.remove("expanded");
       other.querySelector(".row-main").setAttribute("aria-expanded", "false");
+      const d = other.querySelector(".row-detail");
+      if (d) {
+        d.style.maxHeight = "0px";
+        d.style.opacity = "0";
+        d.style.paddingTop = "0";
+        d.style.paddingBottom = "0";
+        d.style.gap = "0";
+      }
     }
   });
 
   li.classList.add("expanded");
   btn.setAttribute("aria-expanded", "true");
 
-  if (li.querySelector(".row-detail")) return;
+  let detail = li.querySelector(".row-detail");
 
-  const videoId = extractYouTubeId(level.videoId);
-  let videoMarkup;
+  // Build detail if not present
+  if (!detail) {
+    const videoId = extractYouTubeId(level.videoId);
+    let videoMarkup;
 
-  if (videoId) {
-    videoMarkup = '\n      <iframe src="https://www.youtube.com/embed/' + videoId + '" title="Verification: ' + escapeHtml(level.name || "") + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>\n      <a href="https://www.youtube.com/watch?v=' + videoId + '" class="video-fallback" target="_blank" rel="noopener">Watch on YouTube ↗</a>\n    ';
-  } else {
-    videoMarkup = '<div class="detail-video-missing">No video added for this tower.</div>';
+    if (videoId) {
+      videoMarkup = '\n      <iframe src="https://www.youtube.com/embed/' + videoId + '" title="Verification: ' + escapeHtml(level.name || "") + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>\n      <a href="https://www.youtube.com/watch?v=' + videoId + '" class="video-fallback" target="_blank" rel="noopener">Watch on YouTube ↗</a>\n    ';
+    } else {
+      videoMarkup = '<div class="detail-video-missing">No video added for this tower.</div>';
+    }
+
+    const diffParsed = parseDifficulty(level.difficulty);
+    const diffDisplay = diffParsed.full || "—";
+    const wrDisplay = level.worldRecord != null ? String(level.worldRecord) : "N/A";
+    const verifierDisplay = (level.verifier || "").trim() || "—";
+    const statusDisplay = verifierDisplay !== "—" ? "Verified" : "Unverified";
+
+    const robloxLink = (level.robloxLink || "").trim();
+    const placeMarkup = robloxLink
+      ? '<a href="' + escapeHtml(robloxLink) + '" class="place-link" target="_blank" rel="noopener">' + ICON_ROBLOX + '<span>Play this tower ↗</span></a>'
+      : '<div class="place-link place-link-missing">' + ICON_ROBLOX + '<span>No Roblox place link added</span></div>';
+
+    detail = document.createElement("div");
+    detail.className = "row-detail";
+    detail.innerHTML = '\n      <div class="detail-video">' + videoMarkup + '</div>\n      <div class="detail-side">\n        <dl class="detail-meta">\n          <div class="meta-item">\n            <dt>Creator</dt>\n            <dd>' + escapeHtml(level.creator || "—") + '</dd>\n          </div>\n          <div class="meta-item">\n            <dt>Verifier</dt>\n            <dd>' + escapeHtml(verifierDisplay) + '</dd>\n          </div>\n          <div class="meta-item">\n            <dt>Difficulty</dt>\n            <dd>' + escapeHtml(diffDisplay) + '</dd>\n          </div>\n          <div class="meta-item">\n            <dt>World Record</dt>\n            <dd>' + escapeHtml(wrDisplay) + '</dd>\n          </div>\n          <div class="meta-item">\n            <dt>Status</dt>\n            <dd>' + escapeHtml(statusDisplay) + '</dd>\n          </div>\n        </dl>\n        ' + placeMarkup + '\n      </div>\n    ';
+    li.appendChild(detail);
   }
 
-  const diffParsed = parseDifficulty(level.difficulty);
-  const diffDisplay = diffParsed.full || "—";
-  const wrDisplay = level.worldRecord != null ? String(level.worldRecord) : "N/A";
-  const verifierDisplay = (level.verifier || "").trim() || "—";
-  const statusDisplay = verifierDisplay !== "—" ? "Verified" : "Unverified";
+  // Measure exact content height and animate to it
+  // First reset to natural height to measure
+  detail.style.maxHeight = "none";
+  detail.style.opacity = "0";
+  detail.style.paddingTop = "0";
+  detail.style.paddingBottom = "0";
+  detail.style.gap = "0";
+  const targetH = detail.scrollHeight;
 
-  const robloxLink = (level.robloxLink || "").trim();
-  const placeMarkup = robloxLink
-    ? '<a href="' + escapeHtml(robloxLink) + '" class="place-link" target="_blank" rel="noopener">' + ICON_ROBLOX + '<span>Play this tower ↗</span></a>'
-    : '<div class="place-link place-link-missing">' + ICON_ROBLOX + '<span>No Roblox place link added</span></div>';
+  // Start from 0
+  detail.style.maxHeight = "0px";
+  detail.offsetHeight; // force reflow
 
-  const detail = document.createElement("div");
-  detail.className = "row-detail";
-  detail.innerHTML = '\n    <div class="detail-video">' + videoMarkup + '</div>\n    <div class="detail-side">\n      <dl class="detail-meta">\n        <div class="meta-item">\n          <dt>Creator</dt>\n          <dd>' + escapeHtml(level.creator || "—") + '</dd>\n        </div>\n        <div class="meta-item">\n          <dt>Verifier</dt>\n          <dd>' + escapeHtml(verifierDisplay) + '</dd>\n        </div>\n        <div class="meta-item">\n          <dt>Difficulty</dt>\n          <dd>' + escapeHtml(diffDisplay) + '</dd>\n        </div>\n        <div class="meta-item">\n          <dt>World Record</dt>\n          <dd>' + escapeHtml(wrDisplay) + '</dd>\n        </div>\n        <div class="meta-item">\n          <dt>Status</dt>\n          <dd>' + escapeHtml(statusDisplay) + '</dd>\n        </div>\n      </dl>\n      ' + placeMarkup + '\n    </div>\n  ';
-  li.appendChild(detail);
+  // Animate to exact measured height
+  detail.style.maxHeight = targetH + "px";
+  detail.style.opacity = "1";
+  detail.style.paddingTop = "4px";
+  detail.style.paddingBottom = "28px";
+  detail.style.gap = "28px";
 }
 
 function escapeHtml(str) {
