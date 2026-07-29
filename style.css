@@ -1,6 +1,6 @@
 /* =========================================================
    IMPOSSIBLE TOWER LIST — style.css
-   Dark theme, smooth animations, clean list design.
+   Dark theme, smooth animations, EToH difficulty system.
    ========================================================= */
 
 :root {
@@ -24,6 +24,13 @@
   --tier-upper:       #ff6b4a;
   --tier-middle:      #d48a3a;
   --tier-foundations: #6b7a8a;
+
+  /* EToH Difficulty Colors */
+  --diff-terrifying:  #ff3333;
+  --diff-catastrophic:#ff6600;
+  --diff-horrific:    #ff0066;
+  --diff-unreal:      #cc00ff;
+  --diff-nil:         #ffffff;
 
   --font-body:  'Inter', system-ui, -apple-system, sans-serif;
   --font-mono:  'JetBrains Mono', 'IBM Plex Mono', monospace;
@@ -231,7 +238,7 @@ main {
 
 .list-head {
   display: grid;
-  grid-template-columns: 64px 1fr 200px 40px;
+  grid-template-columns: 64px 1fr 160px 180px 40px;
   align-items: center;
   padding: 12px 20px;
   font-family: var(--font-mono);
@@ -264,7 +271,7 @@ main {
 .row-main {
   width: 100%;
   display: grid;
-  grid-template-columns: 64px 1fr 200px 40px;
+  grid-template-columns: 64px 1fr 160px 180px 40px;
   align-items: center;
   gap: 8px;
   padding: 15px 20px;
@@ -323,6 +330,50 @@ main {
   color: var(--text);
   letter-spacing: -0.01em;
 }
+
+/* Difficulty badge */
+.row-difficulty {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.diff-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 4px 10px;
+  border-radius: 100px;
+  border: 1px solid transparent;
+  text-transform: uppercase;
+}
+
+.diff-badge .diff-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* EToH Difficulty Colors */
+.diff-terrifying        { color: var(--diff-terrifying); border-color: rgba(255,51,51,0.35); background: rgba(255,51,51,0.08); }
+.diff-terrifying .diff-dot { background: var(--diff-terrifying); box-shadow: 0 0 6px rgba(255,51,51,0.5); }
+
+.diff-catastrophic      { color: var(--diff-catastrophic); border-color: rgba(255,102,0,0.35); background: rgba(255,102,0,0.08); }
+.diff-catastrophic .diff-dot { background: var(--diff-catastrophic); box-shadow: 0 0 6px rgba(255,102,0,0.5); }
+
+.diff-horrific          { color: var(--diff-horrific); border-color: rgba(255,0,102,0.35); background: rgba(255,0,102,0.08); }
+.diff-horrific .diff-dot { background: var(--diff-horrific); box-shadow: 0 0 6px rgba(255,0,102,0.5); }
+
+.diff-unreal            { color: var(--diff-unreal); border-color: rgba(204,0,255,0.35); background: rgba(204,0,255,0.08); }
+.diff-unreal .diff-dot   { background: var(--diff-unreal); box-shadow: 0 0 6px rgba(204,0,255,0.5); }
+
+.diff-nil               { color: var(--diff-nil); border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.06); }
+.diff-nil .diff-dot      { background: var(--diff-nil); box-shadow: 0 0 8px rgba(255,255,255,0.6); }
 
 .row-creator {
   font-size: 13px;
@@ -490,6 +541,7 @@ main {
 
   .list-head { display: none; }
   .row-main { grid-template-columns: 52px 1fr 24px; padding: 14px 16px; }
+  .row-difficulty { display: none; }
   .row-creator { display: none; }
   .row-rank { padding-left: 8px; font-size: 13px; }
   .row-name { font-size: 14px; }
