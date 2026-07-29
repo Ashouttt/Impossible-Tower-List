@@ -1,6 +1,6 @@
 /* =========================================================
    IMPOSSIBLE TOWER LIST — style.css
-   Dark theme, smooth animations, EToH difficulty system.
+   Dark theme, smooth animations, EToH difficulty icons.
    ========================================================= */
 
 :root {
@@ -26,17 +26,15 @@
   --tier-foundations: #6b7a8a;
 
   /* EToH Difficulty Colors */
-  --diff-terrifying:  #ff3333;
-  --diff-catastrophic:#ff6600;
-  --diff-horrific:    #ff0066;
-  --diff-unreal:      #cc00ff;
-  --diff-nil:         #ffffff;
+  --diff-horrific:    #b388ff;
+  --diff-unreal:      #7c3aed;
+  --diff-nil:         #a0a0a0;
+  --diff-error:       #ff3333;
 
   --font-body:  'Inter', system-ui, -apple-system, sans-serif;
   --font-mono:  'JetBrains Mono', 'IBM Plex Mono', monospace;
 
   --radius: 8px;
-  --shadow: 0 4px 24px rgba(0,0,0,0.45);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -238,7 +236,7 @@ main {
 
 .list-head {
   display: grid;
-  grid-template-columns: 64px 1fr 160px 180px 40px;
+  grid-template-columns: 64px 1fr 180px 180px 40px;
   align-items: center;
   padding: 12px 20px;
   font-family: var(--font-mono);
@@ -271,10 +269,10 @@ main {
 .row-main {
   width: 100%;
   display: grid;
-  grid-template-columns: 64px 1fr 160px 180px 40px;
+  grid-template-columns: 64px 1fr 180px 180px 40px;
   align-items: center;
   gap: 8px;
-  padding: 15px 20px;
+  padding: 14px 20px;
   background: none;
   border: none;
   color: inherit;
@@ -331,7 +329,7 @@ main {
   letter-spacing: -0.01em;
 }
 
-/* Difficulty badge */
+/* Difficulty badge with icon */
 .row-difficulty {
   display: flex;
   align-items: center;
@@ -341,39 +339,61 @@ main {
 .diff-badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.04em;
-  padding: 4px 10px;
+  padding: 5px 12px 5px 9px;
   border-radius: 100px;
   border: 1px solid transparent;
   text-transform: uppercase;
+  transition: transform 150ms ease, box-shadow 200ms ease;
 }
 
-.diff-badge .diff-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
+.diff-badge:hover {
+  transform: scale(1.04);
+}
+
+/* SVG Icons — 8-pointed star (Unreal/Nil) and 4-pointed star (Horrific) */
+.diff-icon {
+  width: 18px;
+  height: 18px;
   flex-shrink: 0;
+  filter: drop-shadow(0 0 4px currentColor);
 }
 
-/* EToH Difficulty Colors */
-.diff-terrifying        { color: var(--diff-terrifying); border-color: rgba(255,51,51,0.35); background: rgba(255,51,51,0.08); }
-.diff-terrifying .diff-dot { background: var(--diff-terrifying); box-shadow: 0 0 6px rgba(255,51,51,0.5); }
+/* Horrific — 4-pointed X star, light purple */
+.diff-horrific {
+  color: var(--diff-horrific);
+  border-color: rgba(179,136,255,0.35);
+  background: rgba(179,136,255,0.08);
+}
+.diff-horrific .diff-icon { color: var(--diff-horrific); }
 
-.diff-catastrophic      { color: var(--diff-catastrophic); border-color: rgba(255,102,0,0.35); background: rgba(255,102,0,0.08); }
-.diff-catastrophic .diff-dot { background: var(--diff-catastrophic); box-shadow: 0 0 6px rgba(255,102,0,0.5); }
+/* Unreal — 8-pointed star, deep purple */
+.diff-unreal {
+  color: var(--diff-unreal);
+  border-color: rgba(124,58,237,0.35);
+  background: rgba(124,58,237,0.08);
+}
+.diff-unreal .diff-icon { color: var(--diff-unreal); }
 
-.diff-horrific          { color: var(--diff-horrific); border-color: rgba(255,0,102,0.35); background: rgba(255,0,102,0.08); }
-.diff-horrific .diff-dot { background: var(--diff-horrific); box-shadow: 0 0 6px rgba(255,0,102,0.5); }
+/* Nil — 8-pointed star, silver/gray */
+.diff-nil {
+  color: var(--diff-nil);
+  border-color: rgba(160,160,160,0.30);
+  background: rgba(160,160,160,0.08);
+}
+.diff-nil .diff-icon { color: var(--diff-nil); }
 
-.diff-unreal            { color: var(--diff-unreal); border-color: rgba(204,0,255,0.35); background: rgba(204,0,255,0.08); }
-.diff-unreal .diff-dot   { background: var(--diff-unreal); box-shadow: 0 0 6px rgba(204,0,255,0.5); }
-
-.diff-nil               { color: var(--diff-nil); border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.06); }
-.diff-nil .diff-dot      { background: var(--diff-nil); box-shadow: 0 0 8px rgba(255,255,255,0.6); }
+/* Error — skull/crossbones symbol, red */
+.diff-error {
+  color: var(--diff-error);
+  border-color: rgba(255,51,51,0.35);
+  background: rgba(255,51,51,0.08);
+}
+.diff-error .diff-icon { color: var(--diff-error); }
 
 .row-creator {
   font-size: 13px;
@@ -551,7 +571,7 @@ main {
   .detail-meta { grid-template-columns: 1fr 1fr; gap: 14px 16px; }
 }
 
-/* Stagger animation delays for first 20 rows */
+/* Stagger animation delays */
 .level-row:nth-child(1)  { animation-delay: 0ms; }
 .level-row:nth-child(2)  { animation-delay: 30ms; }
 .level-row:nth-child(3)  { animation-delay: 60ms; }
