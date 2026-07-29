@@ -35,21 +35,20 @@ const ICON_NIL = `<svg class="diff-icon" viewBox="0 0 100 100"><polygon points="
 const ICON_ERROR = `<svg class="diff-icon" viewBox="0 0 100 100"><rect x="8" y="8" width="84" height="84" rx="4" fill="#cc2222" stroke="#991111" stroke-width="6"/></svg>`;
 
 // --- Difficulty parsing (EToH style) ---
+// Supports: "Low", "Mid", "High", "Peak", "Mid-High", "Low-Mid", etc.
 function parseDifficulty(raw) {
   if (!raw) return { prefix: "", base: "", full: "" };
   const str = String(raw).trim();
   const lowered = str.toLowerCase();
 
-  const prefixes = ["bottom", "low", "mid", "high", "peak"];
+  // Match prefix patterns like "mid-high", "low", "peak", etc.
+  const prefixMatch = lowered.match(/^(bottom|low-mid|mid-high|low|mid|high|peak)(?:\s+|-)/);
   let prefix = "";
   let base = lowered;
 
-  for (const p of prefixes) {
-    if (lowered.startsWith(p + " ")) {
-      prefix = p;
-      base = lowered.slice(p.length).trim();
-      break;
-    }
+  if (prefixMatch) {
+    prefix = prefixMatch[1];
+    base = lowered.slice(prefixMatch[0].length).trim();
   }
 
   const capPrefix = prefix ? prefix.charAt(0).toUpperCase() + prefix.slice(1) : "";
@@ -183,9 +182,16 @@ function toggleRow(li, level) {
   if (li.querySelector(".row-detail")) return;
 
   const videoId = extractYouTubeId(level.videoId);
-  const videoMarkup = videoId
-    ? `<iframe src="https://www.youtube.com/embed/${videoId}" title="Verification: ${escapeHtml(level.name || "")}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
-    : `<div class="detail-video-missing">No video added for this level.</div>`;
+  let videoMarkup;
+
+  if (videoId) {
+    videoMarkup = `
+      <iframe src="https://www.youtube.com/embed/${videoId}" title="Verification: ${escapeHtml(level.name || "")}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <a href="https://www.youtube.com/watch?v=${videoId}" class="video-fallback" target="_blank" rel="noopener">Watch on YouTube ↗</a>
+    `;
+  } else {
+    videoMarkup = `<div class="detail-video-missing">No video added for this level.</div>`;
+  }
 
   const diffParsed = parseDifficulty(level.difficulty);
   const diffDisplay = diffParsed.full || "—";
