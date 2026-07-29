@@ -433,9 +433,30 @@ main {
 }
 
 .row-creator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: 13px;
   color: var(--text-dim);
   font-family: var(--font-mono);
+  overflow: hidden;
+}
+
+.creator-first {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.creator-more {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  padding: 2px 7px;
+  border-radius: 100px;
 }
 
 .row-chevron {
