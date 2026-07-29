@@ -28,7 +28,7 @@
   --diff-unreal:      #7c3aed;
   --diff-nil:         #888888;
   --diff-error:       #cc2222;
-  --diff-high-peak:   #a855f7;
+  --diff-high-peak:   #c084fc;
 
   --font-body:  'Inter', system-ui, -apple-system, sans-serif;
   --font-mono:  'JetBrains Mono', 'IBM Plex Mono', monospace;
@@ -435,14 +435,14 @@ main {
   filter: drop-shadow(0 0 5px rgba(204,34,34,0.5));
 }
 
-/* High-Peak — bright purple, uses Unreal star icon */
+/* High-Peak — bright vivid purple, uses Unreal star icon */
 .diff-high-peak {
   color: var(--diff-high-peak);
-  border-color: rgba(168,85,247,0.35);
-  background: rgba(168,85,247,0.08);
+  border-color: rgba(192,132,252,0.40);
+  background: rgba(192,132,252,0.10);
 }
 .diff-high-peak .diff-icon {
-  filter: drop-shadow(0 0 4px rgba(168,85,247,0.5));
+  filter: drop-shadow(0 0 5px rgba(192,132,252,0.6));
 }
 
 .row-creator {
