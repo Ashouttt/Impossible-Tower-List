@@ -28,8 +28,8 @@
   /* EToH Difficulty Colors */
   --diff-horrific:    #b388ff;
   --diff-unreal:      #7c3aed;
-  --diff-nil:         #a0a0a0;
-  --diff-error:       #ff3333;
+  --diff-nil:         #888888;
+  --diff-error:       #cc2222;
 
   --font-body:  'Inter', system-ui, -apple-system, sans-serif;
   --font-mono:  'JetBrains Mono', 'IBM Plex Mono', monospace;
@@ -355,12 +355,11 @@ main {
   transform: scale(1.04);
 }
 
-/* SVG Icons — 8-pointed star (Unreal/Nil) and 4-pointed star (Horrific) */
+/* SVG Icons */
 .diff-icon {
   width: 18px;
   height: 18px;
   flex-shrink: 0;
-  filter: drop-shadow(0 0 4px currentColor);
 }
 
 /* Horrific — 4-pointed X star, light purple */
@@ -369,7 +368,9 @@ main {
   border-color: rgba(179,136,255,0.35);
   background: rgba(179,136,255,0.08);
 }
-.diff-horrific .diff-icon { color: var(--diff-horrific); }
+.diff-horrific .diff-icon {
+  filter: drop-shadow(0 0 4px rgba(179,136,255,0.5));
+}
 
 /* Unreal — 8-pointed star, deep purple */
 .diff-unreal {
@@ -377,23 +378,29 @@ main {
   border-color: rgba(124,58,237,0.35);
   background: rgba(124,58,237,0.08);
 }
-.diff-unreal .diff-icon { color: var(--diff-unreal); }
+.diff-unreal .diff-icon {
+  filter: drop-shadow(0 0 4px rgba(124,58,237,0.5));
+}
 
-/* Nil — 8-pointed star, silver/gray */
+/* Nil — two overlapping gray stars */
 .diff-nil {
   color: var(--diff-nil);
-  border-color: rgba(160,160,160,0.30);
-  background: rgba(160,160,160,0.08);
+  border-color: rgba(136,136,136,0.30);
+  background: rgba(136,136,136,0.08);
 }
-.diff-nil .diff-icon { color: var(--diff-nil); }
+.diff-nil .diff-icon {
+  filter: drop-shadow(0 0 3px rgba(136,136,136,0.4));
+}
 
-/* Error — skull/crossbones symbol, red */
+/* Error — red square with dark border (icon has baked-in colors) */
 .diff-error {
-  color: var(--diff-error);
-  border-color: rgba(255,51,51,0.35);
-  background: rgba(255,51,51,0.08);
+  color: #ff5555;
+  border-color: rgba(204,34,34,0.40);
+  background: rgba(204,34,34,0.10);
 }
-.diff-error .diff-icon { color: var(--diff-error); }
+.diff-error .diff-icon {
+  filter: drop-shadow(0 0 5px rgba(204,34,34,0.5));
+}
 
 .row-creator {
   font-size: 13px;
