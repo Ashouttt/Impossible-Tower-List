@@ -86,7 +86,7 @@ const LEVELS = [
   {
     rank: 7,
     name: "ToMH (Tower of Monochromatic Haze)",
-    creator: "Various Creators",
+    creator: "Gehadimadm, tweet2a, Forstaken2008xs",
     verifier: "Gehadimad",
     difficulty: "Low-Mid Unreal",
     videoId: "HxCV-_zrLW0",
@@ -96,7 +96,7 @@ const LEVELS = [
   {
     rank: 8,
     name: "ToMIH (Tower of My Inner Hatred)",
-    creator: "Various Creators",
+    creator: "Reimu Hakurei, Kinjiture, BFFPikachu",
     verifier: "ZePlayerSlayer",
     difficulty: "Low Unreal",
     videoId: "CZzEPcEtwNU",
@@ -126,10 +126,10 @@ const LEVELS = [
   {
     rank: 11,
     name: "OoUS (Obelisk of Unrealistic Sightings)",
-    creator: "C2J7jaC-pt0",
+    creator: "Apple_FlavoredWater, yuienaaaa, CamronSkilIz, Killer818616",
     verifier: "Pyuruw",
     difficulty: "Low Unreal",
-    videoId: "",
+    videoId: "C2J7jaC-pt0",
     worldRecord: "N/A",
     robloxLink: "https://www.roblox.com/games/4777161742/Obelisk-of-Unrealistic-Sightings",
   },
@@ -196,7 +196,7 @@ const LEVELS = [
   {
     rank: 18,
     name: "ToMIM (Tower of Maybe In Mumbai)",
-    creator: "Various Creators",
+    creator: "Naz0dial, Stitch, Hexium, brub, arik21, az77, zkv07, asAGAIN, nortex, dom, ChillUltralight, spear, geo, twossed.173, NadiPlaysss",
     verifier: "ChillUltralight",
     difficulty: "Bottom-Low Unreal",
     videoId: "_e93li9cdDE",
@@ -216,7 +216,7 @@ const LEVELS = [
   {
     rank: 20,
     name: "TT (Target Tower)",
-    creator: "Various Creators",
+    creator: "DukeQD, Forstaken2008xs, Tritone246",
     verifier: "player0v0",
     difficulty: "Bottom Unreal",
     videoId: "UiK6pKgHGpU",
@@ -236,7 +236,7 @@ const LEVELS = [
   {
     rank: 22,
     name: "ToTT (Tower of Twenty Two)",
-    creator: "Various Creators",
+    creator: "mccatster, jeremylightbulb, zelirium, ghoned, G1adit, carmeniscool12525_2",
     verifier: "carmeniscool12525_2",
     difficulty: "Bottom Unreal",
     videoId: "beqUfnw8dGQgHudh",
