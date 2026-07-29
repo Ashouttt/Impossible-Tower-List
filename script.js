@@ -147,7 +147,7 @@ function buildRow(level, index) {
   li.dataset.diff = diffClass || "none";
   li.style.animationDelay = Math.min(index, 19) * 30 + "ms";
 
-  const rankStr = String(level.rank).padStart(3, "0");
+  const rankStr = String(level.rank);
   const diffBadge = buildDifficultyBadge(level.difficulty);
 
   li.innerHTML = '\n    <button class="row-main" type="button" aria-expanded="false">\n      <span class="row-rank">#' + rankStr + '</span>\n      <span class="row-name">' + escapeHtml(level.name || "Unnamed") + '</span>\n      ' + diffBadge + '\n      ' + buildCreatorSummary(level.creator) + '\n      ' + CHEVRON_SVG + '\n    </button>\n  ';
