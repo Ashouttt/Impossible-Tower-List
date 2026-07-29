@@ -104,19 +104,21 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: var(--accent);
-  color: var(--bg-0);
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  color: var(--text);
   text-decoration: none;
   font-size: 12px;
   font-weight: 700;
   padding: 8px 16px;
   border-radius: 100px;
-  transition: transform 180ms ease, background 180ms ease;
+  transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
   letter-spacing: 0.01em;
 }
 
 .roblox-play-btn:hover {
-  background: var(--accent-2);
+  background: var(--bg-3);
+  border-color: var(--border-hover);
   transform: scale(1.03);
 }
 
