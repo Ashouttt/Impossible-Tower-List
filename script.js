@@ -20,28 +20,20 @@ function tierForRank(rank) {
 }
 
 // --- SVG Icons ---
-// Horrific: 4-pointed X star, light purple outline, transparent fill
 const ICON_HORRIFIC = `<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="7" stroke-linejoin="round"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38"/></svg>`;
 
-// Unreal: 8-pointed star, deep purple outline, transparent fill
 const ICON_UNREAL = `<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"><polygon points="50,2 60,35 98,35 68,56 78,90 50,70 22,90 32,56 2,35 40,35"/></svg>`;
 
-// Nil: two same-size overlapping 4-pointed stars (X shape)
-// Bottom: black fill, dark gray stroke
-// Top: same size, rotated 45deg, black fill, lighter gray stroke
 const ICON_NIL = `<svg class="diff-icon" viewBox="0 0 100 100"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38" fill="#0a0a0a" stroke="#555555" stroke-width="5" stroke-linejoin="round"/><g transform="translate(50,50) rotate(45) translate(-50,-50)"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38" fill="#0a0a0a" stroke="#999999" stroke-width="5" stroke-linejoin="round"/></g></svg>`;
 
-// Error: red square with dark red border, exactly like the image
 const ICON_ERROR = `<svg class="diff-icon" viewBox="0 0 100 100"><rect x="8" y="8" width="84" height="84" rx="4" fill="#cc2222" stroke="#991111" stroke-width="6"/></svg>`;
 
-// --- Difficulty parsing (EToH style) ---
-// Supports: "Low", "Mid", "High", "Peak", "Mid-High", "Low-Mid", etc.
+// --- Difficulty parsing ---
 function parseDifficulty(raw) {
   if (!raw) return { prefix: "", base: "", full: "" };
   const str = String(raw).trim();
   const lowered = str.toLowerCase();
 
-  // Match prefix patterns like "mid-high", "low", "peak", etc.
   const prefixMatch = lowered.match(/^(bottom|low-mid|mid-high|low|mid|high|peak)(?:\s+|-)/);
   let prefix = "";
   let base = lowered;
@@ -195,6 +187,7 @@ function toggleRow(li, level) {
 
   const diffParsed = parseDifficulty(level.difficulty);
   const diffDisplay = diffParsed.full || "—";
+  const wrDisplay = level.worldRecord != null ? String(level.worldRecord) : "N/A";
 
   const detail = document.createElement("div");
   detail.className = "row-detail";
@@ -214,12 +207,8 @@ function toggleRow(li, level) {
         <dd>${escapeHtml(diffDisplay)}</dd>
       </div>
       <div class="meta-item">
-        <dt>Level ID</dt>
-        <dd>${escapeHtml(level.levelId != null ? String(level.levelId) : "—")}</dd>
-      </div>
-      <div class="meta-item">
-        <dt>Points</dt>
-        <dd>${escapeHtml(level.points != null ? String(level.points) : "—")}</dd>
+        <dt>World Record</dt>
+        <dd>${escapeHtml(wrDisplay)}</dd>
       </div>
     </dl>
   `;
