@@ -50,7 +50,7 @@ const LEVELS = [
     verifier: "MonsterIsABlock",
     difficulty: "Mid Unreal",
     videoId: "bwDpQOuQaGg",
-    worldRecord: "Winpad",
+    worldRecord: "N/A",
     robloxLink: "",
   },
   {
