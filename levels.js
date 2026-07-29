@@ -190,7 +190,18 @@ const LEVELS = [
     points: 500,
   },
 
-  // Add more levels below, in this exact format:
+    {
+    rank: 1,
+    name: "Tower of Jungle Gyms",
+    creator: "Macloux, Higherthanblox, D_yni, Eccapin, Findabletag, Kinjiture, Melvinalsgamer, PoptartPunt, Empyrae, pacovepowered5, rohanmishrr, Yellow78Dog, SungazedUwU, Exhaustedsleepybear, Delukes51, CUGASTheLooney",
+    verifier: "",
+    difficulty: "Mid-High Error",
+    videoId: "B0VpzdvwrC0",
+    levelId: null,
+    points: 1000,
+  },
+
+// Add more levels below, in this exact format:
   //
   // {
   //   rank: 17,
