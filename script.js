@@ -1,6 +1,6 @@
 /* =========================================================
    IMPOSSIBLE TOWER LIST — script.js
-   English, smooth animations, EToH difficulty system.
+   English, smooth animations, EToH difficulty icons.
    ========================================================= */
 
 const TIERS = [
@@ -19,8 +19,14 @@ function tierForRank(rank) {
   return TIERS[TIERS.length - 1];
 }
 
+// --- SVG Icons ---
+const ICON_8STAR = `<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"><polygon points="50,2 61,35 98,35 68,57 79,90 50,68 21,90 32,57 2,35 39,35"/></svg>`;
+
+const ICON_4STAR = `<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"><polygon points="50,2 65,35 98,50 65,65 50,98 35,65 2,50 35,35"/></svg>`;
+
+const ICON_ERROR = `<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><circle cx="50" cy="50" r="38"/><path d="M32 32 L68 68 M68 32 L32 68"/><circle cx="38" cy="42" r="5" fill="currentColor"/><circle cx="62" cy="42" r="5" fill="currentColor"/></svg>`;
+
 // --- Difficulty parsing (EToH style) ---
-// Examples: "Mid Unreal", "Low Terrifying", "High Nil", "Catastrophic"
 function parseDifficulty(raw) {
   if (!raw) return { prefix: "", base: "", full: "" };
   const str = String(raw).trim();
@@ -38,7 +44,6 @@ function parseDifficulty(raw) {
     }
   }
 
-  // Capitalize
   const capPrefix = prefix ? prefix.charAt(0).toUpperCase() + prefix.slice(1) : "";
   const capBase = base.charAt(0).toUpperCase() + base.slice(1);
   const full = capPrefix ? capPrefix + " " + capBase : capBase;
@@ -48,13 +53,20 @@ function parseDifficulty(raw) {
 
 function difficultyClass(base) {
   const map = {
-    "terrifying": "terrifying",
-    "catastrophic": "catastrophic",
     "horrific": "horrific",
     "unreal": "unreal",
     "nil": "nil",
+    "error": "error",
   };
   return map[base.toLowerCase()] || "";
+}
+
+function difficultyIcon(base) {
+  const b = base.toLowerCase();
+  if (b === "horrific") return ICON_4STAR;
+  if (b === "unreal" || b === "nil") return ICON_8STAR;
+  if (b === "error") return ICON_ERROR;
+  return "";
 }
 
 // --- state ---
@@ -100,12 +112,13 @@ function buildDifficultyBadge(rawDifficulty) {
   if (!parsed.base) return `<span class="row-difficulty">—</span>`;
 
   const cls = difficultyClass(parsed.base);
+  const icon = difficultyIcon(parsed.base);
   const badgeClass = cls ? `diff-${cls}` : "";
 
   return `
     <span class="row-difficulty">
       <span class="diff-badge ${badgeClass}">
-        <span class="diff-dot"></span>
+        ${icon}
         ${escapeHtml(parsed.full)}
       </span>
     </span>
@@ -148,7 +161,6 @@ function toggleRow(li, level) {
     return;
   }
 
-  // Close any other expanded row for cleaner UX
   document.querySelectorAll(".level-row.expanded").forEach(other => {
     if (other !== li) {
       other.classList.remove("expanded");
@@ -159,7 +171,6 @@ function toggleRow(li, level) {
   li.classList.add("expanded");
   btn.setAttribute("aria-expanded", "true");
 
-  // Only build detail once
   if (li.querySelector(".row-detail")) return;
 
   const videoId = extractYouTubeId(level.videoId);
