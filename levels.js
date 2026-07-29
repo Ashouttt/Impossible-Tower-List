@@ -5,19 +5,13 @@
    Each level is one object { ... } in the LEVELS array below.
    Fields:
 
-     rank       (required) — position in ranking, 1 = hardest
-     name       (required) — level name
-     creator    (required) — level creator
-     verifier   (optional) — who verified the level
-     difficulty (optional) — EToH-style difficulty. Full list:
-                              Low Horrific, Mid Horrific, High Horrific, Peak Horrific
-                              Low Unreal, Mid Unreal, High Unreal, Peak Unreal
-                              Low Nil, Mid Nil, High Nil, Peak Nil
-                              Low Error, Mid Error, High Error, Peak Error
-                              The prefix (Low/Mid/High/Peak) is optional.
-     videoId    (optional) — YouTube link OR 11-character video ID
-     levelId    (optional) — numeric Geometry Dash level ID
-     points     (optional) — list points, if you track them
+     rank         (required) — position in ranking, 1 = hardest
+     name         (required) — level name
+     creator      (required) — level creator(s)
+     verifier     (optional) — who verified the level
+     difficulty   (optional) — EToH-style difficulty
+     videoId      (optional) — YouTube link OR 11-character video ID
+     worldRecord  (optional) — best completion, e.g. "Floor 7", "N/A"
 
    Tier thresholds (Summit / Upper / Middle / Foundations)
    are set in script.js in the TIERS object.
@@ -36,8 +30,7 @@ const LEVELS = [
     verifier: "",
     difficulty: "Mid-High Error",
     videoId: "B0VpzdvwrC0",
-    levelId: null,
-    points: 1000,
+    worldRecord: "N/A",
   },
   {
     rank: 2,
@@ -46,7 +39,6 @@ const LEVELS = [
     verifier: "",
     difficulty: "Peak Nil",
     videoId: "bJPgQlqkQxI",
-    levelId: null,
-    points: 950,
+    worldRecord: "Floor 7",
   },
 ];
