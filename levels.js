@@ -12,6 +12,9 @@
      difficulty   (optional) — EToH-style difficulty
      videoId      (optional) — YouTube link OR 11-character video ID
      worldRecord  (optional) — best completion, e.g. "Floor 7", "N/A"
+     robloxLink   (optional) — link to the Roblox place where this
+                                tower is located, e.g.
+                                "https://www.roblox.com/games/XXXXXXXX/Place-Name"
 
    Order of objects in the array doesn't matter — the page
    sorts them by "rank". You can have unlimited entries.
@@ -28,6 +31,7 @@ const LEVELS = [
     difficulty: "Mid-High Error",
     videoId: "B0VpzdvwrC0",
     worldRecord: "N/A",
+    robloxLink: "",
   },
   {
     rank: 2,
@@ -37,6 +41,7 @@ const LEVELS = [
     difficulty: "Peak Nil",
     videoId: "bJPgQlqkQxI",
     worldRecord: "Floor 7",
+    robloxLink: "",
   },
   {
     rank: 3,
@@ -46,5 +51,6 @@ const LEVELS = [
     difficulty: "Mid Unreal",
     videoId: "bwDpQOuQaGg",
     worldRecord: "Winpad",
+    robloxLink: "",
   },
 ];
