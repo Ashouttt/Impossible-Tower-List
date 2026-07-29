@@ -490,19 +490,25 @@ main {
 .row-detail {
   display: grid;
   grid-template-columns: minmax(0, 480px) 1fr;
-  gap: 28px;
-  padding: 0 20px 24px;
+  grid-template-rows: 0fr;
+  gap: 0;
+  padding: 0 20px;
   background: transparent;
-  overflow: hidden;
-  max-height: 0;
   opacity: 0;
-  transition: max-height 350ms cubic-bezier(0.22, 1, 0.36, 1),
+  transition: grid-template-rows 350ms cubic-bezier(0.22, 1, 0.36, 1),
               opacity 250ms ease 50ms,
+              gap 350ms cubic-bezier(0.22, 1, 0.36, 1),
               padding 350ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.row-detail > * {
+  min-height: 0;
+  overflow: hidden;
+}
+
 .level-row.expanded .row-detail {
-  max-height: 600px;
+  grid-template-rows: 1fr;
+  gap: 28px;
   opacity: 1;
   padding: 4px 20px 28px;
 }
