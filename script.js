@@ -20,14 +20,14 @@ function tierForRank(rank) {
 }
 
 // --- SVG Icons ---
-// Horrific: 4-pointed X star, light purple outline, black fill
+// Horrific: 4-pointed X star, light purple outline, transparent fill
 const ICON_HORRIFIC = `<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="7" stroke-linejoin="round"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38"/></svg>`;
 
-// Unreal: 8-pointed star, deep purple outline, black fill
+// Unreal: 8-pointed star, deep purple outline, transparent fill
 const ICON_UNREAL = `<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"><polygon points="50,2 60,35 98,35 68,56 78,90 50,70 22,90 32,56 2,35 40,35"/></svg>`;
 
-// Nil: two IDENTICAL overlapping gray 8-pointed stars with black fill
-const ICON_NIL = `<svg class="diff-icon" viewBox="0 0 100 100"><polygon points="50,5 58,32 88,32 64,48 72,76 50,60 28,76 36,48 12,32 42,32" fill="#0a0a0a" stroke="#888888" stroke-width="5" stroke-linejoin="round"/><polygon points="50,12 57,35 82,35 62,49 68,72 50,58 32,72 38,49 18,35 43,35" fill="#0a0a0a" stroke="#888888" stroke-width="4" stroke-linejoin="round"/></svg>`;
+// Nil: two IDENTICAL overlapping gray 8-pointed stars, offset, transparent background
+const ICON_NIL = `<svg class="diff-icon" viewBox="0 0 100 100"><polygon points="50,2 60,35 98,35 68,56 78,90 50,70 22,90 32,56 2,35 40,35" fill="none" stroke="#888888" stroke-width="5" stroke-linejoin="round"/><polygon points="50,12 58,38 86,38 64,54 72,80 50,66 28,80 36,54 14,38 42,38" fill="none" stroke="#888888" stroke-width="5" stroke-linejoin="round"/></svg>`;
 
 // Error: red square with dark red border, exactly like the image
 const ICON_ERROR = `<svg class="diff-icon" viewBox="0 0 100 100"><rect x="8" y="8" width="84" height="84" rx="4" fill="#cc2222" stroke="#991111" stroke-width="6"/></svg>`;
