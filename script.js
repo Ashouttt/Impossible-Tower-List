@@ -128,6 +128,21 @@ function buildDifficultyBadge(rawDifficulty) {
   `;
 }
 
+function buildCreatorSummary(creatorStr) {
+  const raw = (creatorStr || "").trim();
+  if (!raw) return `<span class="row-creator">—</span>`;
+
+  const names = raw.split(",").map(n => n.trim()).filter(Boolean);
+  const first = escapeHtml(names[0] || raw);
+  const extra = names.length - 1;
+
+  if (extra <= 0) {
+    return `<span class="row-creator">${first}</span>`;
+  }
+
+  return `<span class="row-creator"><span class="creator-first">${first}</span><span class="creator-more">+${extra}</span></span>`;
+}
+
 function buildRow(level, index) {
   const tier = tierForLevel(level);
   const diffParsed = parseDifficulty(level.difficulty);
@@ -147,7 +162,7 @@ function buildRow(level, index) {
       <span class="row-rank">#${rankStr}</span>
       <span class="row-name">${escapeHtml(level.name || "Unnamed")}</span>
       ${diffBadge}
-      <span class="row-creator">${escapeHtml(level.creator || "—")}</span>
+      ${buildCreatorSummary(level.creator)}
       ${CHEVRON_SVG}
     </button>
   `;
