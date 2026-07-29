@@ -303,11 +303,11 @@ main {
   background: var(--accent);
 }
 
-/* Tier colored left borders */
-.level-row[data-tier="summit"] .row-main::before      { background: var(--tier-summit); }
-.level-row[data-tier="upper"] .row-main::before       { background: var(--tier-upper); }
-.level-row[data-tier="middle"] .row-main::before      { background: var(--tier-middle); }
-.level-row[data-tier="foundations"] .row-main::before { background: var(--tier-foundations); }
+/* Difficulty colored left borders */
+.level-row[data-diff="horrific"] .row-main::before  { background: var(--diff-horrific); }
+.level-row[data-diff="unreal"] .row-main::before    { background: var(--diff-unreal); }
+.level-row[data-diff="nil"] .row-main::before       { background: var(--diff-nil); }
+.level-row[data-diff="error"] .row-main::before      { background: var(--diff-error); }
 
 .row-rank {
   font-family: var(--font-mono);
@@ -317,10 +317,10 @@ main {
   padding-left: 12px;
 }
 
-.level-row[data-tier="summit"] .row-rank      { color: var(--tier-summit); }
-.level-row[data-tier="upper"] .row-rank       { color: var(--tier-upper); }
-.level-row[data-tier="middle"] .row-rank      { color: var(--tier-middle); }
-.level-row[data-tier="foundations"] .row-rank  { color: var(--tier-foundations); }
+.level-row[data-diff="horrific"] .row-rank  { color: var(--diff-horrific); }
+.level-row[data-diff="unreal"] .row-rank    { color: var(--diff-unreal); }
+.level-row[data-diff="nil"] .row-rank       { color: var(--diff-nil); }
+.level-row[data-diff="error"] .row-rank     { color: var(--diff-error); }
 
 .row-name {
   font-weight: 600;
