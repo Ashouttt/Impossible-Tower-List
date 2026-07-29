@@ -20,10 +20,8 @@
   --accent-2:    #ff9e5e;
   --accent-gold: #f0c040;
 
-  --tier-summit:      #f0c040;
-  --tier-upper:       #ff6b4a;
-  --tier-middle:      #d48a3a;
-  --tier-foundations: #6b7a8a;
+  --tier-verified:   #4ade80;
+  --tier-unverified: #f87171;
 
   /* EToH Difficulty Colors */
   --diff-horrific:    #b388ff;
@@ -303,11 +301,15 @@ main {
   background: var(--accent);
 }
 
-/* Difficulty colored left borders */
+/* Verified / Unverified colored left borders */
+.level-row[data-tier="verified"] .row-main::before   { background: var(--tier-verified); }
+.level-row[data-tier="unverified"] .row-main::before { background: var(--tier-unverified); }
+
+/* Difficulty colored left borders (override tier colors when difficulty is present) */
 .level-row[data-diff="horrific"] .row-main::before  { background: var(--diff-horrific); }
 .level-row[data-diff="unreal"] .row-main::before    { background: var(--diff-unreal); }
 .level-row[data-diff="nil"] .row-main::before       { background: var(--diff-nil); }
-.level-row[data-diff="error"] .row-main::before      { background: var(--diff-error); }
+.level-row[data-diff="error"] .row-main::before     { background: var(--diff-error); }
 
 .row-rank {
   font-family: var(--font-mono);
