@@ -4,19 +4,20 @@
    ========================================================= */
 
 const TIERS = [
-  { id: "summit",      label: "Summit",       max: 10   },
-  { id: "upper",       label: "Upper",        max: 50   },
-  { id: "middle",      label: "Middle",       max: 200  },
-  { id: "foundations", label: "Foundations",  max: Infinity },
+  { id: "verified",   label: "Verified",   max: Infinity },
+  { id: "unverified", label: "Unverified", max: Infinity },
 ];
 
 const PAGE_SIZE = 50;
 
-function tierForRank(rank) {
-  for (const tier of TIERS) {
-    if (rank <= tier.max) return tier;
+function tierForLevel(level) {
+  // A tower is "verified" if it has a verifier (non-empty string)
+  // "unverified" if verifier is empty or missing
+  const verifier = (level.verifier || "").trim();
+  if (verifier.length > 0) {
+    return TIERS.find(t => t.id === "verified");
   }
-  return TIERS[TIERS.length - 1];
+  return TIERS.find(t => t.id === "unverified");
 }
 
 // --- SVG Icons ---
@@ -90,7 +91,7 @@ function getFilteredLevels() {
     .slice()
     .sort((a, b) => a.rank - b.rank)
     .filter((lvl) => {
-      const tier = tierForRank(lvl.rank);
+      const tier = tierForLevel(lvl);
       if (activeTierId !== "all" && tier.id !== activeTierId) return false;
       if (!q) return true;
       const name = (lvl.name || "").toLowerCase();
@@ -126,7 +127,7 @@ function buildDifficultyBadge(rawDifficulty) {
 }
 
 function buildRow(level, index) {
-  const tier = tierForRank(level.rank);
+  const tier = tierForLevel(level);
   const diffParsed = parseDifficulty(level.difficulty);
   const diffClass = difficultyClass(diffParsed.base);
 
@@ -186,12 +187,14 @@ function toggleRow(li, level) {
       <a href="https://www.youtube.com/watch?v=${videoId}" class="video-fallback" target="_blank" rel="noopener">Watch on YouTube ↗</a>
     `;
   } else {
-    videoMarkup = `<div class="detail-video-missing">No video added for this level.</div>`;
+    videoMarkup = `<div class="detail-video-missing">No video added for this tower.</div>`;
   }
 
   const diffParsed = parseDifficulty(level.difficulty);
   const diffDisplay = diffParsed.full || "—";
   const wrDisplay = level.worldRecord != null ? String(level.worldRecord) : "N/A";
+  const verifierDisplay = (level.verifier || "").trim() || "—";
+  const statusDisplay = verifierDisplay !== "—" ? "Verified" : "Unverified";
 
   const detail = document.createElement("div");
   detail.className = "row-detail";
@@ -204,7 +207,7 @@ function toggleRow(li, level) {
       </div>
       <div class="meta-item">
         <dt>Verifier</dt>
-        <dd>${escapeHtml(level.verifier || "—")}</dd>
+        <dd>${escapeHtml(verifierDisplay)}</dd>
       </div>
       <div class="meta-item">
         <dt>Difficulty</dt>
@@ -213,6 +216,10 @@ function toggleRow(li, level) {
       <div class="meta-item">
         <dt>World Record</dt>
         <dd>${escapeHtml(wrDisplay)}</dd>
+      </div>
+      <div class="meta-item">
+        <dt>Status</dt>
+        <dd>${escapeHtml(statusDisplay)}</dd>
       </div>
     </dl>
   `;
