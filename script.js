@@ -35,7 +35,9 @@ function parseDifficulty(raw) {
   const str = String(raw).trim();
   const lowered = str.toLowerCase();
 
-  const prefixMatch = lowered.match(/^(low-mid|mid-high|bottom-low|baseline|bottom|low|mid|high|peak|high-peak|base)(?:\s+|-)/);
+  // FIX: high-peak MUST come before high in the alternation,
+  // otherwise "high-peak" gets matched as prefix="high" + base="peak..."
+  const prefixMatch = lowered.match(/^(low-mid|mid-high|bottom-low|baseline|bottom|low|mid|high-peak|high|peak|base)(?:\s+|-)/);
   let prefix = "";
   let base = lowered;
 
