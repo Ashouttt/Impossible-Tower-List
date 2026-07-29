@@ -35,7 +35,7 @@ function parseDifficulty(raw) {
   const str = String(raw).trim();
   const lowered = str.toLowerCase();
 
-  const prefixMatch = lowered.match(/^(low-mid|mid-high|bottom-low|baseline|bottom|low|mid|high|peak|base)(?:\s+|-)/);
+  const prefixMatch = lowered.match(/^(low-mid|mid-high|bottom-low|baseline|bottom|low|mid|high|peak|high-peak|base)(?:\s+|-)/);
   let prefix = "";
   let base = lowered;
 
@@ -51,18 +51,22 @@ function parseDifficulty(raw) {
   return { prefix: capPrefix, base: capBase, full };
 }
 
-function difficultyClass(base) {
+function difficultyClass(parsed) {
+  // High-Peak gets its own class for distinct styling
+  if (parsed.prefix === "High-Peak") return "high-peak";
   const map = {
     "horrific": "horrific",
     "unreal": "unreal",
     "nil": "nil",
     "error": "error",
   };
-  return map[base.toLowerCase()] || "";
+  return map[parsed.base.toLowerCase()] || "";
 }
 
-function difficultyIcon(base) {
-  const b = base.toLowerCase();
+function difficultyIcon(parsed) {
+  // High-Peak uses the Unreal star icon
+  if (parsed.prefix === "High-Peak") return ICON_UNREAL;
+  const b = parsed.base.toLowerCase();
   if (b === "horrific") return ICON_HORRIFIC;
   if (b === "unreal") return ICON_UNREAL;
   if (b === "nil") return ICON_NIL;
@@ -112,8 +116,8 @@ function buildDifficultyBadge(rawDifficulty) {
   const parsed = parseDifficulty(rawDifficulty);
   if (!parsed.base) return '<span class="row-difficulty">—</span>';
 
-  const cls = difficultyClass(parsed.base);
-  const icon = difficultyIcon(parsed.base);
+  const cls = difficultyClass(parsed);
+  const icon = difficultyIcon(parsed);
   const badgeClass = cls ? 'diff-' + cls : "";
 
   return '\n    <span class="row-difficulty">\n      <span class="diff-badge ' + badgeClass + '">\n        ' + icon + '\n        ' + escapeHtml(parsed.full) + '\n      </span>\n    </span>\n  ';
@@ -137,7 +141,7 @@ function buildCreatorSummary(creatorStr) {
 function buildRow(level, index) {
   const tier = tierForLevel(level);
   const diffParsed = parseDifficulty(level.difficulty);
-  const diffClass = difficultyClass(diffParsed.base);
+  const diffClass = difficultyClass(diffParsed);
 
   const li = document.createElement("li");
   li.className = "level-row";
