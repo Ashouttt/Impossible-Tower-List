@@ -6,19 +6,12 @@
    Pola:
 
      rank      (wymagane) — pozycja w rankingu, 1 = najtrudniejszy
-                             (im mniejsza liczba, tym wyżej w wieży)
      name      (wymagane) — nazwa poziomu
      creator   (wymagane) — twórca poziomu
-     verifier  (opcjonalne) — kto zweryfikował (może być inny niż twórca)
+     verifier  (opcjonalne) — kto zweryfikował
      videoId   (opcjonalne) — link do YouTube ALBO samo 11-znakowe ID
-                             np. "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-                             albo po prostu "dQw4w9WgXcQ"
      levelId   (opcjonalne) — numeryczne ID poziomu z Geometry Dash
-     points    (opcjonalne) — punkty listy, jeśli prowadzisz taki system
-
-   Progi "pięter" wieży (Szczyt / Górne Piętra / Środkowe Piętra /
-   Fundamenty) ustawiasz w script.js w obiekcie TIERS — tutaj
-   wystarczy, że nadasz poziomowi poprawny "rank".
+     points    (opcjonalne) — punkty listy
 
    Kolejność obiektów w tablicy nie ma znaczenia — strona sama
    sortuje je po polu "rank". Możesz mieć od 1 do 1000 wpisów.
@@ -102,5 +95,4 @@ const LEVELS = [
   //   levelId: 12345678,
   //   points: 875,
   // },
-
 ];
