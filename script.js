@@ -255,4 +255,4 @@ document.addEventListener("DOMContentLoaded", () => {
   setupControls();
   setupStats();
   render();
-});wreqf
+});
