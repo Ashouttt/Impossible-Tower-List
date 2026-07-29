@@ -273,4 +273,14 @@ const LEVELS = [
     worldRecord: "N/A",
     robloxLink: "https://www.roblox.com/games/18603968759/Community-Top-Towers",
   },
+  {
+    rank: 26,
+    name: "Chaotic Tower",
+    creator: "zorloth1, vipsem, RagingEngineer, CreationIsntGood, D_yni, FindableTag, PoptartPunt, Delukes51, SungazedUwU",
+    verifier: "",
+    difficulty: "Mid-High Error",
+    videoId: "",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/5684674542/Chaotic-Tower-R",
+  },
 ];
