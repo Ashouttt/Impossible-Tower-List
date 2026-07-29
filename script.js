@@ -1,13 +1,13 @@
 /* =========================================================
    IMPOSSIBLE TOWER LIST — script.js
-   Simplified, smooth, no tower SVG nonsense.
+   English, smooth animations, EToH difficulty system.
    ========================================================= */
 
 const TIERS = [
-  { id: "summit",      label: "Szczyt",           max: 10   },
-  { id: "upper",       label: "Górne Piętra",      max: 50   },
-  { id: "middle",      label: "Środkowe Piętra",   max: 200  },
-  { id: "foundations", label: "Fundamenty",        max: Infinity },
+  { id: "summit",      label: "Summit",       max: 10   },
+  { id: "upper",       label: "Upper",        max: 50   },
+  { id: "middle",      label: "Middle",       max: 200  },
+  { id: "foundations", label: "Foundations",  max: Infinity },
 ];
 
 const PAGE_SIZE = 50;
@@ -17,6 +17,44 @@ function tierForRank(rank) {
     if (rank <= tier.max) return tier;
   }
   return TIERS[TIERS.length - 1];
+}
+
+// --- Difficulty parsing (EToH style) ---
+// Examples: "Mid Unreal", "Low Terrifying", "High Nil", "Catastrophic"
+function parseDifficulty(raw) {
+  if (!raw) return { prefix: "", base: "", full: "" };
+  const str = String(raw).trim();
+  const lowered = str.toLowerCase();
+
+  const prefixes = ["bottom", "low", "mid", "high", "peak"];
+  let prefix = "";
+  let base = lowered;
+
+  for (const p of prefixes) {
+    if (lowered.startsWith(p + " ")) {
+      prefix = p;
+      base = lowered.slice(p.length).trim();
+      break;
+    }
+  }
+
+  // Capitalize
+  const capPrefix = prefix ? prefix.charAt(0).toUpperCase() + prefix.slice(1) : "";
+  const capBase = base.charAt(0).toUpperCase() + base.slice(1);
+  const full = capPrefix ? capPrefix + " " + capBase : capBase;
+
+  return { prefix: capPrefix, base: capBase, full };
+}
+
+function difficultyClass(base) {
+  const map = {
+    "terrifying": "terrifying",
+    "catastrophic": "catastrophic",
+    "horrific": "horrific",
+    "unreal": "unreal",
+    "nil": "nil",
+  };
+  return map[base.toLowerCase()] || "";
 }
 
 // --- state ---
@@ -45,7 +83,8 @@ function getFilteredLevels() {
       if (!q) return true;
       const name = (lvl.name || "").toLowerCase();
       const creator = (lvl.creator || "").toLowerCase();
-      return name.includes(q) || creator.includes(q);
+      const diff = (lvl.difficulty || "").toLowerCase();
+      return name.includes(q) || creator.includes(q) || diff.includes(q);
     });
 }
 
@@ -56,6 +95,23 @@ function extractYouTubeId(input) {
   return match ? match[1] : "";
 }
 
+function buildDifficultyBadge(rawDifficulty) {
+  const parsed = parseDifficulty(rawDifficulty);
+  if (!parsed.base) return `<span class="row-difficulty">—</span>`;
+
+  const cls = difficultyClass(parsed.base);
+  const badgeClass = cls ? `diff-${cls}` : "";
+
+  return `
+    <span class="row-difficulty">
+      <span class="diff-badge ${badgeClass}">
+        <span class="diff-dot"></span>
+        ${escapeHtml(parsed.full)}
+      </span>
+    </span>
+  `;
+}
+
 function buildRow(level, index) {
   const tier = tierForRank(level.rank);
   const li = document.createElement("li");
@@ -64,11 +120,13 @@ function buildRow(level, index) {
   li.style.animationDelay = `${Math.min(index, 19) * 30}ms`;
 
   const rankStr = String(level.rank).padStart(3, "0");
+  const diffBadge = buildDifficultyBadge(level.difficulty);
 
   li.innerHTML = `
     <button class="row-main" type="button" aria-expanded="false">
       <span class="row-rank">#${rankStr}</span>
-      <span class="row-name">${escapeHtml(level.name || "Bez nazwy")}</span>
+      <span class="row-name">${escapeHtml(level.name || "Unnamed")}</span>
+      ${diffBadge}
       <span class="row-creator">${escapeHtml(level.creator || "—")}</span>
       ${CHEVRON_SVG}
     </button>
@@ -106,8 +164,11 @@ function toggleRow(li, level) {
 
   const videoId = extractYouTubeId(level.videoId);
   const videoMarkup = videoId
-    ? `<iframe src="https://www.youtube.com/embed/${videoId}" title="Weryfikacja: ${escapeHtml(level.name || "")}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
-    : `<div class="detail-video-missing">Brak dodanego wideo dla tego poziomu.</div>`;
+    ? `<iframe src="https://www.youtube.com/embed/${videoId}" title="Verification: ${escapeHtml(level.name || "")}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+    : `<div class="detail-video-missing">No video added for this level.</div>`;
+
+  const diffParsed = parseDifficulty(level.difficulty);
+  const diffDisplay = diffParsed.full || "—";
 
   const detail = document.createElement("div");
   detail.className = "row-detail";
@@ -115,19 +176,23 @@ function toggleRow(li, level) {
     <div class="detail-video">${videoMarkup}</div>
     <dl class="detail-meta">
       <div class="meta-item">
-        <dt>Twórca</dt>
+        <dt>Creator</dt>
         <dd>${escapeHtml(level.creator || "—")}</dd>
       </div>
       <div class="meta-item">
-        <dt>Weryfikacja</dt>
+        <dt>Verifier</dt>
         <dd>${escapeHtml(level.verifier || "—")}</dd>
       </div>
       <div class="meta-item">
-        <dt>ID poziomu</dt>
+        <dt>Difficulty</dt>
+        <dd>${escapeHtml(diffDisplay)}</dd>
+      </div>
+      <div class="meta-item">
+        <dt>Level ID</dt>
         <dd>${escapeHtml(level.levelId != null ? String(level.levelId) : "—")}</dd>
       </div>
       <div class="meta-item">
-        <dt>Punkty</dt>
+        <dt>Points</dt>
         <dd>${escapeHtml(level.points != null ? String(level.points) : "—")}</dd>
       </div>
     </dl>
