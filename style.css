@@ -461,6 +461,26 @@ main {
   border: 0;
 }
 
+.video-fallback {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: rgba(204,34,34,0.9);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 100px;
+  text-decoration: none;
+  z-index: 10;
+  transition: background 180ms ease;
+}
+
+.video-fallback:hover {
+  background: rgba(204,34,34,1);
+}
+
 .detail-video-missing {
   position: absolute;
   inset: 0;
