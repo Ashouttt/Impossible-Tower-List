@@ -20,11 +20,17 @@ function tierForRank(rank) {
 }
 
 // --- SVG Icons ---
-const ICON_8STAR = `<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"><polygon points="50,2 61,35 98,35 68,57 79,90 50,68 21,90 32,57 2,35 39,35"/></svg>`;
+// Horrific: 4-pointed X star, light purple outline
+const ICON_HORRIFIC = `<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="7" stroke-linejoin="round"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38"/></svg>`;
 
-const ICON_4STAR = `<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"><polygon points="50,2 65,35 98,50 65,65 50,98 35,65 2,50 35,35"/></svg>`;
+// Unreal: 8-pointed star, deep purple outline
+const ICON_UNREAL = `<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"><polygon points="50,2 60,35 98,35 68,56 78,90 50,70 22,90 32,56 2,35 40,35"/></svg>`;
 
-const ICON_ERROR = `<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><circle cx="50" cy="50" r="38"/><path d="M32 32 L68 68 M68 32 L32 68"/><circle cx="38" cy="42" r="5" fill="currentColor"/><circle cx="62" cy="42" r="5" fill="currentColor"/></svg>`;
+// Nil: two overlapping gray 8-pointed stars
+const ICON_NIL = `<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><polygon points="50,8 58,34 88,34 64,50 72,76 50,62 28,76 36,50 12,34 42,34" opacity="0.55"/><polygon points="50,18 57,38 80,38 62,52 68,72 50,60 32,72 38,52 20,38 43,38"/></svg>`;
+
+// Error: red square with darker red border, exactly like the image
+const ICON_ERROR = `<svg class="diff-icon" viewBox="0 0 100 100"><rect x="8" y="8" width="84" height="84" rx="4" fill="#cc2222" stroke="#991111" stroke-width="6"/></svg>`;
 
 // --- Difficulty parsing (EToH style) ---
 function parseDifficulty(raw) {
@@ -63,8 +69,9 @@ function difficultyClass(base) {
 
 function difficultyIcon(base) {
   const b = base.toLowerCase();
-  if (b === "horrific") return ICON_4STAR;
-  if (b === "unreal" || b === "nil") return ICON_8STAR;
+  if (b === "horrific") return ICON_HORRIFIC;
+  if (b === "unreal") return ICON_UNREAL;
+  if (b === "nil") return ICON_NIL;
   if (b === "error") return ICON_ERROR;
   return "";
 }
