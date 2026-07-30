@@ -20,7 +20,7 @@
    sorts them by "rank". You can have unlimited entries.
    ========================================================= */
 
-const LAST_UPDATE = "29.07.2026";
+const LAST_UPDATE = "30.07.2026";
 
 const LEVELS = [
   {
@@ -352,5 +352,25 @@ const LEVELS = [
     videoId: "75VZzOgVyHc",
     worldRecord: "N/A",
     robloxLink: "https://www.roblox.com/games/18603968759/Community-Top-Towers",
+  },
+  {
+    rank: 34,
+    name: "ToV (Tower of Void)",
+    creator: "bLockerman666, IceNsalt, ciel_azulsky, popop614, Feodoric, PPtTenshi",
+    verifier: "",
+    difficulty: "High Unreal",
+    videoId: "T-kOe8L6uw8",
+    worldRecord: "Floor 9",
+    robloxLink: "https://www.roblox.com/games/88462999400021/Tower-of-Void-practice",
+  },
+  {
+    rank: 35,
+    name: "ToTQFP (Tower of The Quest For Perfection)",
+    creator: "4d9r, bLockerman666, BigScaryMonster10G",
+    verifier: "",
+    difficulty: "High Unreal",
+    videoId: "vMOpTTcdIVk",
+    worldRecord: "Floor 8",
+    robloxLink: "https://www.roblox.com/games/14860104753/Tower-of-The-Quest-For-Perfection-Fixed",
   },
 ];
