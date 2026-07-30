@@ -67,7 +67,7 @@ const LEVELS = [
     rank: 5,
     name: "Tower of Existential Crisis",
     creator: "Kinjiture, dogwithabome, 4Nuln, pacovepowered5, Dasiohh",
-    verifier: "Dasiohh",
+    verifier: "",
     difficulty: "High Nil",
     videoId: "YUkjDZra0t8",
     worldRecord: "N/A",
