@@ -1,399 +1,486 @@
 /* =========================================================
-   IMPOSSIBLE TOWER LIST — script.js
-   English, smooth animations, EToH difficulty icons.
+   IMPOSSIBLE TOWER LIST — levels.js
+   THIS IS THE ONLY FILE YOU NEED TO EDIT.
+
+   Each tower is one object { ... } in the LEVELS array below.
+   Fields:
+
+     rank         (required) — position in ranking, 1 = hardest
+     name         (required) — tower name
+     creator      (required) — tower creator(s)
+     verifier     (optional) — who verified the tower (empty = unverified)
+     difficulty   (optional) — EToH-style difficulty
+     videoId      (optional) — YouTube link OR 11-character video ID
+     worldRecord  (optional) — best completion, e.g. "Floor 7", "N/A"
+     robloxLink   (optional) — link to the Roblox place where this
+                                tower is located, e.g.
+                                "https://www.roblox.com/games/XXXXXXXX/Place-Name"
+
+   Order of objects in the array doesn't matter — the page
+   sorts them by "rank". You can have unlimited entries.
    ========================================================= */
 
-const TIERS = [
-  { id: "verified",   label: "Verified",   max: Infinity },
-  { id: "unverified", label: "Unverified", max: Infinity },
+const LAST_UPDATE = "30.07.2026";
+
+const LEVELS = [
+  {
+    rank: 1,
+    name: "Tower of Jungle Gyms",
+    creator: "Macloux, Higherthanblox, D_yni, Eccapin, Findabletag, Kinjiture, Melvinalsgamer, PoptartPunt, Empyrae, pacovepowered5, rohanmishrr, Yellow78Dog, SungazedUwU, Exhaustedsleepybear, Delukes51, CUGASTheLooney",
+    verifier: "",
+    difficulty: "Mid-High Error",
+    videoId: "B0VpzdvwrC0",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/99982773118045/Tower-of-Jungle-Gyms-The-Big-Climb#ropro-quick-search",
+  },
+  {
+    rank: 2,
+    name: "Chaotic Tower",
+    creator: "zorloth1, vipsem, RagingEngineer, CreationIsntGood, D_yni, FindableTag, PoptartPunt, Delukes51, SungazedUwU",
+    verifier: "",
+    difficulty: "Mid-High Error",
+    videoId: "",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/5684674542/Chaotic-Tower-R",
+  },
+  {
+    rank: 3,
+    name: "Tower of Ziggle Core",
+    creator: "N/A",
+    verifier: "",
+    difficulty: "Bottom-Low Error",
+    videoId: "EO_kYW30LCg",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/89993867711798/Tower-of-Ziggle-Core",
+  },
+  {
+    rank: 4,
+    name: "Not Even Playable Gameplay",
+    creator: "NameZerooo, SE5Y3QAY, MIXMENMIX, 10A_v, artemzartemz, benceiyibendy, kryception, MiniLagOOn, GameSion, computerboi3131, xXFighterofTimeXx",
+    verifier: "",
+    difficulty: "Baseline Error",
+    videoId: "U1nDh0HO9A4",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/130670383361152/Not-Even-Playable-Gameplay",
+  },
+  {
+    rank: 5,
+    name: "Citadel of Void",
+    creator: "bLockerman666, Karinriine, IceNsalt, ciel_azulsky, Feodoric, tintom495, PPtTenshi, popop614, latomludo, macalads, Coatesultimate1, KittenLord420, nott_vy, Heksi",
+    verifier: "",
+    difficulty: "Peak Nil",
+    videoId: "bJPgQlqkQxI",
+    worldRecord: "Floor 7",
+    robloxLink: "https://www.roblox.com/games/4597361034/Citadel-of-Void-OFFICIAL",
+  },
+  {
+    rank: 6,
+    name: "Tower of Very Fun Obstacles",
+    creator: "NoobsTheBestGuys, XxRed1ScorpionxX",
+    verifier: "",
+    difficulty: "Peak Nil",
+    videoId: "",
+    worldRecord: "N/A",
+    robloxLink: "",
+  },
+  {
+    rank: 7,
+    name: "Tower of Vague Luminescence",
+    creator: "glizzygladiattorrr, Adan3842, exhaustedsleepybear, SungazedUwU",
+    verifier: "",
+    difficulty: "High-Peak Nil",
+    videoId: "s5vJ6ha2Luo",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/9024799067/Tower-of-Vague-Luminescence",
+  },
+  {
+    rank: 8,
+    name: "Tower of Existential Crisis",
+    creator: "Kinjiture, dogwithabome, 4Nuln, pacovepowered5, Dasiohh",
+    verifier: "",
+    difficulty: "High Nil",
+    videoId: "YUkjDZra0t8",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/10712971259/Tower-of-Existential-Crisis",
+  },
+  {
+    rank: 9,
+    name: "Tower of Top Jumps Community Never Clear",
+    creator: "N/A",
+    verifier: "",
+    difficulty: "High Nil",
+    videoId: "w092tls5Wq0",
+    worldRecord: "N/A",
+    robloxLink: "",
+  },
+  {
+    rank: 10,
+    name: "Citadel of Wicked Boogers",
+    creator: "PoptartPunt, Higherthanblox, Adan3842, SungazedUwU, Macloux, D_yni, FindableTag",
+    verifier: "",
+    difficulty: "Low Nil",
+    videoId: "RLnT4QqycoQ",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/123328980290815/Citadel-of-Wicked-Booger",
+  },
+  {
+    rank: 11,
+    name: "Tower of The Drive Towards Human Limits",
+    creator: "Adan3842, Findabletag, MonsterIsABlock",
+    verifier: "",
+    difficulty: "Baseline Nil",
+    videoId: "AceEID7TVKc",
+    worldRecord: "Floor 8",
+    robloxLink: "https://www.roblox.com/games/125252864219980/Tower-of-The-Drive-Towards-Human-Limits",
+  },
+  {
+    rank: 12,
+    name: "Tower of False Confidence",
+    creator: "ashoutdev2, cristololo",
+    verifier: "",
+    difficulty: "Baseline Nil",
+    videoId: "",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/118250523983734/tower-of-generation-succes",
+  },
+  {
+    rank: 13,
+    name: "Popsicle Tower",
+    creator: "SouIIev",
+    verifier: "",
+    difficulty: "Baseline Nil",
+    videoId: "oLTNVsQjJxE",
+    worldRecord: "N/A",
+    robloxLink: "",
+  },
+  {
+    rank: 14,
+    name: "Tower of Insane Zodiac",
+    creator: "bilmoment",
+    verifier: "",
+    difficulty: "Peak Unreal",
+    videoId: "5El1ZYt0zNA",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/91634804321932/Tower-of-Insane-Zodiac",
+  },
+  {
+    rank: 15,
+    name: "Tower of Mushroom",
+    creator: "Taste_Pepsi1, canteloupe3727",
+    verifier: "",
+    difficulty: "High-Peak Unreal",
+    videoId: "adSiolrNJjY",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/11857764752/Tower-of-Mushroom#ropro-quick-play",
+  },
+  {
+    rank: 16,
+    name: "ToV (Tower of Void)",
+    creator: "bLockerman666, IceNsalt, ciel_azulsky, popop614, Feodoric, PPtTenshi",
+    verifier: "",
+    difficulty: "High Unreal",
+    videoId: "T-kOe8L6uw8",
+    worldRecord: "Floor 9",
+    robloxLink: "https://www.roblox.com/games/88462999400021/Tower-of-Void-practice",
+  },
+  {
+    rank: 17,
+    name: "ToTQFP (Tower of The Quest For Perfection)",
+    creator: "4d9r, bLockerman666, BigScaryMonster10G",
+    verifier: "",
+    difficulty: "High Unreal",
+    videoId: "vMOpTTcdIVk",
+    worldRecord: "Floor 8",
+    robloxLink: "https://www.roblox.com/games/14860104753/Tower-of-The-Quest-For-Perfection-Fixed",
+  },
+  {
+    rank: 18,
+    name: "Tower of The Concluding Run",
+    creator: "sokol50",
+    verifier: "",
+    difficulty: "High Unreal",
+    videoId: "https://www.youtube.com/watch?v=aayo6JJA0FM&t=1s",
+    worldRecord: "N/A",
+    robloxLink: "",
+  },
+  {
+    rank: 19,
+    name: "Hellish Eextermination Labyrinth",
+    creator: "AddisonJudah, Tetrix_Masterll, yuienaaaa, Hyperfantasies",
+    verifier: "",
+    difficulty: "High Unreal",
+    videoId: "kLb26I6PKNo",
+    worldRecord: "N/A",
+    robloxLink: "",
+  },
+  {
+    rank: 20,
+    name: "Tower of Flotage",
+    creator: "",
+    verifier: "",
+    difficulty: "Mid-High Unreal",
+    videoId: "https://www.youtube.com/watch?v=zeW5kxeKLk8&list=RDzeW5kxeKLk8&start_radio=1&t=222s",
+    worldRecord: "N/A",
+    robloxLink: "",
+  },
+  {
+    rank: 21,
+    name: "Tower of Multiversal Dream Archive",
+    creator: "ZePlayerSlayer",
+    verifier: "",
+    difficulty: "Mid-High Unreal",
+    videoId: "IONOfb8s9xs",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/109123863452692/Tower-of-Multiversal-Dream-Archive",
+  },
+  {
+    rank: 22,
+    name: "Tower of It Never Ends",
+    creator: "ciel_azulsky",
+    verifier: "MonsterIsABlock",
+    difficulty: "Mid Unreal",
+    videoId: "bwDpQOuQaGg",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/107705095969573/tower-of-IT-NEVER-ENDS",
+  },
+  {
+    rank: 23,
+    name: "STONE: Reborn",
+    creator: "IceNsalt, Zakki",
+    verifier: "MonsterIsABlock",
+    difficulty: "Mid Unreal",
+    videoId: "N4B9qvfS8qQ",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/5711190403/The-S-T-O-N-E-Facility",
+  },
+  {
+    rank: 24,
+    name: "ToID (Tower of Impending Doom)",
+    creator: "pczm1, Forstaken2008xs, mikolajole, skitsuna, walroooos, Celest_Z, Demolisher_11",
+    verifier: "greenbean1421",
+    difficulty: "Low-Mid Unreal",
+    videoId: "DRGmoqF1T_E",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/15177865210/Tower-of-Impending-Doom#!/about",
+  },
+  {
+    rank: 25,
+    name: "ToW (Tower of Wigglecore)",
+    creator: "ScorpioexLOLez, kkdpracticeacc",
+    verifier: "BoomSasok",
+    difficulty: "Low-Mid Unreal",
+    videoId: "nj2vwu0LeG8",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/15873244701/JToH-The-Eternal-Abyss",
+  },
+  {
+    rank: 26,
+    name: "ToMH (Tower of Monochromatic Haze)",
+    creator: "Gehadimadm, tweet2a, Forstaken2008xs",
+    verifier: "Gehadimad",
+    difficulty: "Low-Mid Unreal",
+    videoId: "HxCV-_zrLW0",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/117307574423766/Tower-of-Monochromatic-Haze-List-Version",
+  },
+  {
+    rank: 27,
+    name: "Tower of Rebirth The End",
+    creator: "Polovnik30, Sokol50",
+    verifier: "",
+    difficulty: "Low-Mid Unreal",
+    videoId: "eKYZ4g6Mfkw",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/70581657896182/Tower-of-Rebirth-the-End",
+  },
+  {
+    rank: 28,
+    name: "ToMIH (Tower of My Inner Hatred)",
+    creator: "Reimu Hakurei, Kinjiture, BFFPikachu",
+    verifier: "ZePlayerSlayer",
+    difficulty: "Low Unreal",
+    videoId: "CZzEPcEtwNU",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/119663832848907/Tower-of-My-Inner-Hatred",
+  },
+  {
+    rank: 29,
+    name: "ToSF (Tower of Spiralling Fates)",
+    creator: "ciel_azulsky",
+    verifier: "MonsterIsABlock",
+    difficulty: "Low Unreal",
+    videoId: "Wc3IJivXjfE",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/130741996193452/Tower-of-Spiralling-Fates",
+  },
+  {
+    rank: 30,
+    name: "CoCBF (Citadel of Cold Blooded Fatality)",
+    creator: "n_rtex, a6iq1",
+    verifier: "BlackportTransport",
+    difficulty: "Low Unreal",
+    videoId: "foOtLcnyII0",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/71138470084002/Citadel-of-Cold-Blooded-Fatality",
+  },
+  {
+    rank: 31,
+    name: "OoUS (Obelisk of Unrealistic Sightings)",
+    creator: "Apple_FlavoredWater, yuienaaaa, CamronSkilIz, Killer818616",
+    verifier: "Pyuruw",
+    difficulty: "Low Unreal",
+    videoId: "C2J7jaC-pt0",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/4777161742/Obelisk-of-Unrealistic-Sightings",
+  },
+  {
+    rank: 32,
+    name: "ToCB (Tower of Celestial Bloom)",
+    creator: "zkv07, glizzygladiattorrr",
+    verifier: "hyperionblades",
+    difficulty: "Low Unreal",
+    videoId: "I5QVrxvPaXY&t",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/140232542804431/Tower-of-Celestial-Bloom",
+  },
+  {
+    rank: 33,
+    name: "ToQU (Tower of Qwerty Uiop)",
+    creator: "Purple_BaconHair",
+    verifier: "jeang4me",
+    difficulty: "Bottom-Low Unreal",
+    videoId: "v5f32f4Poks&t=51s",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/7769438539/Tower-of-Qwerty-Uiop",
+  },
+  {
+    rank: 34,
+    name: "CoTEC (Citadel of The Eternal Calamity)",
+    creator: "susplayerslayer",
+    verifier: "Marqulitt",
+    difficulty: "Bottom-Low Unreal",
+    videoId: "cZefNeSBC40",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/12121834605/The-Eternal-Calamity-ULTIMATE",
+  },
+  {
+    rank: 35,
+    name: "CoIV (Citadel of Infinite Void)",
+    creator: "bLockerman666, IceNsalt, popop614, ciel_azulsky, PPtTenshi, latomludo, Heksi, nott_vy, skitsuna, mrgamingpotato1",
+    verifier: "skitsuna",
+    difficulty: "Bottom-Low Unreal",
+    videoId: "Mtcliw0KJ4w",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/10199085458/Citadel-of-Infinite-Void",
+  },
+  {
+    rank: 36,
+    name: "ToBF (Tower of Blind Fate)",
+    creator: "Nosav",
+    verifier: "tinenderman",
+    difficulty: "Bottom-Low Unreal",
+    videoId: "6xzPARlwnio",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/3100988051/Tower-of-Blind-Fate",
+  },
+  {
+    rank: 37,
+    name: "ToP (Tower of Paradise)",
+    creator: "Macloux",
+    verifier: "Yazmania_1m",
+    difficulty: "Bottom-Low Unreal",
+    videoId: "NkRtXvFl-lA",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/10541580790/Tower-of-Paradise",
+  },
+  {
+    rank: 38,
+    name: "ToMIM (Tower of Maybe In Mumbai)",
+    creator: "Naz0dial, Stitch, Hexium, brub, arik21, az77, zkv07, asAGAIN, nortex, dom, ChillUltralight, spear, geo, twossed.173, NadiPlaysss",
+    verifier: "ChillUltralight",
+    difficulty: "Bottom-Low Unreal",
+    videoId: "_e93li9cdDE",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/83052485504037/Tower-of-Maybe-in-Mumbai",
+  },
+  {
+    rank: 39,
+    name: "ToWC (Tower of Withered Consensus)",
+    creator: "glizzygladiattorrr",
+    verifier: "glizzygladiattorrr",
+    difficulty: "Bottom Unreal",
+    videoId: "DLKMIGM6mS8",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/85794013389625/Tower-of-Withered-Consensus",
+  },
+  {
+    rank: 40,
+    name: "TT (Target Tower)",
+    creator: "DukeQD, Forstaken2008xs, Tritone246",
+    verifier: "player0v0",
+    difficulty: "Bottom Unreal",
+    videoId: "UiK6pKgHGpU",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/16730891689/",
+  },
+  {
+    rank: 41,
+    name: "ToZS (Tower of Zen Surplus)",
+    creator: "ciel_azulsky, skitsuna",
+    verifier: "SeeRyanplayroblox",
+    difficulty: "Bottom Unreal",
+    videoId: "AT90nqEX0NE",
+    worldRecord: "N/A",
+    robloxLink: "",
+  },
+  {
+    rank: 42,
+    name: "ToTT (Tower of Twenty Two)",
+    creator: "mccatster, jeremylightbulb, zelirium, ghoned, G1adit, carmeniscool12525_2",
+    verifier: "carmeniscool12525_2",
+    difficulty: "Bottom Unreal",
+    videoId: "beqUfnw8dGQgHudh",
+    worldRecord: "N/A",
+    robloxLink: "",
+  },
+  {
+    rank: 43,
+    name: "3008-T (3008 Tower)",
+    creator: "pczm1",
+    verifier: "ChillUltralight",
+    difficulty: "Bottom Unreal",
+    videoId: "rO8Czv0HcNk&t",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/17401926899/3008-Tower",
+  },
+  {
+    rank: 44,
+    name: "IKEA (Ikea Tower)",
+    creator: "Higherthanblox",
+    verifier: "MonsterIsABlock",
+    difficulty: "Bottom Unreal",
+    videoId: "fpJmckiIzFw",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/17379816541/Sweden-Tower",
+  },
+  {
+    rank: 45,
+    name: "Mini and Not Great Obelisk of Mini and Not Great Obelisk",
+    creator: "joelkoot, Tomasklimt, damadman11, Renzovanhooren, fedde201, rutra6665, Wesleytjes",
+    verifier: "",
+    difficulty: "Bottom Unreal",
+    videoId: "ow9Dcpf61f0",
+    worldRecord: "finale stretch",
+    robloxLink: "",
+  },
+  {
+    rank: 46,
+    name: "ToSD (Tower of Sudden Death)",
+    creator: "WaterMakeer, CosmikChaos",
+    verifier: "skitsuna",
+    difficulty: "Baseline Unreal",
+    videoId: "75VZzOgVyHc",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/18603968759/Community-Top-Towers",
+  }
 ];
-
-const PAGE_SIZE = 50;
-
-function tierForLevel(level) {
-  const verifier = (level.verifier || "").trim();
-  if (verifier.length > 0) {
-    return TIERS.find(t => t.id === "verified");
-  }
-  return TIERS.find(t => t.id === "unverified");
-}
-
-// --- SVG Icons ---
-const ICON_HORRIFIC = `<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="7" stroke-linejoin="round"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38"/></svg>`;
-
-const ICON_UNREAL = `<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"><polygon points="50,2 60,35 98,35 68,56 78,90 50,70 22,90 32,56 2,35 40,35"/></svg>`;
-
-const ICON_NIL = `<svg class="diff-icon" viewBox="0 0 100 100"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38" fill="#0a0a0a" stroke="#555555" stroke-width="5" stroke-linejoin="round"/><g transform="translate(50,50) rotate(45) translate(-50,-50)"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38" fill="#0a0a0a" stroke="#999999" stroke-width="5" stroke-linejoin="round"/></g></svg>`;
-
-const ICON_ERROR = `<svg class="diff-icon" viewBox="0 0 100 100"><rect x="8" y="8" width="84" height="84" rx="4" fill="#cc2222" stroke="#991111" stroke-width="6"/></svg>`;
-
-const ICON_ROBLOX = `<svg class="place-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M4.24 0L0 19.76 19.76 24 24 4.24 4.24 0zM9.6 8.4l6 1.4-1.4 6-6-1.4 1.4-6z"/></svg>`;
-
-// --- Difficulty parsing ---
-function parseDifficulty(raw) {
-  if (!raw) return { prefix: "", base: "", full: "" };
-  const str = String(raw).trim();
-  const lowered = str.toLowerCase();
-
-  const prefixMatch = lowered.match(/^(low-mid|mid-high|bottom-low|baseline|bottom|low|mid|high-peak|high|peak|base)(?:\s+|-)/);
-  let prefix = "";
-  let base = lowered;
-
-  if (prefixMatch) {
-    prefix = prefixMatch[1];
-    base = lowered.slice(prefixMatch[0].length).trim();
-  }
-
-  const capPrefix = prefix ? prefix.charAt(0).toUpperCase() + prefix.slice(1) : "";
-  const capBase = base.charAt(0).toUpperCase() + base.slice(1);
-  const full = capPrefix ? capPrefix + " " + capBase : capBase;
-
-  return { prefix: capPrefix, base: capBase, full };
-}
-
-function difficultyClass(parsed) {
-  if (parsed.prefix === "High-Peak") return "high-peak";
-  const map = {
-    "horrific": "horrific",
-    "unreal": "unreal",
-    "nil": "nil",
-    "error": "error",
-  };
-  return map[parsed.base.toLowerCase()] || "";
-}
-
-function difficultyIcon(parsed) {
-  if (parsed.prefix === "High-Peak") return ICON_UNREAL;
-  const b = parsed.base.toLowerCase();
-  if (b === "horrific") return ICON_HORRIFIC;
-  if (b === "unreal") return ICON_UNREAL;
-  if (b === "nil") return ICON_NIL;
-  if (b === "error") return ICON_ERROR;
-  return "";
-}
-
-// --- state ---
-let visibleCount = PAGE_SIZE;
-let activeTierId = "all";
-let query = "";
-
-const listEl = document.getElementById("levelList");
-const emptyStateEl = document.getElementById("emptyState");
-const loadMoreBtn = document.getElementById("loadMoreBtn");
-const searchInput = document.getElementById("searchInput");
-const tierFiltersEl = document.getElementById("tierFilters");
-const statTotal = document.getElementById("statTotal");
-const statUpdated = document.getElementById("statUpdated");
-
-const CHEVRON_SVG = `<svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>`;
-
-/* =========================================================
-   VIEW COUNTER — globalny licznik wejść (CountAPI)
-   Każdy użytkownik widzi tę samą liczbę, zapisywaną w chmurze.
-   ========================================================= */
-
-const COUNT_API_KEY = "ashout-itl-views";
-const COUNT_API_URL = "https://api.countapi.xyz";
-
-async function initViewCounter() {
-  const viewNumEl = document.getElementById("viewNum");
-  const viewCounterEl = document.getElementById("viewCounter");
-  if (!viewNumEl) return;
-
-  try {
-    // Wyślij "hit" — zwiększ globalny licznik o 1
-    const hitRes = await fetch(`${COUNT_API_URL}/hit/${COUNT_API_KEY}`);
-    if (!hitRes.ok) throw new Error("Hit failed");
-    const hitData = await hitRes.json();
-    const views = hitData.value;
-
-    // Animowane liczenie od 0 do aktualnej wartości
-    animateNumber(viewNumEl, 0, views, 1200, () => {
-      viewNumEl.classList.remove("counting");
-    });
-    viewNumEl.classList.add("counting");
-
-    // Pulse efekt na kontenerze
-    viewCounterEl.classList.add("pulse");
-    setTimeout(() => viewCounterEl.classList.remove("pulse"), 700);
-  } catch (err) {
-    // Fallback: jeśli API nie działa, pokaż "—"
-    viewNumEl.textContent = "—";
-    console.warn("View counter API error:", err);
-  }
-}
-
-function animateNumber(el, from, to, duration, onDone) {
-  const start = performance.now();
-  function tick(now) {
-    const elapsed = now - start;
-    const progress = Math.min(elapsed / duration, 1);
-    // easeOutExpo
-    const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-    const current = Math.floor(from + (to - from) * eased);
-    el.textContent = formatViews(current);
-    if (progress < 1) {
-      requestAnimationFrame(tick);
-    } else if (onDone) {
-      onDone();
-    }
-  }
-  requestAnimationFrame(tick);
-}
-
-function formatViews(n) {
-  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1).replace(/\.0$/, "") + "M";
-  if (n >= 1_000) return (n / 1_000).toFixed(1).replace(/\.0$/, "") + "k";
-  return String(n);
-}
-
-function getFilteredLevels() {
-  const q = query.trim().toLowerCase();
-  return LEVELS
-    .slice()
-    .sort((a, b) => a.rank - b.rank)
-    .filter((lvl) => {
-      const tier = tierForLevel(lvl);
-      if (activeTierId !== "all" && tier.id !== activeTierId) return false;
-      if (!q) return true;
-      const name = (lvl.name || "").toLowerCase();
-      const creator = (lvl.creator || "").toLowerCase();
-      const diff = (lvl.difficulty || "").toLowerCase();
-      return name.includes(q) || creator.includes(q) || diff.includes(q);
-    });
-}
-
-function extractYouTubeId(input) {
-  if (!input) return "";
-  if (/^[a-zA-Z0-9_-]{11}$/.test(input)) return input;
-  const match = input.match(/(?:youtu\.be\/|v=|embed\/)([a-zA-Z0-9_-]{11})/);
-  return match ? match[1] : "";
-}
-
-function buildDifficultyBadge(rawDifficulty) {
-  const parsed = parseDifficulty(rawDifficulty);
-  if (!parsed.base) return `<span class="row-difficulty">—</span>`;
-
-  const cls = difficultyClass(parsed);
-  const icon = difficultyIcon(parsed);
-  const badgeClass = cls ? `diff-${cls}` : "";
-
-  return `
-    <span class="row-difficulty">
-      <span class="diff-badge ${badgeClass}">
-        ${icon}
-        ${escapeHtml(parsed.full)}
-      </span>
-    </span>
-  `;
-}
-
-function buildCreatorSummary(creatorStr) {
-  const raw = (creatorStr || "").trim();
-  if (!raw) return `<span class="row-creator">—</span>`;
-
-  const names = raw.split(",").map(n => n.trim()).filter(Boolean);
-  const first = escapeHtml(names[0] || raw);
-  const extra = names.length - 1;
-
-  if (extra <= 0) {
-    return `<span class="row-creator">${first}</span>`;
-  }
-
-  return `<span class="row-creator"><span class="creator-first">${first}</span><span class="creator-more">+${extra}</span></span>`;
-}
-
-function buildRow(level, index) {
-  const tier = tierForLevel(level);
-  const diffParsed = parseDifficulty(level.difficulty);
-  const diffClass = difficultyClass(diffParsed);
-
-  const li = document.createElement("li");
-  li.className = "level-row";
-  li.dataset.tier = tier.id;
-  li.dataset.diff = diffClass || "none";
-  li.style.animationDelay = Math.min(index, 19) * 30 + "ms";
-
-  const rankStr = String(level.rank);
-  const diffBadge = buildDifficultyBadge(level.difficulty);
-
-  li.innerHTML = `
-    <button class="row-main" type="button" aria-expanded="false">
-      <span class="row-rank">#${rankStr}</span>
-      <span class="row-name">${escapeHtml(level.name || "Unnamed")}</span>
-      ${diffBadge}
-      ${buildCreatorSummary(level.creator)}
-      ${CHEVRON_SVG}
-    </button>
-  `;
-
-  const btn = li.querySelector(".row-main");
-  btn.addEventListener("click", () => toggleRow(li, level));
-
-  return li;
-}
-
-function toggleRow(li, level) {
-  const btn = li.querySelector(".row-main");
-  const isExpanded = li.classList.contains("expanded");
-
-  // Collapse this row if already expanded
-  if (isExpanded) {
-    const detail = li.querySelector(".row-detail");
-    if (detail) {
-      // Measure current height for smooth collapse
-      const h = detail.scrollHeight;
-      detail.style.maxHeight = h + "px";
-      detail.offsetHeight; // force reflow
-      detail.style.maxHeight = "0px";
-      detail.style.opacity = "0";
-    }
-    li.classList.remove("expanded");
-    btn.setAttribute("aria-expanded", "false");
-    return;
-  }
-
-  // Collapse any other expanded rows
-  document.querySelectorAll(".level-row.expanded").forEach(other => {
-    if (other !== li) {
-      other.classList.remove("expanded");
-      other.querySelector(".row-main").setAttribute("aria-expanded", "false");
-      const d = other.querySelector(".row-detail");
-      if (d) {
-        d.style.maxHeight = "0px";
-        d.style.opacity = "0";
-      }
-    }
-  });
-
-  li.classList.add("expanded");
-  btn.setAttribute("aria-expanded", "true");
-
-  let detail = li.querySelector(".row-detail");
-
-  // Build detail if not present
-  if (!detail) {
-    const videoId = extractYouTubeId(level.videoId);
-    let videoMarkup;
-
-    if (videoId) {
-      videoMarkup = `
-      <iframe src="https://www.youtube.com/embed/${videoId}" title="Verification: ${escapeHtml(level.name || "")}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-      <a href="https://www.youtube.com/watch?v=${videoId}" class="video-fallback" target="_blank" rel="noopener">Watch on YouTube ↗</a>
-    `;
-    } else {
-      videoMarkup = `<div class="detail-video-missing">No video added for this tower.</div>`;
-    }
-
-    const diffParsed = parseDifficulty(level.difficulty);
-    const diffDisplay = diffParsed.full || "—";
-    const wrDisplay = level.worldRecord != null ? String(level.worldRecord) : "N/A";
-    const verifierDisplay = (level.verifier || "").trim() || "—";
-    const statusDisplay = verifierDisplay !== "—" ? "Verified" : "Unverified";
-
-    const robloxLink = (level.robloxLink || "").trim();
-    const placeMarkup = robloxLink
-      ? `<a href="${escapeHtml(robloxLink)}" class="place-link" target="_blank" rel="noopener">${ICON_ROBLOX}<span>Play this tower ↗</span></a>`
-      : `<div class="place-link place-link-missing">${ICON_ROBLOX}<span>No Roblox place link added</span></div>`;
-
-    detail = document.createElement("div");
-    detail.className = "row-detail";
-    detail.innerHTML = `
-      <div class="detail-video">${videoMarkup}</div>
-      <div class="detail-side">
-        <dl class="detail-meta">
-          <div class="meta-item">
-            <dt>Creator</dt>
-            <dd>${escapeHtml(level.creator || "—")}</dd>
-          </div>
-          <div class="meta-item">
-            <dt>Verifier</dt>
-            <dd>${escapeHtml(verifierDisplay)}</dd>
-          </div>
-          <div class="meta-item">
-            <dt>Difficulty</dt>
-            <dd>${escapeHtml(diffDisplay)}</dd>
-          </div>
-          <div class="meta-item">
-            <dt>World Record</dt>
-            <dd>${escapeHtml(wrDisplay)}</dd>
-          </div>
-          <div class="meta-item">
-            <dt>Status</dt>
-            <dd>${escapeHtml(statusDisplay)}</dd>
-          </div>
-        </dl>
-        ${placeMarkup}
-      </div>
-    `;
-    li.appendChild(detail);
-  }
-
-  // Measure exact content height and animate to it
-  // First reset to natural height to measure
-  detail.style.maxHeight = "none";
-  detail.style.opacity = "0";
-  const targetH = detail.scrollHeight;
-
-  // Start from 0
-  detail.style.maxHeight = "0px";
-  detail.offsetHeight; // force reflow
-
-  // Animate to exact measured height
-  detail.style.maxHeight = targetH + "px";
-  detail.style.opacity = "1";
-}
-
-function escapeHtml(str) {
-  const div = document.createElement("div");
-  div.textContent = str;
-  return div.innerHTML;
-}
-
-function render() {
-  const filtered = getFilteredLevels();
-  const toShow = filtered.slice(0, visibleCount);
-
-  listEl.innerHTML = "";
-  const fragment = document.createDocumentFragment();
-  toShow.forEach((level, i) => fragment.appendChild(buildRow(level, i)));
-  listEl.appendChild(fragment);
-
-  emptyStateEl.hidden = filtered.length !== 0;
-  loadMoreBtn.hidden = filtered.length <= visibleCount;
-}
-
-function setupControls() {
-  searchInput.addEventListener("input", (e) => {
-    query = e.target.value;
-    visibleCount = PAGE_SIZE;
-    render();
-  });
-
-  tierFiltersEl.addEventListener("click", (e) => {
-    const btn = e.target.closest(".tier-btn");
-    if (!btn) return;
-    tierFiltersEl.querySelectorAll(".tier-btn").forEach((b) => b.classList.remove("active"));
-    btn.classList.add("active");
-    activeTierId = btn.dataset.tier;
-    visibleCount = PAGE_SIZE;
-    render();
-  });
-
-  loadMoreBtn.addEventListener("click", () => {
-    visibleCount += PAGE_SIZE;
-    render();
-  });
-}
-
-function setupStats() {
-  statTotal.textContent = LEVELS.length;
-  statUpdated.textContent = typeof LAST_UPDATE !== "undefined" ? LAST_UPDATE : "—";
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  setupControls();
-  setupStats();
-  initViewCounter();
-  render();
-});
