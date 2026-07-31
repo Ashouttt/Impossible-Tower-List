@@ -158,6 +158,32 @@ body {
   font-weight: 500;
 }
 
+/* Discord pill */
+.discord-pill {
+  text-decoration: none;
+  color: inherit;
+  transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+  cursor: pointer;
+}
+
+.discord-pill:hover {
+  background: rgba(88, 101, 242, 0.15);
+  border-color: rgba(88, 101, 242, 0.40);
+  transform: scale(1.03);
+}
+
+.discord-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: #5865F2;
+}
+
+.discord-pill .meta-label {
+  color: #8a94f0;
+  font-weight: 600;
+}
+
 /* ---------------- Controls bar ---------------- */
 
 .controls-bar {
