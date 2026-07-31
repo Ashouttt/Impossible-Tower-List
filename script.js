@@ -1,5 +1,6 @@
 /* =========================================================
-   IMPOSSIBLE TOWER LIST — script.js
+   TOWER DIFFICULTY RANKINGS — script.js
+   Clean, no external redirects, no innerHTML for user data.
    ========================================================= */
 
 const TIERS = [
@@ -83,26 +84,9 @@ const searchInput = document.getElementById("searchInput");
 const tierFiltersEl = document.getElementById("tierFilters");
 const statTotal = document.getElementById("statTotal");
 const statUpdated = document.getElementById("statUpdated");
+const footerUpdated = document.getElementById("footerUpdated");
 
 const CHEVRON_SVG = `<svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>`;
-
-/* =========================================================
-   VIEW COUNTER — session-only (no localStorage, no tracking)
-   ========================================================= */
-
-let sessionViews = 0;
-
-function initViewCounter() {
-  const viewNumEl = document.getElementById("viewNum");
-  const viewCounterEl = document.getElementById("viewCounter");
-  if (!viewNumEl) return;
-
-  sessionViews += 1;
-  viewNumEl.textContent = String(sessionViews);
-
-  viewCounterEl.classList.add("pulse");
-  setTimeout(() => viewCounterEl.classList.remove("pulse"), 700);
-}
 
 function getFilteredLevels() {
   const q = query.trim().toLowerCase();
@@ -124,6 +108,12 @@ function extractYouTubeId(input) {
   if (!input) return "";
   if (/^[a-zA-Z0-9_-]{11}$/.test(input)) return input;
   const match = input.match(/(?:youtu\.be\/|v=|embed\/)([a-zA-Z0-9_-]{11})/);
+  return match ? match[1] : "";
+}
+
+function extractRobloxId(input) {
+  if (!input) return "";
+  const match = input.match(/games\/(\d+)/);
   return match ? match[1] : "";
 }
 
@@ -230,9 +220,9 @@ function toggleRow(li, level) {
     let videoMarkup;
 
     if (videoId) {
-      // Link instead of iframe — AV can't flag embedded content
+      // Thumbnail link instead of iframe — no embedded external content
       videoMarkup = `
-        <a href="https://www.youtube.com/watch?v=${videoId}" class="video-link" rel="noopener noreferrer">
+        <a href="https://www.youtube.com/watch?v=${videoId}" class="video-link" target="_blank" rel="noopener noreferrer">
           <div class="video-thumb">
             <img src="https://i.ytimg.com/vi/${videoId}/mqdefault.jpg" alt="${escapeHtml(level.name || "Video")}" loading="lazy">
             <div class="video-play">▶</div>
@@ -241,7 +231,7 @@ function toggleRow(li, level) {
         </a>
       `;
     } else {
-      videoMarkup = `<div class="detail-video-missing">No video added for this tower.</div>`;
+      videoMarkup = `<div class="detail-video-missing"><span>No video added for this tower.</span></div>`;
     }
 
     const diffParsed = parseDifficulty(level.difficulty);
@@ -250,10 +240,10 @@ function toggleRow(li, level) {
     const verifierDisplay = (level.verifier || "").trim() || "—";
     const statusDisplay = verifierDisplay !== "—" ? "Verified" : "Unverified";
 
-    const robloxLink = (level.robloxLink || "").trim();
-    const placeMarkup = robloxLink
-      ? `<a href="${escapeHtml(robloxLink)}" class="place-link" rel="noopener noreferrer">${ICON_ROBLOX}<span>Play this tower</span></a>`
-      : `<div class="place-link place-link-missing">${ICON_ROBLOX}<span>No Roblox place link added</span></div>`;
+    const robloxId = extractRobloxId(level.robloxLink || "");
+    const placeMarkup = robloxId
+      ? `<div class="place-id">${ICON_ROBLOX}<span>Place ID: ${escapeHtml(robloxId)}</span></div>`
+      : `<div class="place-id place-id-missing">${ICON_ROBLOX}<span>No place ID available</span></div>`;
 
     detail = document.createElement("div");
     detail.className = "row-detail";
@@ -343,12 +333,13 @@ function setupControls() {
 
 function setupStats() {
   statTotal.textContent = LEVELS.length;
-  statUpdated.textContent = typeof LAST_UPDATE !== "undefined" ? LAST_UPDATE : "—";
+  const updateText = typeof LAST_UPDATE !== "undefined" ? LAST_UPDATE : "—";
+  statUpdated.textContent = updateText;
+  if (footerUpdated) footerUpdated.textContent = updateText;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   setupControls();
   setupStats();
-  initViewCounter();
   render();
 });
