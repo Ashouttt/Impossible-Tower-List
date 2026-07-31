@@ -88,39 +88,29 @@ const statUpdated = document.getElementById("statUpdated");
 const CHEVRON_SVG = `<svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>`;
 
 /* =========================================================
-   VIEW COUNTER — globalny licznik wejść (CountAPI)
-   Każdy użytkownik widzi tę samą liczbę, zapisywaną w chmurze.
+   VIEW COUNTER — lokalny licznik wejść (localStorage)
+   Zero zewnętrznych połączeń, działa offline.
    ========================================================= */
 
-const COUNT_API_KEY = "ashout-itl-views";
-const COUNT_API_URL = "https://api.countapi.xyz";
-
-async function initViewCounter() {
+function initViewCounter() {
   const viewNumEl = document.getElementById("viewNum");
   const viewCounterEl = document.getElementById("viewCounter");
   if (!viewNumEl) return;
 
-  try {
-    // Wyślij "hit" — zwiększ globalny licznik o 1
-    const hitRes = await fetch(`${COUNT_API_URL}/hit/${COUNT_API_KEY}`);
-    if (!hitRes.ok) throw new Error("Hit failed");
-    const hitData = await hitRes.json();
-    const views = hitData.value;
+  // Pobierz zapisaną liczbę z localStorage
+  let views = parseInt(localStorage.getItem("itl_views") || "0", 10);
+  views += 1;
+  localStorage.setItem("itl_views", String(views));
 
-    // Animowane liczenie od 0 do aktualnej wartości
-    animateNumber(viewNumEl, 0, views, 1200, () => {
-      viewNumEl.classList.remove("counting");
-    });
-    viewNumEl.classList.add("counting");
+  // Animowane liczenie od 0 do aktualnej wartości
+  animateNumber(viewNumEl, 0, views, 1200, () => {
+    viewNumEl.classList.remove("counting");
+  });
+  viewNumEl.classList.add("counting");
 
-    // Pulse efekt na kontenerze
-    viewCounterEl.classList.add("pulse");
-    setTimeout(() => viewCounterEl.classList.remove("pulse"), 700);
-  } catch (err) {
-    // Fallback: jeśli API nie działa, pokaż "—"
-    viewNumEl.textContent = "—";
-    console.warn("View counter API error:", err);
-  }
+  // Pulse efekt na kontenerze
+  viewCounterEl.classList.add("pulse");
+  setTimeout(() => viewCounterEl.classList.remove("pulse"), 700);
 }
 
 function animateNumber(el, from, to, duration, onDone) {
