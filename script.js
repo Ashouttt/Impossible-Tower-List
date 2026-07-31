@@ -83,7 +83,6 @@ const loadMoreBtn = document.getElementById("loadMoreBtn");
 const searchInput = document.getElementById("searchInput");
 const tierFiltersEl = document.getElementById("tierFilters");
 const statTotal = document.getElementById("statTotal");
-const statUpdated = document.getElementById("statUpdated");
 
 const CHEVRON_SVG = '<svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
 
@@ -327,8 +326,9 @@ function setupControls() {
 }
 
 function setupStats() {
-  statTotal.textContent = LEVELS.length;
-  statUpdated.textContent = typeof LAST_UPDATE !== "undefined" ? LAST_UPDATE : "—";
+  if (statTotal) {
+    statTotal.textContent = LEVELS.length;
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
