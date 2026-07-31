@@ -1,0 +1,5 @@
+RewriteEngine On
+
+# Przekierowanie z aitl.pro na www.aitl.pro
+RewriteCond %{HTTP_HOST} ^aitl\.pro$ [NC]
+RewriteRule ^(.*)$ https://www.aitl.pro/$1 [R=301,L]
