@@ -1,6 +1,6 @@
 /* =========================================================
    IMPOSSIBLE TOWER LIST — script.js
-   English, smooth animations, EToH difficulty icons.
+   Cache-bust: v2
    ========================================================= */
 
 const TIERS = [
@@ -18,7 +18,6 @@ function tierForLevel(level) {
   return TIERS.find(t => t.id === "unverified");
 }
 
-// --- SVG Icons ---
 const ICON_HORRIFIC = '<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="7" stroke-linejoin="round"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38"/></svg>';
 
 const ICON_UNREAL = '<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"><polygon points="50,2 60,35 98,35 68,56 78,90 50,70 22,90 32,56 2,35 40,35"/></svg>';
@@ -29,36 +28,26 @@ const ICON_ERROR = '<svg class="diff-icon" viewBox="0 0 100 100"><rect x="8" y="
 
 const ICON_ROBLOX = '<svg class="place-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M4.24 0L0 19.76 19.76 24 24 4.24 4.24 0zM9.6 8.4l6 1.4-1.4 6-6-1.4 1.4-6z"/></svg>';
 
-// --- Difficulty parsing ---
 function parseDifficulty(raw) {
   if (!raw) return { prefix: "", base: "", full: "" };
   const str = String(raw).trim();
   const lowered = str.toLowerCase();
-
   const prefixMatch = lowered.match(/^(low-mid|mid-high|bottom-low|baseline|bottom|low|mid|high-peak|high|peak|base)(?:\s+|-)/);
   let prefix = "";
   let base = lowered;
-
   if (prefixMatch) {
     prefix = prefixMatch[1];
     base = lowered.slice(prefixMatch[0].length).trim();
   }
-
   const capPrefix = prefix ? prefix.charAt(0).toUpperCase() + prefix.slice(1) : "";
   const capBase = base.charAt(0).toUpperCase() + base.slice(1);
   const full = capPrefix ? capPrefix + " " + capBase : capBase;
-
   return { prefix: capPrefix, base: capBase, full };
 }
 
 function difficultyClass(parsed) {
   if (parsed.prefix === "High-Peak") return "high-peak";
-  const map = {
-    "horrific": "horrific",
-    "unreal": "unreal",
-    "nil": "nil",
-    "error": "error",
-  };
+  const map = { "horrific": "horrific", "unreal": "unreal", "nil": "nil", "error": "error" };
   return map[parsed.base.toLowerCase()] || "";
 }
 
@@ -72,7 +61,6 @@ function difficultyIcon(parsed) {
   return "";
 }
 
-// --- state ---
 let visibleCount = PAGE_SIZE;
 let activeTierId = "all";
 let query = "";
@@ -88,18 +76,15 @@ const CHEVRON_SVG = '<svg class="row-chevron" viewBox="0 0 24 24" fill="none" st
 
 function getFilteredLevels() {
   const q = query.trim().toLowerCase();
-  return LEVELS
-    .slice()
-    .sort((a, b) => a.rank - b.rank)
-    .filter((lvl) => {
-      const tier = tierForLevel(lvl);
-      if (activeTierId !== "all" && tier.id !== activeTierId) return false;
-      if (!q) return true;
-      const name = (lvl.name || "").toLowerCase();
-      const creator = (lvl.creator || "").toLowerCase();
-      const diff = (lvl.difficulty || "").toLowerCase();
-      return name.includes(q) || creator.includes(q) || diff.includes(q);
-    });
+  return LEVELS.slice().sort((a, b) => a.rank - b.rank).filter((lvl) => {
+    const tier = tierForLevel(lvl);
+    if (activeTierId !== "all" && tier.id !== activeTierId) return false;
+    if (!q) return true;
+    const name = (lvl.name || "").toLowerCase();
+    const creator = (lvl.creator || "").toLowerCase();
+    const diff = (lvl.difficulty || "").toLowerCase();
+    return name.includes(q) || creator.includes(q) || diff.includes(q);
+  });
 }
 
 function extractYouTubeId(input) {
@@ -109,36 +94,28 @@ function extractYouTubeId(input) {
   return match ? match[1] : "";
 }
 
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str;
+  return div.innerHTML;
+}
+
 function buildDifficultyBadge(rawDifficulty) {
   const parsed = parseDifficulty(rawDifficulty);
   if (!parsed.base) return '<span class="row-difficulty">—</span>';
-
   const cls = difficultyClass(parsed);
   const icon = difficultyIcon(parsed);
   const badgeClass = cls ? 'diff-' + cls : "";
-
-  return '
-    <span class="row-difficulty">
-      <span class="diff-badge ' + badgeClass + '">
-        ' + icon + '
-        ' + escapeHtml(parsed.full) + '
-      </span>
-    </span>
-  ';
+  return '<span class="row-difficulty"><span class="diff-badge ' + badgeClass + '">' + icon + escapeHtml(parsed.full) + '</span></span>';
 }
 
 function buildCreatorSummary(creatorStr) {
   const raw = (creatorStr || "").trim();
   if (!raw) return '<span class="row-creator">—</span>';
-
   const names = raw.split(",").map(n => n.trim()).filter(Boolean);
   const first = escapeHtml(names[0] || raw);
   const extra = names.length - 1;
-
-  if (extra <= 0) {
-    return '<span class="row-creator">' + first + '</span>';
-  }
-
+  if (extra <= 0) return '<span class="row-creator">' + first + '</span>';
   return '<span class="row-creator"><span class="creator-first">' + first + '</span><span class="creator-more">+' + extra + '</span></span>';
 }
 
@@ -146,44 +123,28 @@ function buildRow(level, index) {
   const tier = tierForLevel(level);
   const diffParsed = parseDifficulty(level.difficulty);
   const diffClass = difficultyClass(diffParsed);
-
   const li = document.createElement("li");
   li.className = "level-row";
   li.dataset.tier = tier.id;
   li.dataset.diff = diffClass || "none";
   li.style.animationDelay = Math.min(index, 19) * 30 + "ms";
-
   const rankStr = String(level.rank);
   const diffBadge = buildDifficultyBadge(level.difficulty);
-
-  li.innerHTML = '
-    <button class="row-main" type="button" aria-expanded="false">
-      <span class="row-rank">#' + rankStr + '</span>
-      <span class="row-name">' + escapeHtml(level.name || "Unnamed") + '</span>
-      ' + diffBadge + '
-      ' + buildCreatorSummary(level.creator) + '
-      ' + CHEVRON_SVG + '
-    </button>
-  ';
-
+  li.innerHTML = '<button class="row-main" type="button" aria-expanded="false"><span class="row-rank">#' + rankStr + '</span><span class="row-name">' + escapeHtml(level.name || "Unnamed") + '</span>' + diffBadge + buildCreatorSummary(level.creator) + CHEVRON_SVG + '</button>';
   const btn = li.querySelector(".row-main");
   btn.addEventListener("click", () => toggleRow(li, level));
-
   return li;
 }
 
 function toggleRow(li, level) {
   const btn = li.querySelector(".row-main");
   const isExpanded = li.classList.contains("expanded");
-
-  // Collapse this row if already expanded
   if (isExpanded) {
     const detail = li.querySelector(".row-detail");
     if (detail) {
-      // Measure current height for smooth collapse
       const h = detail.scrollHeight;
       detail.style.maxHeight = h + "px";
-      detail.offsetHeight; // force reflow
+      detail.offsetHeight;
       detail.style.maxHeight = "0px";
       detail.style.opacity = "0";
     }
@@ -191,113 +152,55 @@ function toggleRow(li, level) {
     btn.setAttribute("aria-expanded", "false");
     return;
   }
-
-  // Collapse any other expanded rows
   document.querySelectorAll(".level-row.expanded").forEach(other => {
     if (other !== li) {
       other.classList.remove("expanded");
       other.querySelector(".row-main").setAttribute("aria-expanded", "false");
       const d = other.querySelector(".row-detail");
-      if (d) {
-        d.style.maxHeight = "0px";
-        d.style.opacity = "0";
-      }
+      if (d) { d.style.maxHeight = "0px"; d.style.opacity = "0"; }
     }
   });
-
   li.classList.add("expanded");
   btn.setAttribute("aria-expanded", "true");
-
   let detail = li.querySelector(".row-detail");
-
-  // Build detail if not present
   if (!detail) {
     const videoId = extractYouTubeId(level.videoId);
     let videoMarkup;
-
     if (videoId) {
-      videoMarkup = '
-      <iframe src="https://www.youtube.com/embed/' + videoId + '" title="Verification: ' + escapeHtml(level.name || "") + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-      <a href="https://www.youtube.com/watch?v=' + videoId + '" class="video-fallback" target="_blank" rel="noopener">Watch on YouTube ↗</a>
-    ';
+      videoMarkup = '<iframe src="https://www.youtube.com/embed/' + videoId + '" title="Verification: ' + escapeHtml(level.name || "") + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><a href="https://www.youtube.com/watch?v=' + videoId + '" class="video-fallback" target="_blank" rel="noopener">Watch on YouTube ↗</a>';
     } else {
       videoMarkup = '<div class="detail-video-missing">No video added for this tower.</div>';
     }
-
     const diffParsed = parseDifficulty(level.difficulty);
     const diffDisplay = diffParsed.full || "—";
     const wrDisplay = level.worldRecord != null ? String(level.worldRecord) : "N/A";
     const verifierDisplay = (level.verifier || "").trim() || "—";
     const statusDisplay = verifierDisplay !== "—" ? "Verified" : "Unverified";
-
     const robloxLink = (level.robloxLink || "").trim();
     const placeMarkup = robloxLink
       ? '<a href="' + escapeHtml(robloxLink) + '" class="place-link" target="_blank" rel="noopener">' + ICON_ROBLOX + '<span>Play this tower ↗</span></a>'
       : '<div class="place-link place-link-missing">' + ICON_ROBLOX + '<span>No Roblox place link added</span></div>';
-
     detail = document.createElement("div");
     detail.className = "row-detail";
-    detail.innerHTML = '
-      <div class="detail-video">' + videoMarkup + '</div>
-      <div class="detail-side">
-        <dl class="detail-meta">
-          <div class="meta-item">
-            <dt>Creator</dt>
-            <dd>' + escapeHtml(level.creator || "—") + '</dd>
-          </div>
-          <div class="meta-item">
-            <dt>Verifier</dt>
-            <dd>' + escapeHtml(verifierDisplay) + '</dd>
-          </div>
-          <div class="meta-item">
-            <dt>Difficulty</dt>
-            <dd>' + escapeHtml(diffDisplay) + '</dd>
-          </div>
-          <div class="meta-item">
-            <dt>World Record</dt>
-            <dd>' + escapeHtml(wrDisplay) + '</dd>
-          </div>
-          <div class="meta-item">
-            <dt>Status</dt>
-            <dd>' + escapeHtml(statusDisplay) + '</dd>
-          </div>
-        </dl>
-        ' + placeMarkup + '
-      </div>
-    ';
+    detail.innerHTML = '<div class="detail-video">' + videoMarkup + '</div><div class="detail-side"><dl class="detail-meta"><div class="meta-item"><dt>Creator</dt><dd>' + escapeHtml(level.creator || "—") + '</dd></div><div class="meta-item"><dt>Verifier</dt><dd>' + escapeHtml(verifierDisplay) + '</dd></div><div class="meta-item"><dt>Difficulty</dt><dd>' + escapeHtml(diffDisplay) + '</dd></div><div class="meta-item"><dt>World Record</dt><dd>' + escapeHtml(wrDisplay) + '</dd></div><div class="meta-item"><dt>Status</dt><dd>' + escapeHtml(statusDisplay) + '</dd></div></dl>' + placeMarkup + '</div>';
     li.appendChild(detail);
   }
-
-  // Measure exact content height and animate to it
-  // First reset to natural height to measure
   detail.style.maxHeight = "none";
   detail.style.opacity = "0";
   const targetH = detail.scrollHeight;
-
-  // Start from 0
   detail.style.maxHeight = "0px";
-  detail.offsetHeight; // force reflow
-
-  // Animate to exact measured height
+  detail.offsetHeight;
   detail.style.maxHeight = targetH + "px";
   detail.style.opacity = "1";
-}
-
-function escapeHtml(str) {
-  const div = document.createElement("div");
-  div.textContent = str;
-  return div.innerHTML;
 }
 
 function render() {
   const filtered = getFilteredLevels();
   const toShow = filtered.slice(0, visibleCount);
-
   listEl.innerHTML = "";
   const fragment = document.createDocumentFragment();
   toShow.forEach((level, i) => fragment.appendChild(buildRow(level, i)));
   listEl.appendChild(fragment);
-
   emptyStateEl.hidden = filtered.length !== 0;
   loadMoreBtn.hidden = filtered.length <= visibleCount;
 }
@@ -308,7 +211,6 @@ function setupControls() {
     visibleCount = PAGE_SIZE;
     render();
   });
-
   tierFiltersEl.addEventListener("click", (e) => {
     const btn = e.target.closest(".tier-btn");
     if (!btn) return;
@@ -318,7 +220,6 @@ function setupControls() {
     visibleCount = PAGE_SIZE;
     render();
   });
-
   loadMoreBtn.addEventListener("click", () => {
     visibleCount += PAGE_SIZE;
     render();
@@ -326,9 +227,7 @@ function setupControls() {
 }
 
 function setupStats() {
-  if (statTotal) {
-    statTotal.textContent = LEVELS.length;
-  }
+  if (statTotal) statTotal.textContent = LEVELS.length;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
