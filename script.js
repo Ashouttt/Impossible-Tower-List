@@ -118,7 +118,14 @@ function buildDifficultyBadge(rawDifficulty) {
   const icon = difficultyIcon(parsed);
   const badgeClass = cls ? 'diff-' + cls : "";
 
-  return '\n    <span class="row-difficulty">\n      <span class="diff-badge ' + badgeClass + '">\n        ' + icon + '\n        ' + escapeHtml(parsed.full) + '\n      </span>\n    </span>\n  ';
+  return '
+    <span class="row-difficulty">
+      <span class="diff-badge ' + badgeClass + '">
+        ' + icon + '
+        ' + escapeHtml(parsed.full) + '
+      </span>
+    </span>
+  ';
 }
 
 function buildCreatorSummary(creatorStr) {
@@ -150,7 +157,15 @@ function buildRow(level, index) {
   const rankStr = String(level.rank);
   const diffBadge = buildDifficultyBadge(level.difficulty);
 
-  li.innerHTML = '\n    <button class="row-main" type="button" aria-expanded="false">\n      <span class="row-rank">#' + rankStr + '</span>\n      <span class="row-name">' + escapeHtml(level.name || "Unnamed") + '</span>\n      ' + diffBadge + '\n      ' + buildCreatorSummary(level.creator) + '\n      ' + CHEVRON_SVG + '\n    </button>\n  ';
+  li.innerHTML = '
+    <button class="row-main" type="button" aria-expanded="false">
+      <span class="row-rank">#' + rankStr + '</span>
+      <span class="row-name">' + escapeHtml(level.name || "Unnamed") + '</span>
+      ' + diffBadge + '
+      ' + buildCreatorSummary(level.creator) + '
+      ' + CHEVRON_SVG + '
+    </button>
+  ';
 
   const btn = li.querySelector(".row-main");
   btn.addEventListener("click", () => toggleRow(li, level));
@@ -202,7 +217,10 @@ function toggleRow(li, level) {
     let videoMarkup;
 
     if (videoId) {
-      videoMarkup = '\n      <iframe src="https://www.youtube.com/embed/' + videoId + '" title="Verification: ' + escapeHtml(level.name || "") + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>\n      <a href="https://www.youtube.com/watch?v=' + videoId + '" class="video-fallback" target="_blank" rel="noopener">Watch on YouTube ↗</a>\n    ';
+      videoMarkup = '
+      <iframe src="https://www.youtube.com/embed/' + videoId + '" title="Verification: ' + escapeHtml(level.name || "") + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <a href="https://www.youtube.com/watch?v=' + videoId + '" class="video-fallback" target="_blank" rel="noopener">Watch on YouTube ↗</a>
+    ';
     } else {
       videoMarkup = '<div class="detail-video-missing">No video added for this tower.</div>';
     }
@@ -220,7 +238,34 @@ function toggleRow(li, level) {
 
     detail = document.createElement("div");
     detail.className = "row-detail";
-    detail.innerHTML = '\n      <div class="detail-video">' + videoMarkup + '</div>\n      <div class="detail-side">\n        <dl class="detail-meta">\n          <div class="meta-item">\n            <dt>Creator</dt>\n            <dd>' + escapeHtml(level.creator || "—") + '</dd>\n          </div>\n          <div class="meta-item">\n            <dt>Verifier</dt>\n            <dd>' + escapeHtml(verifierDisplay) + '</dd>\n          </div>\n          <div class="meta-item">\n            <dt>Difficulty</dt>\n            <dd>' + escapeHtml(diffDisplay) + '</dd>\n          </div>\n          <div class="meta-item">\n            <dt>World Record</dt>\n            <dd>' + escapeHtml(wrDisplay) + '</dd>\n          </div>\n          <div class="meta-item">\n            <dt>Status</dt>\n            <dd>' + escapeHtml(statusDisplay) + '</dd>\n          </div>\n        </dl>\n        ' + placeMarkup + '\n      </div>\n    ';
+    detail.innerHTML = '
+      <div class="detail-video">' + videoMarkup + '</div>
+      <div class="detail-side">
+        <dl class="detail-meta">
+          <div class="meta-item">
+            <dt>Creator</dt>
+            <dd>' + escapeHtml(level.creator || "—") + '</dd>
+          </div>
+          <div class="meta-item">
+            <dt>Verifier</dt>
+            <dd>' + escapeHtml(verifierDisplay) + '</dd>
+          </div>
+          <div class="meta-item">
+            <dt>Difficulty</dt>
+            <dd>' + escapeHtml(diffDisplay) + '</dd>
+          </div>
+          <div class="meta-item">
+            <dt>World Record</dt>
+            <dd>' + escapeHtml(wrDisplay) + '</dd>
+          </div>
+          <div class="meta-item">
+            <dt>Status</dt>
+            <dd>' + escapeHtml(statusDisplay) + '</dd>
+          </div>
+        </dl>
+        ' + placeMarkup + '
+      </div>
+    ';
     li.appendChild(detail);
   }
 
