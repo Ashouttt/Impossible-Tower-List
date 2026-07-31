@@ -19,15 +19,15 @@ function tierForLevel(level) {
 }
 
 // --- SVG Icons ---
-const ICON_HORRIFIC = `<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="7" stroke-linejoin="round"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38"/></svg>`;
+const ICON_HORRIFIC = '<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="7" stroke-linejoin="round"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38"/></svg>';
 
-const ICON_UNREAL = `<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"><polygon points="50,2 60,35 98,35 68,56 78,90 50,70 22,90 32,56 2,35 40,35"/></svg>`;
+const ICON_UNREAL = '<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"><polygon points="50,2 60,35 98,35 68,56 78,90 50,70 22,90 32,56 2,35 40,35"/></svg>';
 
-const ICON_NIL = `<svg class="diff-icon" viewBox="0 0 100 100"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38" fill="#0a0a0a" stroke="#555555" stroke-width="5" stroke-linejoin="round"/><g transform="translate(50,50) rotate(45) translate(-50,-50)"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38" fill="#0a0a0a" stroke="#999999" stroke-width="5" stroke-linejoin="round"/></g></svg>`;
+const ICON_NIL = '<svg class="diff-icon" viewBox="0 0 100 100"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38" fill="#0a0a0a" stroke="#555555" stroke-width="5" stroke-linejoin="round"/><g transform="translate(50,50) rotate(45) translate(-50,-50)"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38" fill="#0a0a0a" stroke="#999999" stroke-width="5" stroke-linejoin="round"/></g></svg>';
 
-const ICON_ERROR = `<svg class="diff-icon" viewBox="0 0 100 100"><rect x="8" y="8" width="84" height="84" rx="4" fill="#cc2222" stroke="#991111" stroke-width="6"/></svg>`;
+const ICON_ERROR = '<svg class="diff-icon" viewBox="0 0 100 100"><rect x="8" y="8" width="84" height="84" rx="4" fill="#cc2222" stroke="#991111" stroke-width="6"/></svg>';
 
-const ICON_ROBLOX = `<svg class="place-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M4.24 0L0 19.76 19.76 24 24 4.24 4.24 0zM9.6 8.4l6 1.4-1.4 6-6-1.4 1.4-6z"/></svg>`;
+const ICON_ROBLOX = '<svg class="place-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M4.24 0L0 19.76 19.76 24 24 4.24 4.24 0zM9.6 8.4l6 1.4-1.4 6-6-1.4 1.4-6z"/></svg>';
 
 // --- Difficulty parsing ---
 function parseDifficulty(raw) {
@@ -85,57 +85,7 @@ const tierFiltersEl = document.getElementById("tierFilters");
 const statTotal = document.getElementById("statTotal");
 const statUpdated = document.getElementById("statUpdated");
 
-const CHEVRON_SVG = `<svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>`;
-
-/* =========================================================
-   VIEW COUNTER — lokalny licznik wejść (localStorage)
-   Zero zewnętrznych połączeń, działa offline.
-   ========================================================= */
-
-function initViewCounter() {
-  const viewNumEl = document.getElementById("viewNum");
-  const viewCounterEl = document.getElementById("viewCounter");
-  if (!viewNumEl) return;
-
-  // Pobierz zapisaną liczbę z localStorage
-  let views = parseInt(localStorage.getItem("itl_views") || "0", 10);
-  views += 1;
-  localStorage.setItem("itl_views", String(views));
-
-  // Animowane liczenie od 0 do aktualnej wartości
-  animateNumber(viewNumEl, 0, views, 1200, () => {
-    viewNumEl.classList.remove("counting");
-  });
-  viewNumEl.classList.add("counting");
-
-  // Pulse efekt na kontenerze
-  viewCounterEl.classList.add("pulse");
-  setTimeout(() => viewCounterEl.classList.remove("pulse"), 700);
-}
-
-function animateNumber(el, from, to, duration, onDone) {
-  const start = performance.now();
-  function tick(now) {
-    const elapsed = now - start;
-    const progress = Math.min(elapsed / duration, 1);
-    // easeOutExpo
-    const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-    const current = Math.floor(from + (to - from) * eased);
-    el.textContent = formatViews(current);
-    if (progress < 1) {
-      requestAnimationFrame(tick);
-    } else if (onDone) {
-      onDone();
-    }
-  }
-  requestAnimationFrame(tick);
-}
-
-function formatViews(n) {
-  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1).replace(/\.0$/, "") + "M";
-  if (n >= 1_000) return (n / 1_000).toFixed(1).replace(/\.0$/, "") + "k";
-  return String(n);
-}
+const CHEVRON_SVG = '<svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
 
 function getFilteredLevels() {
   const q = query.trim().toLowerCase();
@@ -162,35 +112,28 @@ function extractYouTubeId(input) {
 
 function buildDifficultyBadge(rawDifficulty) {
   const parsed = parseDifficulty(rawDifficulty);
-  if (!parsed.base) return `<span class="row-difficulty">—</span>`;
+  if (!parsed.base) return '<span class="row-difficulty">—</span>';
 
   const cls = difficultyClass(parsed);
   const icon = difficultyIcon(parsed);
-  const badgeClass = cls ? `diff-${cls}` : "";
+  const badgeClass = cls ? 'diff-' + cls : "";
 
-  return `
-    <span class="row-difficulty">
-      <span class="diff-badge ${badgeClass}">
-        ${icon}
-        ${escapeHtml(parsed.full)}
-      </span>
-    </span>
-  `;
+  return '\n    <span class="row-difficulty">\n      <span class="diff-badge ' + badgeClass + '">\n        ' + icon + '\n        ' + escapeHtml(parsed.full) + '\n      </span>\n    </span>\n  ';
 }
 
 function buildCreatorSummary(creatorStr) {
   const raw = (creatorStr || "").trim();
-  if (!raw) return `<span class="row-creator">—</span>`;
+  if (!raw) return '<span class="row-creator">—</span>';
 
   const names = raw.split(",").map(n => n.trim()).filter(Boolean);
   const first = escapeHtml(names[0] || raw);
   const extra = names.length - 1;
 
   if (extra <= 0) {
-    return `<span class="row-creator">${first}</span>`;
+    return '<span class="row-creator">' + first + '</span>';
   }
 
-  return `<span class="row-creator"><span class="creator-first">${first}</span><span class="creator-more">+${extra}</span></span>`;
+  return '<span class="row-creator"><span class="creator-first">' + first + '</span><span class="creator-more">+' + extra + '</span></span>';
 }
 
 function buildRow(level, index) {
@@ -207,15 +150,7 @@ function buildRow(level, index) {
   const rankStr = String(level.rank);
   const diffBadge = buildDifficultyBadge(level.difficulty);
 
-  li.innerHTML = `
-    <button class="row-main" type="button" aria-expanded="false">
-      <span class="row-rank">#${rankStr}</span>
-      <span class="row-name">${escapeHtml(level.name || "Unnamed")}</span>
-      ${diffBadge}
-      ${buildCreatorSummary(level.creator)}
-      ${CHEVRON_SVG}
-    </button>
-  `;
+  li.innerHTML = '\n    <button class="row-main" type="button" aria-expanded="false">\n      <span class="row-rank">#' + rankStr + '</span>\n      <span class="row-name">' + escapeHtml(level.name || "Unnamed") + '</span>\n      ' + diffBadge + '\n      ' + buildCreatorSummary(level.creator) + '\n      ' + CHEVRON_SVG + '\n    </button>\n  ';
 
   const btn = li.querySelector(".row-main");
   btn.addEventListener("click", () => toggleRow(li, level));
@@ -267,12 +202,9 @@ function toggleRow(li, level) {
     let videoMarkup;
 
     if (videoId) {
-      videoMarkup = `
-      <iframe src="https://www.youtube.com/embed/${videoId}" title="Verification: ${escapeHtml(level.name || "")}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-      <a href="https://www.youtube.com/watch?v=${videoId}" class="video-fallback" target="_blank" rel="noopener">Watch on YouTube ↗</a>
-    `;
+      videoMarkup = '\n      <iframe src="https://www.youtube.com/embed/' + videoId + '" title="Verification: ' + escapeHtml(level.name || "") + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>\n      <a href="https://www.youtube.com/watch?v=' + videoId + '" class="video-fallback" target="_blank" rel="noopener">Watch on YouTube ↗</a>\n    ';
     } else {
-      videoMarkup = `<div class="detail-video-missing">No video added for this tower.</div>`;
+      videoMarkup = '<div class="detail-video-missing">No video added for this tower.</div>';
     }
 
     const diffParsed = parseDifficulty(level.difficulty);
@@ -283,39 +215,12 @@ function toggleRow(li, level) {
 
     const robloxLink = (level.robloxLink || "").trim();
     const placeMarkup = robloxLink
-      ? `<a href="${escapeHtml(robloxLink)}" class="place-link" target="_blank" rel="noopener">${ICON_ROBLOX}<span>Play this tower ↗</span></a>`
-      : `<div class="place-link place-link-missing">${ICON_ROBLOX}<span>No Roblox place link added</span></div>`;
+      ? '<a href="' + escapeHtml(robloxLink) + '" class="place-link" target="_blank" rel="noopener">' + ICON_ROBLOX + '<span>Play this tower ↗</span></a>'
+      : '<div class="place-link place-link-missing">' + ICON_ROBLOX + '<span>No Roblox place link added</span></div>';
 
     detail = document.createElement("div");
     detail.className = "row-detail";
-    detail.innerHTML = `
-      <div class="detail-video">${videoMarkup}</div>
-      <div class="detail-side">
-        <dl class="detail-meta">
-          <div class="meta-item">
-            <dt>Creator</dt>
-            <dd>${escapeHtml(level.creator || "—")}</dd>
-          </div>
-          <div class="meta-item">
-            <dt>Verifier</dt>
-            <dd>${escapeHtml(verifierDisplay)}</dd>
-          </div>
-          <div class="meta-item">
-            <dt>Difficulty</dt>
-            <dd>${escapeHtml(diffDisplay)}</dd>
-          </div>
-          <div class="meta-item">
-            <dt>World Record</dt>
-            <dd>${escapeHtml(wrDisplay)}</dd>
-          </div>
-          <div class="meta-item">
-            <dt>Status</dt>
-            <dd>${escapeHtml(statusDisplay)}</dd>
-          </div>
-        </dl>
-        ${placeMarkup}
-      </div>
-    `;
+    detail.innerHTML = '\n      <div class="detail-video">' + videoMarkup + '</div>\n      <div class="detail-side">\n        <dl class="detail-meta">\n          <div class="meta-item">\n            <dt>Creator</dt>\n            <dd>' + escapeHtml(level.creator || "—") + '</dd>\n          </div>\n          <div class="meta-item">\n            <dt>Verifier</dt>\n            <dd>' + escapeHtml(verifierDisplay) + '</dd>\n          </div>\n          <div class="meta-item">\n            <dt>Difficulty</dt>\n            <dd>' + escapeHtml(diffDisplay) + '</dd>\n          </div>\n          <div class="meta-item">\n            <dt>World Record</dt>\n            <dd>' + escapeHtml(wrDisplay) + '</dd>\n          </div>\n          <div class="meta-item">\n            <dt>Status</dt>\n            <dd>' + escapeHtml(statusDisplay) + '</dd>\n          </div>\n        </dl>\n        ' + placeMarkup + '\n      </div>\n    ';
     li.appendChild(detail);
   }
 
@@ -384,6 +289,5 @@ function setupStats() {
 document.addEventListener("DOMContentLoaded", () => {
   setupControls();
   setupStats();
-  initViewCounter();
   render();
 });
