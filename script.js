@@ -1,6 +1,5 @@
 /* =========================================================
    IMPOSSIBLE TOWER LIST — script.js
-   English, smooth animations, EToH difficulty icons.
    ========================================================= */
 
 const TIERS = [
@@ -19,15 +18,15 @@ function tierForLevel(level) {
 }
 
 // --- SVG Icons ---
-const ICON_HORRIFIC = '<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="7" stroke-linejoin="round"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38"/></svg>';
+const ICON_HORRIFIC = `<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="7" stroke-linejoin="round"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38"/></svg>`;
 
-const ICON_UNREAL = '<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"><polygon points="50,2 60,35 98,35 68,56 78,90 50,70 22,90 32,56 2,35 40,35"/></svg>';
+const ICON_UNREAL = `<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"><polygon points="50,2 60,35 98,35 68,56 78,90 50,70 22,90 32,56 2,35 40,35"/></svg>`;
 
-const ICON_NIL = '<svg class="diff-icon" viewBox="0 0 100 100"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38" fill="#0a0a0a" stroke="#555555" stroke-width="5" stroke-linejoin="round"/><g transform="translate(50,50) rotate(45) translate(-50,-50)"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38" fill="#0a0a0a" stroke="#999999" stroke-width="5" stroke-linejoin="round"/></g></svg>';
+const ICON_NIL = `<svg class="diff-icon" viewBox="0 0 100 100"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38" fill="#0a0a0a" stroke="#555555" stroke-width="5" stroke-linejoin="round"/><g transform="translate(50,50) rotate(45) translate(-50,-50)"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38" fill="#0a0a0a" stroke="#999999" stroke-width="5" stroke-linejoin="round"/></g></svg>`;
 
-const ICON_ERROR = '<svg class="diff-icon" viewBox="0 0 100 100"><rect x="8" y="8" width="84" height="84" rx="4" fill="#cc2222" stroke="#991111" stroke-width="6"/></svg>';
+const ICON_ERROR = `<svg class="diff-icon" viewBox="0 0 100 100"><rect x="8" y="8" width="84" height="84" rx="4" fill="#cc2222" stroke="#991111" stroke-width="6"/></svg>`;
 
-const ICON_ROBLOX = '<svg class="place-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M4.24 0L0 19.76 19.76 24 24 4.24 4.24 0zM9.6 8.4l6 1.4-1.4 6-6-1.4 1.4-6z"/></svg>';
+const ICON_ROBLOX = `<svg class="place-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M4.24 0L0 19.76 19.76 24 24 4.24 4.24 0zM9.6 8.4l6 1.4-1.4 6-6-1.4 1.4-6z"/></svg>`;
 
 // --- Difficulty parsing ---
 function parseDifficulty(raw) {
@@ -85,7 +84,25 @@ const tierFiltersEl = document.getElementById("tierFilters");
 const statTotal = document.getElementById("statTotal");
 const statUpdated = document.getElementById("statUpdated");
 
-const CHEVRON_SVG = '<svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
+const CHEVRON_SVG = `<svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>`;
+
+/* =========================================================
+   VIEW COUNTER — session-only (no localStorage, no tracking)
+   ========================================================= */
+
+let sessionViews = 0;
+
+function initViewCounter() {
+  const viewNumEl = document.getElementById("viewNum");
+  const viewCounterEl = document.getElementById("viewCounter");
+  if (!viewNumEl) return;
+
+  sessionViews += 1;
+  viewNumEl.textContent = String(sessionViews);
+
+  viewCounterEl.classList.add("pulse");
+  setTimeout(() => viewCounterEl.classList.remove("pulse"), 700);
+}
 
 function getFilteredLevels() {
   const q = query.trim().toLowerCase();
@@ -112,28 +129,35 @@ function extractYouTubeId(input) {
 
 function buildDifficultyBadge(rawDifficulty) {
   const parsed = parseDifficulty(rawDifficulty);
-  if (!parsed.base) return '<span class="row-difficulty">—</span>';
+  if (!parsed.base) return `<span class="row-difficulty">—</span>`;
 
   const cls = difficultyClass(parsed);
   const icon = difficultyIcon(parsed);
-  const badgeClass = cls ? 'diff-' + cls : "";
+  const badgeClass = cls ? `diff-${cls}` : "";
 
-  return '\n    <span class="row-difficulty">\n      <span class="diff-badge ' + badgeClass + '">\n        ' + icon + '\n        ' + escapeHtml(parsed.full) + '\n      </span>\n    </span>\n  ';
+  return `
+    <span class="row-difficulty">
+      <span class="diff-badge ${badgeClass}">
+        ${icon}
+        ${escapeHtml(parsed.full)}
+      </span>
+    </span>
+  `;
 }
 
 function buildCreatorSummary(creatorStr) {
   const raw = (creatorStr || "").trim();
-  if (!raw) return '<span class="row-creator">—</span>';
+  if (!raw) return `<span class="row-creator">—</span>`;
 
   const names = raw.split(",").map(n => n.trim()).filter(Boolean);
   const first = escapeHtml(names[0] || raw);
   const extra = names.length - 1;
 
   if (extra <= 0) {
-    return '<span class="row-creator">' + first + '</span>';
+    return `<span class="row-creator">${first}</span>`;
   }
 
-  return '<span class="row-creator"><span class="creator-first">' + first + '</span><span class="creator-more">+' + extra + '</span></span>';
+  return `<span class="row-creator"><span class="creator-first">${first}</span><span class="creator-more">+${extra}</span></span>`;
 }
 
 function buildRow(level, index) {
@@ -150,7 +174,15 @@ function buildRow(level, index) {
   const rankStr = String(level.rank);
   const diffBadge = buildDifficultyBadge(level.difficulty);
 
-  li.innerHTML = '\n    <button class="row-main" type="button" aria-expanded="false">\n      <span class="row-rank">#' + rankStr + '</span>\n      <span class="row-name">' + escapeHtml(level.name || "Unnamed") + '</span>\n      ' + diffBadge + '\n      ' + buildCreatorSummary(level.creator) + '\n      ' + CHEVRON_SVG + '\n    </button>\n  ';
+  li.innerHTML = `
+    <button class="row-main" type="button" aria-expanded="false">
+      <span class="row-rank">#${rankStr}</span>
+      <span class="row-name">${escapeHtml(level.name || "Unnamed")}</span>
+      ${diffBadge}
+      ${buildCreatorSummary(level.creator)}
+      ${CHEVRON_SVG}
+    </button>
+  `;
 
   const btn = li.querySelector(".row-main");
   btn.addEventListener("click", () => toggleRow(li, level));
@@ -162,14 +194,12 @@ function toggleRow(li, level) {
   const btn = li.querySelector(".row-main");
   const isExpanded = li.classList.contains("expanded");
 
-  // Collapse this row if already expanded
   if (isExpanded) {
     const detail = li.querySelector(".row-detail");
     if (detail) {
-      // Measure current height for smooth collapse
       const h = detail.scrollHeight;
       detail.style.maxHeight = h + "px";
-      detail.offsetHeight; // force reflow
+      detail.offsetHeight;
       detail.style.maxHeight = "0px";
       detail.style.opacity = "0";
     }
@@ -178,7 +208,6 @@ function toggleRow(li, level) {
     return;
   }
 
-  // Collapse any other expanded rows
   document.querySelectorAll(".level-row.expanded").forEach(other => {
     if (other !== li) {
       other.classList.remove("expanded");
@@ -196,15 +225,23 @@ function toggleRow(li, level) {
 
   let detail = li.querySelector(".row-detail");
 
-  // Build detail if not present
   if (!detail) {
     const videoId = extractYouTubeId(level.videoId);
     let videoMarkup;
 
     if (videoId) {
-      videoMarkup = '\n      <iframe src="https://www.youtube.com/embed/' + videoId + '" title="Verification: ' + escapeHtml(level.name || "") + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>\n      <a href="https://www.youtube.com/watch?v=' + videoId + '" class="video-fallback" target="_blank" rel="noopener">Watch on YouTube ↗</a>\n    ';
+      // Link instead of iframe — AV can't flag embedded content
+      videoMarkup = `
+        <a href="https://www.youtube.com/watch?v=${videoId}" class="video-link" rel="noopener noreferrer">
+          <div class="video-thumb">
+            <img src="https://i.ytimg.com/vi/${videoId}/mqdefault.jpg" alt="${escapeHtml(level.name || "Video")}" loading="lazy">
+            <div class="video-play">▶</div>
+          </div>
+          <span class="video-text">Watch on YouTube</span>
+        </a>
+      `;
     } else {
-      videoMarkup = '<div class="detail-video-missing">No video added for this tower.</div>';
+      videoMarkup = `<div class="detail-video-missing">No video added for this tower.</div>`;
     }
 
     const diffParsed = parseDifficulty(level.difficulty);
@@ -215,26 +252,49 @@ function toggleRow(li, level) {
 
     const robloxLink = (level.robloxLink || "").trim();
     const placeMarkup = robloxLink
-      ? '<a href="' + escapeHtml(robloxLink) + '" class="place-link" target="_blank" rel="noopener">' + ICON_ROBLOX + '<span>Play this tower ↗</span></a>'
-      : '<div class="place-link place-link-missing">' + ICON_ROBLOX + '<span>No Roblox place link added</span></div>';
+      ? `<a href="${escapeHtml(robloxLink)}" class="place-link" rel="noopener noreferrer">${ICON_ROBLOX}<span>Play this tower</span></a>`
+      : `<div class="place-link place-link-missing">${ICON_ROBLOX}<span>No Roblox place link added</span></div>`;
 
     detail = document.createElement("div");
     detail.className = "row-detail";
-    detail.innerHTML = '\n      <div class="detail-video">' + videoMarkup + '</div>\n      <div class="detail-side">\n        <dl class="detail-meta">\n          <div class="meta-item">\n            <dt>Creator</dt>\n            <dd>' + escapeHtml(level.creator || "—") + '</dd>\n          </div>\n          <div class="meta-item">\n            <dt>Verifier</dt>\n            <dd>' + escapeHtml(verifierDisplay) + '</dd>\n          </div>\n          <div class="meta-item">\n            <dt>Difficulty</dt>\n            <dd>' + escapeHtml(diffDisplay) + '</dd>\n          </div>\n          <div class="meta-item">\n            <dt>World Record</dt>\n            <dd>' + escapeHtml(wrDisplay) + '</dd>\n          </div>\n          <div class="meta-item">\n            <dt>Status</dt>\n            <dd>' + escapeHtml(statusDisplay) + '</dd>\n          </div>\n        </dl>\n        ' + placeMarkup + '\n      </div>\n    ';
+    detail.innerHTML = `
+      <div class="detail-video">${videoMarkup}</div>
+      <div class="detail-side">
+        <dl class="detail-meta">
+          <div class="meta-item">
+            <dt>Creator</dt>
+            <dd>${escapeHtml(level.creator || "—")}</dd>
+          </div>
+          <div class="meta-item">
+            <dt>Verifier</dt>
+            <dd>${escapeHtml(verifierDisplay)}</dd>
+          </div>
+          <div class="meta-item">
+            <dt>Difficulty</dt>
+            <dd>${escapeHtml(diffDisplay)}</dd>
+          </div>
+          <div class="meta-item">
+            <dt>World Record</dt>
+            <dd>${escapeHtml(wrDisplay)}</dd>
+          </div>
+          <div class="meta-item">
+            <dt>Status</dt>
+            <dd>${escapeHtml(statusDisplay)}</dd>
+          </div>
+        </dl>
+        ${placeMarkup}
+      </div>
+    `;
     li.appendChild(detail);
   }
 
-  // Measure exact content height and animate to it
-  // First reset to natural height to measure
   detail.style.maxHeight = "none";
   detail.style.opacity = "0";
   const targetH = detail.scrollHeight;
 
-  // Start from 0
   detail.style.maxHeight = "0px";
-  detail.offsetHeight; // force reflow
+  detail.offsetHeight;
 
-  // Animate to exact measured height
   detail.style.maxHeight = targetH + "px";
   detail.style.opacity = "1";
 }
@@ -289,5 +349,6 @@ function setupStats() {
 document.addEventListener("DOMContentLoaded", () => {
   setupControls();
   setupStats();
+  initViewCounter();
   render();
 });
