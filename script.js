@@ -1,75 +1,75 @@
 /* =========================================================
-   IMPOSSIBLE TOWER LIST — script.js
-   English, smooth animations, EToH difficulty icons.
-   ========================================================= */
+ IMPOSSIBLE TOWER LIST — script.js
+ English, smooth animations, EToH difficulty icons.
+ ========================================================= */
 
 const TIERS = [
-  { id: "verified",   label: "Verified",   max: Infinity },
-  { id: "unverified", label: "Unverified", max: Infinity },
+ { id: "verified", label: "Verified", max: Infinity },
+ { id: "unverified", label: "Unverified", max: Infinity },
 ];
 
 const PAGE_SIZE = 50;
 
 function tierForLevel(level) {
-  const verifier = (level.verifier || "").trim();
-  if (verifier.length > 0) {
-    return TIERS.find(t => t.id === "verified");
-  }
-  return TIERS.find(t => t.id === "unverified");
+ const verifier = (level.verifier || "").trim();
+ if (verifier.length > 0) {
+ return TIERS.find(t => t.id === "verified");
+ }
+ return TIERS.find(t => t.id === "unverified");
 }
 
 // --- SVG Icons ---
-const ICON_HORRIFIC = '<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="7" stroke-linejoin="round"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38"/></svg>';
+const ICON_HORRIFIC = `<svg class="diff-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5Z"/></svg>`;
 
-const ICON_UNREAL = '<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"><polygon points="50,2 60,35 98,35 68,56 78,90 50,70 22,90 32,56 2,35 40,35"/></svg>';
+const ICON_UNREAL = `<svg class="diff-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L13.5 8.5L20 7L15.5 12L20 17L13.5 15.5L12 22L10.5 15.5L4 17L8.5 12L4 7L10.5 8.5Z"/></svg>`;
 
-const ICON_NIL = '<svg class="diff-icon" viewBox="0 0 100 100"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38" fill="#0a0a0a" stroke="#555555" stroke-width="5" stroke-linejoin="round"/><g transform="translate(50,50) rotate(45) translate(-50,-50)"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38" fill="#0a0a0a" stroke="#999999" stroke-width="5" stroke-linejoin="round"/></g></svg>';
+const ICON_NIL = `<svg class="diff-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L14 9L21 12L14 15L12 22L10 15L3 12L10 9Z" opacity="0.5"/><path d="M12 5L13.5 10.5L19 12L13.5 13.5L12 19L10.5 13.5L5 12L10.5 10.5Z"/></svg>`;
 
-const ICON_ERROR = '<svg class="diff-icon" viewBox="0 0 100 100"><rect x="8" y="8" width="84" height="84" rx="4" fill="#cc2222" stroke="#991111" stroke-width="6"/></svg>';
+const ICON_ERROR = `<svg class="diff-icon" viewBox="0 0 24 24" fill="none" stroke="#ff5555" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><line x1="8" y1="8" x2="16" y2="16"/><line x1="16" y1="8" x2="8" y2="16"/></svg>`;
 
-const ICON_ROBLOX = '<svg class="place-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M4.24 0L0 19.76 19.76 24 24 4.24 4.24 0zM9.6 8.4l6 1.4-1.4 6-6-1.4 1.4-6z"/></svg>';
+const ICON_ROBLOX = `<svg class="place-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M4.8 0L0 19.2L19.2 24L24 4.8L4.8 0ZM15.6 15.6L7.2 13.2L9.6 4.8L18 7.2L15.6 15.6Z"/></svg>`;
 
 // --- Difficulty parsing ---
 function parseDifficulty(raw) {
-  if (!raw) return { prefix: "", base: "", full: "" };
-  const str = String(raw).trim();
-  const lowered = str.toLowerCase();
+ if (!raw) return { prefix: "", base: "", full: "" };
+ const str = String(raw).trim();
+ const lowered = str.toLowerCase();
 
-  const prefixMatch = lowered.match(/^(low-mid|mid-high|bottom-low|baseline|bottom|low|mid|high-peak|high|peak|base)(?:\s+|-)/);
-  let prefix = "";
-  let base = lowered;
+ const prefixMatch = lowered.match(/^(low-mid|mid-high|bottom-low|baseline|bottom|low|mid|high-peak|high|peak|base)(?:\s+|-)/);
+ let prefix = "";
+ let base = lowered;
 
-  if (prefixMatch) {
-    prefix = prefixMatch[1];
-    base = lowered.slice(prefixMatch[0].length).trim();
-  }
+ if (prefixMatch) {
+ prefix = prefixMatch[1];
+ base = lowered.slice(prefixMatch[0].length).trim();
+ }
 
-  const capPrefix = prefix ? prefix.charAt(0).toUpperCase() + prefix.slice(1) : "";
-  const capBase = base.charAt(0).toUpperCase() + base.slice(1);
-  const full = capPrefix ? capPrefix + " " + capBase : capBase;
+ const capPrefix = prefix ? prefix.charAt(0).toUpperCase() + prefix.slice(1) : "";
+ const capBase = base.charAt(0).toUpperCase() + base.slice(1);
+ const full = capPrefix ? capPrefix + " " + capBase : capBase;
 
-  return { prefix: capPrefix, base: capBase, full };
+ return { prefix: capPrefix, base: capBase, full };
 }
 
 function difficultyClass(parsed) {
-  if (parsed.prefix === "High-Peak") return "high-peak";
-  const map = {
-    "horrific": "horrific",
-    "unreal": "unreal",
-    "nil": "nil",
-    "error": "error",
-  };
-  return map[parsed.base.toLowerCase()] || "";
+ if (parsed.prefix === "High-Peak") return "high-peak";
+ const map = {
+ "horrific": "horrific",
+ "unreal": "unreal",
+ "nil": "nil",
+ "error": "error",
+ };
+ return map[parsed.base.toLowerCase()] || "";
 }
 
 function difficultyIcon(parsed) {
-  if (parsed.prefix === "High-Peak") return ICON_UNREAL;
-  const b = parsed.base.toLowerCase();
-  if (b === "horrific") return ICON_HORRIFIC;
-  if (b === "unreal") return ICON_UNREAL;
-  if (b === "nil") return ICON_NIL;
-  if (b === "error") return ICON_ERROR;
-  return "";
+ if (parsed.prefix === "High-Peak") return ICON_UNREAL;
+ const b = parsed.base.toLowerCase();
+ if (b === "horrific") return ICON_HORRIFIC;
+ if (b === "unreal") return ICON_UNREAL;
+ if (b === "nil") return ICON_NIL;
+ if (b === "error") return ICON_ERROR;
+ return "";
 }
 
 // --- state ---
@@ -85,209 +85,243 @@ const tierFiltersEl = document.getElementById("tierFilters");
 const statTotal = document.getElementById("statTotal");
 const statUpdated = document.getElementById("statUpdated");
 
-const CHEVRON_SVG = '<svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
+const CHEVRON_SVG = `<svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>`;
 
 function getFilteredLevels() {
-  const q = query.trim().toLowerCase();
-  return LEVELS
-    .slice()
-    .sort((a, b) => a.rank - b.rank)
-    .filter((lvl) => {
-      const tier = tierForLevel(lvl);
-      if (activeTierId !== "all" && tier.id !== activeTierId) return false;
-      if (!q) return true;
-      const name = (lvl.name || "").toLowerCase();
-      const creator = (lvl.creator || "").toLowerCase();
-      const diff = (lvl.difficulty || "").toLowerCase();
-      return name.includes(q) || creator.includes(q) || diff.includes(q);
-    });
+ const q = query.trim().toLowerCase();
+ return LEVELS
+ .slice()
+ .sort((a, b) => a.rank - b.rank)
+ .filter((lvl) => {
+ const tier = tierForLevel(lvl);
+ if (activeTierId !== "all" && tier.id !== activeTierId) return false;
+ if (!q) return true;
+ const name = (lvl.name || "").toLowerCase();
+ const creator = (lvl.creator || "").toLowerCase();
+ const diff = (lvl.difficulty || "").toLowerCase();
+ return name.includes(q) || creator.includes(q) || diff.includes(q);
+ });
 }
 
 function extractYouTubeId(input) {
-  if (!input) return "";
-  if (/^[a-zA-Z0-9_-]{11}$/.test(input)) return input;
-  const match = input.match(/(?:youtu\.be\/|v=|embed\/)([a-zA-Z0-9_-]{11})/);
-  return match ? match[1] : "";
+ if (!input) return "";
+ if (/^[a-zA-Z0-9_-]{11}$/.test(input)) return input;
+ const match = input.match(/(?:youtu\.be\/|v=|embed\/)([a-zA-Z0-9_-]{11})/);
+ return match ? match[1] : "";
 }
 
 function buildDifficultyBadge(rawDifficulty) {
-  const parsed = parseDifficulty(rawDifficulty);
-  if (!parsed.base) return '<span class="row-difficulty">—</span>';
+ const parsed = parseDifficulty(rawDifficulty);
+ if (!parsed.base) return "—";
 
-  const cls = difficultyClass(parsed);
-  const icon = difficultyIcon(parsed);
-  const badgeClass = cls ? 'diff-' + cls : "";
+ const cls = difficultyClass(parsed);
+ const icon = difficultyIcon(parsed);
+ const badgeClass = cls ? "diff-" + cls : "";
 
-  return '\n    <span class="row-difficulty">\n      <span class="diff-badge ' + badgeClass + '">\n        ' + icon + '\n        ' + escapeHtml(parsed.full) + '\n      </span>\n    </span>\n  ';
+ return `<span class="diff-badge ${badgeClass}">${icon}<span>${escapeHtml(parsed.full)}</span></span>`;
 }
 
 function buildCreatorSummary(creatorStr) {
-  const raw = (creatorStr || "").trim();
-  if (!raw) return '<span class="row-creator">—</span>';
+ const raw = (creatorStr || "").trim();
+ if (!raw) return "—";
 
-  const names = raw.split(",").map(n => n.trim()).filter(Boolean);
-  const first = escapeHtml(names[0] || raw);
-  const extra = names.length - 1;
+ const names = raw.split(",").map(n => n.trim()).filter(Boolean);
+ const first = escapeHtml(names[0] || raw);
+ const extra = names.length - 1;
 
-  if (extra <= 0) {
-    return '<span class="row-creator">' + first + '</span>';
-  }
+ if (extra <= 0) {
+ return `<span class="creator-first">${first}</span>`;
+ }
 
-  return '<span class="row-creator"><span class="creator-first">' + first + '</span><span class="creator-more">+' + extra + '</span></span>';
+ return `<span class="creator-first">${first}</span><span class="creator-more">+${extra}</span>`;
 }
 
 function buildRow(level, index) {
-  const tier = tierForLevel(level);
-  const diffParsed = parseDifficulty(level.difficulty);
-  const diffClass = difficultyClass(diffParsed);
+ const tier = tierForLevel(level);
+ const diffParsed = parseDifficulty(level.difficulty);
+ const diffClass = difficultyClass(diffParsed);
 
-  const li = document.createElement("li");
-  li.className = "level-row";
-  li.dataset.tier = tier.id;
-  li.dataset.diff = diffClass || "none";
-  li.style.animationDelay = Math.min(index, 19) * 30 + "ms";
+ const li = document.createElement("li");
+ li.className = "level-row";
+ li.dataset.tier = tier.id;
+ li.dataset.diff = diffClass || "none";
+ li.style.animationDelay = Math.min(index, 19) * 30 + "ms";
 
-  const rankStr = String(level.rank);
-  const diffBadge = buildDifficultyBadge(level.difficulty);
+ const rankStr = String(level.rank);
+ const diffBadge = buildDifficultyBadge(level.difficulty);
+ const creatorSummary = buildCreatorSummary(level.creator);
 
-  li.innerHTML = '\n    <button class="row-main" type="button" aria-expanded="false">\n      <span class="row-rank">#' + rankStr + '</span>\n      <span class="row-name">' + escapeHtml(level.name || "Unnamed") + '</span>\n      ' + diffBadge + '\n      ' + buildCreatorSummary(level.creator) + '\n      ' + CHEVRON_SVG + '\n    </button>\n  ';
+ li.innerHTML = `
+ <button class="row-main" aria-expanded="false">
+ <span class="row-rank">${escapeHtml(rankStr)}</span>
+ <span class="row-name">${escapeHtml(level.name || "—")}</span>
+ <span class="row-difficulty">${diffBadge}</span>
+ <span class="row-creator">${creatorSummary}</span>
+ ${CHEVRON_SVG}
+ </button>
+ `;
 
-  const btn = li.querySelector(".row-main");
-  btn.addEventListener("click", () => toggleRow(li, level));
+ const btn = li.querySelector(".row-main");
+ btn.addEventListener("click", () => toggleRow(li, level));
 
-  return li;
+ return li;
 }
 
 function toggleRow(li, level) {
-  const btn = li.querySelector(".row-main");
-  const isExpanded = li.classList.contains("expanded");
+ const btn = li.querySelector(".row-main");
+ const isExpanded = li.classList.contains("expanded");
 
-  // Collapse this row if already expanded
-  if (isExpanded) {
-    const detail = li.querySelector(".row-detail");
-    if (detail) {
-      // Measure current height for smooth collapse
-      const h = detail.scrollHeight;
-      detail.style.maxHeight = h + "px";
-      detail.offsetHeight; // force reflow
-      detail.style.maxHeight = "0px";
-      detail.style.opacity = "0";
-    }
-    li.classList.remove("expanded");
-    btn.setAttribute("aria-expanded", "false");
-    return;
-  }
+ // Collapse this row if already expanded
+ if (isExpanded) {
+ const detail = li.querySelector(".row-detail");
+ if (detail) {
+ const h = detail.scrollHeight;
+ detail.style.maxHeight = h + "px";
+ detail.offsetHeight;
+ detail.style.maxHeight = "0px";
+ detail.style.opacity = "0";
+ }
+ li.classList.remove("expanded");
+ btn.setAttribute("aria-expanded", "false");
+ return;
+ }
 
-  // Collapse any other expanded rows
-  document.querySelectorAll(".level-row.expanded").forEach(other => {
-    if (other !== li) {
-      other.classList.remove("expanded");
-      other.querySelector(".row-main").setAttribute("aria-expanded", "false");
-      const d = other.querySelector(".row-detail");
-      if (d) {
-        d.style.maxHeight = "0px";
-        d.style.opacity = "0";
-      }
-    }
-  });
+ // Collapse any other expanded rows
+ document.querySelectorAll(".level-row.expanded").forEach(other => {
+ if (other !== li) {
+ other.classList.remove("expanded");
+ other.querySelector(".row-main").setAttribute("aria-expanded", "false");
+ const d = other.querySelector(".row-detail");
+ if (d) {
+ d.style.maxHeight = "0px";
+ d.style.opacity = "0";
+ }
+ }
+ });
 
-  li.classList.add("expanded");
-  btn.setAttribute("aria-expanded", "true");
+ li.classList.add("expanded");
+ btn.setAttribute("aria-expanded", "true");
 
-  let detail = li.querySelector(".row-detail");
+ let detail = li.querySelector(".row-detail");
 
-  // Build detail if not present
-  if (!detail) {
-    const videoId = extractYouTubeId(level.videoId);
-    let videoMarkup;
+ // Build detail if not present
+ if (!detail) {
+ const videoId = extractYouTubeId(level.videoId);
+ let videoMarkup;
 
-    if (videoId) {
-      videoMarkup = '\n      <iframe src="https://www.youtube.com/embed/' + videoId + '" title="Verification: ' + escapeHtml(level.name || "") + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>\n      <a href="https://www.youtube.com/watch?v=' + videoId + '" class="video-fallback" target="_blank" rel="noopener">Watch on YouTube ↗</a>\n    ';
-    } else {
-      videoMarkup = '<div class="detail-video-missing">No video added for this tower.</div>';
-    }
+ if (videoId) {
+ videoMarkup = `
+ <div class="detail-video">
+ <iframe src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+ <a class="video-fallback" href="https://youtu.be/${videoId}" target="_blank">Watch on YouTube ↗</a>
+ </div>
+ `;
+ } else {
+ videoMarkup = `<div class="detail-video"><div class="detail-video-missing">No video added for this tower.</div></div>`;
+ }
 
-    const diffParsed = parseDifficulty(level.difficulty);
-    const diffDisplay = diffParsed.full || "—";
-    const wrDisplay = level.worldRecord != null ? String(level.worldRecord) : "N/A";
-    const verifierDisplay = (level.verifier || "").trim() || "—";
-    const statusDisplay = verifierDisplay !== "—" ? "Verified" : "Unverified";
+ const diffParsed = parseDifficulty(level.difficulty);
+ const diffDisplay = diffParsed.full || "—";
+ const wrDisplay = level.worldRecord != null ? String(level.worldRecord) : "N/A";
+ const verifierDisplay = (level.verifier || "").trim() || "—";
+ const statusDisplay = verifierDisplay !== "—" ? "Verified" : "Unverified";
 
-    const robloxLink = (level.robloxLink || "").trim();
-    const placeMarkup = robloxLink
-      ? '<a href="' + escapeHtml(robloxLink) + '" class="place-link" target="_blank" rel="noopener">' + ICON_ROBLOX + '<span>Play this tower ↗</span></a>'
-      : '<div class="place-link place-link-missing">' + ICON_ROBLOX + '<span>No Roblox place link added</span></div>';
+ const robloxLink = (level.robloxLink || "").trim();
+ const placeMarkup = robloxLink
+ ? `<a class="place-link" href="${escapeHtml(robloxLink)}" target="_blank">${ICON_ROBLOX}Play this tower ↗</a>`
+ : `<span class="place-link place-link-missing">${ICON_ROBLOX}No Roblox place link added</span>`;
 
-    detail = document.createElement("div");
-    detail.className = "row-detail";
-    detail.innerHTML = '\n      <div class="detail-video">' + videoMarkup + '</div>\n      <div class="detail-side">\n        <dl class="detail-meta">\n          <div class="meta-item">\n            <dt>Creator</dt>\n            <dd>' + escapeHtml(level.creator || "—") + '</dd>\n          </div>\n          <div class="meta-item">\n            <dt>Verifier</dt>\n            <dd>' + escapeHtml(verifierDisplay) + '</dd>\n          </div>\n          <div class="meta-item">\n            <dt>Difficulty</dt>\n            <dd>' + escapeHtml(diffDisplay) + '</dd>\n          </div>\n          <div class="meta-item">\n            <dt>World Record</dt>\n            <dd>' + escapeHtml(wrDisplay) + '</dd>\n          </div>\n          <div class="meta-item">\n            <dt>Status</dt>\n            <dd>' + escapeHtml(statusDisplay) + '</dd>\n          </div>\n        </dl>\n        ' + placeMarkup + '\n      </div>\n    ';
-    li.appendChild(detail);
-  }
+ detail = document.createElement("div");
+ detail.className = "row-detail";
+ detail.innerHTML = `
+ <div class="detail-video-wrap">
+ ${videoMarkup}
+ </div>
+ <div class="detail-side">
+ <dl class="detail-meta">
+ <div class="meta-item">
+ <dt>Difficulty</dt>
+ <dd>${escapeHtml(diffDisplay)}</dd>
+ </div>
+ <div class="meta-item">
+ <dt>World Record</dt>
+ <dd>${escapeHtml(wrDisplay)}</dd>
+ </div>
+ <div class="meta-item">
+ <dt>Verifier</dt>
+ <dd>${escapeHtml(verifierDisplay)}</dd>
+ </div>
+ <div class="meta-item">
+ <dt>Status</dt>
+ <dd>${escapeHtml(statusDisplay)}</dd>
+ </div>
+ </dl>
+ ${placeMarkup}
+ </div>
+ `;
+ li.appendChild(detail);
+ }
 
-  // Measure exact content height and animate to it
-  // First reset to natural height to measure
-  detail.style.maxHeight = "none";
-  detail.style.opacity = "0";
-  const targetH = detail.scrollHeight;
+ detail.style.maxHeight = "none";
+ detail.style.opacity = "0";
+ const targetH = detail.scrollHeight;
 
-  // Start from 0
-  detail.style.maxHeight = "0px";
-  detail.offsetHeight; // force reflow
+ detail.style.maxHeight = "0px";
+ detail.offsetHeight;
 
-  // Animate to exact measured height
-  detail.style.maxHeight = targetH + "px";
-  detail.style.opacity = "1";
+ detail.style.maxHeight = targetH + "px";
+ detail.style.opacity = "1";
 }
 
 function escapeHtml(str) {
-  const div = document.createElement("div");
-  div.textContent = str;
-  return div.innerHTML;
+ const div = document.createElement("div");
+ div.textContent = str;
+ return div.innerHTML;
 }
 
 function render() {
-  const filtered = getFilteredLevels();
-  const toShow = filtered.slice(0, visibleCount);
+ const filtered = getFilteredLevels();
+ const toShow = filtered.slice(0, visibleCount);
 
-  listEl.innerHTML = "";
-  const fragment = document.createDocumentFragment();
-  toShow.forEach((level, i) => fragment.appendChild(buildRow(level, i)));
-  listEl.appendChild(fragment);
+ listEl.innerHTML = "";
+ const fragment = document.createDocumentFragment();
+ toShow.forEach((level, i) => fragment.appendChild(buildRow(level, i)));
+ listEl.appendChild(fragment);
 
-  emptyStateEl.hidden = filtered.length !== 0;
-  loadMoreBtn.hidden = filtered.length <= visibleCount;
+ emptyStateEl.hidden = filtered.length !== 0;
+ loadMoreBtn.hidden = filtered.length <= visibleCount;
 }
 
 function setupControls() {
-  searchInput.addEventListener("input", (e) => {
-    query = e.target.value;
-    visibleCount = PAGE_SIZE;
-    render();
-  });
+ searchInput.addEventListener("input", (e) => {
+ query = e.target.value;
+ visibleCount = PAGE_SIZE;
+ render();
+ });
 
-  tierFiltersEl.addEventListener("click", (e) => {
-    const btn = e.target.closest(".tier-btn");
-    if (!btn) return;
-    tierFiltersEl.querySelectorAll(".tier-btn").forEach((b) => b.classList.remove("active"));
-    btn.classList.add("active");
-    activeTierId = btn.dataset.tier;
-    visibleCount = PAGE_SIZE;
-    render();
-  });
+ tierFiltersEl.addEventListener("click", (e) => {
+ const btn = e.target.closest(".tier-btn");
+ if (!btn) return;
+ tierFiltersEl.querySelectorAll(".tier-btn").forEach((b) => b.classList.remove("active"));
+ btn.classList.add("active");
+ activeTierId = btn.dataset.tier;
+ visibleCount = PAGE_SIZE;
+ render();
+ });
 
-  loadMoreBtn.addEventListener("click", () => {
-    visibleCount += PAGE_SIZE;
-    render();
-  });
+ loadMoreBtn.addEventListener("click", () => {
+ visibleCount += PAGE_SIZE;
+ render();
+ });
 }
 
 function setupStats() {
-  statTotal.textContent = LEVELS.length;
-  statUpdated.textContent = typeof LAST_UPDATE !== "undefined" ? LAST_UPDATE : "—";
+ statTotal.textContent = LEVELS.length;
+ statUpdated.textContent = typeof LAST_UPDATE !== "undefined" ? LAST_UPDATE : "—";
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  setupControls();
-  setupStats();
-  render();
+ setupControls();
+ setupStats();
+ render();
 });
