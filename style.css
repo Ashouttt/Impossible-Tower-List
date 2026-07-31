@@ -79,43 +79,11 @@ body {
   flex-wrap: wrap;
 }
 
-/* ===== Brand glow effect ===== */
-.brand-glow {
-  position: relative;
-  display: inline-block;
-}
-
-.brand-glow h1 {
+.header-brand h1 {
   font-size: 22px;
   font-weight: 800;
   letter-spacing: -0.02em;
   color: var(--text);
-  position: relative;
-  z-index: 1;
-  background: linear-gradient(135deg, #fff 0%, #e8e6f0 40%, var(--accent) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: none;
-}
-
-.brand-glow::before {
-  content: 'Impossible Tower List';
-  position: absolute;
-  top: 0;
-  left: 0;
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  background: linear-gradient(135deg, var(--accent) 0%, #ff9e5e 50%, #f0c040 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  filter: blur(12px);
-  opacity: 0.45;
-  z-index: 0;
-  pointer-events: none;
-  white-space: nowrap;
 }
 
 .header-sub {
@@ -131,72 +99,6 @@ body {
   display: flex;
   gap: 14px;
   align-items: center;
-}
-
-/* ===== View Counter ===== */
-.view-counter {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--bg-2);
-  border: 1px solid var(--border);
-  padding: 7px 14px;
-  border-radius: 100px;
-  font-size: 12px;
-  transition: border-color 200ms ease, box-shadow 200ms ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.view-counter::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,107,74,0.08), transparent);
-  opacity: 0;
-  transition: opacity 300ms ease;
-  pointer-events: none;
-  border-radius: 100px;
-}
-
-.view-counter.pulse::after {
-  opacity: 1;
-  animation: viewPulse 600ms ease-out forwards;
-}
-
-@keyframes viewPulse {
-  0%   { opacity: 0; }
-  30%  { opacity: 1; }
-  100% { opacity: 0; }
-}
-
-.view-icon {
-  width: 14px;
-  height: 14px;
-  color: var(--accent);
-  flex-shrink: 0;
-}
-
-.view-label {
-  color: var(--text-muted);
-  font-weight: 500;
-}
-
-.view-num {
-  font-family: var(--font-mono);
-  font-weight: 700;
-  font-size: 14px;
-  color: var(--accent);
-  min-width: 48px;
-  text-align: right;
-  transition: color 200ms ease;
-}
-
-.view-num.counting {
-  color: var(--accent-gold);
 }
 
 .roblox-play-btn {
@@ -796,12 +698,8 @@ main {
 @media (max-width: 720px) {
   .header-inner { padding: 14px 18px; }
   .header-brand h1 { font-size: 18px; }
-  .brand-glow::before { font-size: 18px; }
-  .header-meta { gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+  .header-meta { gap: 8px; }
   .meta-pill { padding: 6px 10px; font-size: 11px; }
-  .view-counter { padding: 6px 10px; }
-  .view-label { display: none; }
-  .view-num { min-width: 36px; font-size: 13px; }
   .roblox-play-btn span { display: none; }
   .roblox-play-btn { padding: 8px 10px; }
 
