@@ -3,12 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tower Difficulty Rankings</title>
-<meta name="description" content="Community rankings of challenging Roblox tower levels.">
-<meta http-equiv="X-Frame-Options" content="DENY">
-<meta http-equiv="X-Content-Type-Options" content="nosniff">
-<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-<meta name="robots" content="index, follow">
+<title>Ashout's Impossible Towers List</title>
+<meta name="description" content="Ranking of the hardest Roblox tower levels.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https://i.ytimg.com data:; frame-src https://www.youtube.com; connect-src 'none';">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,11 +20,17 @@
   <div class="header-inner">
     <div class="header-brand">
       <div class="brand-glow">
-        <h1>Tower Difficulty Rankings</h1>
+        <h1>Ashout's Impossible Towers List</h1>
       </div>
     </div>
 
     <div class="header-meta">
+      <div class="view-counter" id="viewCounter" title="Total page views">
+        <svg class="view-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+        <span class="view-label">Views</span>
+        <span class="view-num" id="viewNum">0</span>
+      </div>
+
       <div class="meta-pill">
         <span class="meta-num" id="statTotal">0</span>
         <span class="meta-label">towers</span>
@@ -69,11 +72,6 @@
     <button class="load-more" id="loadMoreBtn" hidden>Load more</button>
   </section>
 </main>
-
-<footer class="site-footer">
-  <p>Community-maintained tower rankings. All game content belongs to respective creators.</p>
-  <p class="footer-note">Data last updated: <span id="footerUpdated">—</span></p>
-</footer>
 
 <script src="levels.js"></script>
 <script src="script.js"></script>
