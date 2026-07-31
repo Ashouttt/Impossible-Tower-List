@@ -119,9 +119,9 @@ const LEVELS = [
     creator: "PoptartPunt, Higherthanblox, Adan3842, SungazedUwU, Macloux, D_yni, FindableTag",
     verifier: "",
     difficulty: "Low Nil",
-    videoId: "",
+    videoId: "RLnT4QqycoQ",
     worldRecord: "N/A",
-    robloxLink: "RLnT4QqycoQ",
+    robloxLink: "https://www.roblox.com/games/123328980290815/Citadel-of-Wicked-Booger",
   },
   {
     rank: 11,
