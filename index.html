@@ -3,31 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ashout`s Impossible Tower List</title>
+<title>Ashout's Impossible Tower List</title>
 <meta name="description" content="Ranking of the hardest Roblox tower levels.">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-
 <link rel="stylesheet" href="style.css">
 <base target="_blank">
 </head>
 <body>
-
 <header class="site-header" id="siteHeader">
   <div class="header-inner">
     <div class="header-brand">
-      <h1>Ashout`s Impossible Tower List</h1>
-      <span class="header-sub">Community-maintained ranking</span>
+      <h1 class="brand-title">
+        <svg class="brand-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M2 19L7 9L10 13L14 5L22 19H2Z"/>
+        </svg>
+        <span class="brand-title-text">Ashout&rsquo;s <span class="brand-impossible">Impossible</span> Tower List</span>
+      </h1>
     </div>
-
     <div class="header-meta">
       <div class="meta-pill">
         <span class="meta-num" id="statTotal">0</span>
         <span class="meta-label">towers</span>
       </div>
-
       <div class="meta-pill">
         <span class="meta-label">updated</span>
         <span class="meta-date" id="statUpdated">—</span>
@@ -35,7 +34,7 @@
     </div>
   </div>
 </header>
-  
+
 <main>
   <section class="controls-bar" id="controlsBar">
     <div class="controls-inner">
@@ -50,7 +49,6 @@
       </div>
     </div>
   </section>
-
   <section class="list-section">
     <div class="list-head" aria-hidden="true">
       <span class="col-rank">#</span>
@@ -64,12 +62,9 @@
     <button class="load-more" id="loadMoreBtn" hidden>Load more</button>
   </section>
 </main>
-
 <footer class="site-footer">
-  <p>Impossible Tower List — community-maintained ranking.</p>
   <p class="footer-note">To add or edit towers, modify <code>levels.js</code>.</p>
 </footer>
-
 <script src="levels.js"></script>
 <script src="script.js"></script>
 </body>
