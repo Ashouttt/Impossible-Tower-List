@@ -4,34 +4,34 @@
    ========================================================= */
 
 :root {
-  --bg-0: #070709;
-  --bg-1: #0d0d10;
-  --bg-2: #131318;
-  --bg-3: #1a1a20;
-  --bg-hover: #1e1e26;
-  --border: #272730;
+  --bg-0:        #070709;
+  --bg-1:        #0d0d10;
+  --bg-2:        #131318;
+  --bg-3:        #1a1a20;
+  --bg-hover:    #1e1e26;
+  --border:      #272730;
   --border-hover:#353540;
 
-  --text: #e8e6f0;
-  --text-dim: #8a8699;
-  --text-muted: #5c5866;
+  --text:        #e8e6f0;
+  --text-dim:    #8a8699;
+  --text-muted:  #5c5866;
 
-  --accent: #ff6b4a;
-  --accent-2: #ff9e5e;
+  --accent:      #ff6b4a;
+  --accent-2:    #ff9e5e;
   --accent-gold: #f0c040;
 
-  --tier-verified: #4ade80;
+  --tier-verified:   #4ade80;
   --tier-unverified: #f87171;
 
   /* EToH Difficulty Colors */
-  --diff-horrific: #b388ff;
-  --diff-unreal: #7c3aed;
-  --diff-nil: #888888;
-  --diff-error: #cc2222;
-  --diff-high-peak: #c084fc;
+  --diff-horrific:    #b388ff;
+  --diff-unreal:      #7c3aed;
+  --diff-nil:         #888888;
+  --diff-error:       #cc2222;
+  --diff-high-peak:   #c084fc;
 
-  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+  --font-body:  'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono:  'JetBrains Mono', 'IBM Plex Mono', monospace;
 
   --radius: 8px;
 }
@@ -331,14 +331,14 @@ main {
 }
 
 /* Verified / Unverified colored left borders */
-.level-row[data-tier="verified"] .row-main::before { background: var(--tier-verified); }
+.level-row[data-tier="verified"] .row-main::before   { background: var(--tier-verified); }
 .level-row[data-tier="unverified"] .row-main::before { background: var(--tier-unverified); }
 
 /* Difficulty colored left borders (override tier colors when difficulty is present) */
-.level-row[data-diff="horrific"] .row-main::before { background: var(--diff-horrific); }
-.level-row[data-diff="unreal"] .row-main::before { background: var(--diff-unreal); }
-.level-row[data-diff="nil"] .row-main::before { background: var(--diff-nil); }
-.level-row[data-diff="error"] .row-main::before { background: var(--diff-error); }
+.level-row[data-diff="horrific"] .row-main::before  { background: var(--diff-horrific); }
+.level-row[data-diff="unreal"] .row-main::before    { background: var(--diff-unreal); }
+.level-row[data-diff="nil"] .row-main::before       { background: var(--diff-nil); }
+.level-row[data-diff="error"] .row-main::before     { background: var(--diff-error); }
 .level-row[data-diff="high-peak"] .row-main::before { background: var(--diff-high-peak); }
 
 .row-rank {
@@ -349,10 +349,10 @@ main {
   padding-left: 12px;
 }
 
-.level-row[data-diff="horrific"] .row-rank { color: var(--diff-horrific); }
-.level-row[data-diff="unreal"] .row-rank { color: var(--diff-unreal); }
-.level-row[data-diff="nil"] .row-rank { color: var(--diff-nil); }
-.level-row[data-diff="error"] .row-rank { color: var(--diff-error); }
+.level-row[data-diff="horrific"] .row-rank  { color: var(--diff-horrific); }
+.level-row[data-diff="unreal"] .row-rank    { color: var(--diff-unreal); }
+.level-row[data-diff="nil"] .row-rank       { color: var(--diff-nil); }
+.level-row[data-diff="error"] .row-rank     { color: var(--diff-error); }
 .level-row[data-diff="high-peak"] .row-rank { color: var(--diff-high-peak); }
 
 .row-name {
@@ -485,7 +485,7 @@ main {
   color: var(--text);
 }
 
-/* ---------------- Detail panel ---------------- */
+/* ---------------- Detail panel — FIXED ALIGNMENT ---------------- */
 
 .row-detail {
   display: grid;
@@ -496,6 +496,7 @@ main {
   opacity: 0;
   max-height: 0;
   overflow: hidden;
+  /* Smooth transitions for all properties */
   transition: max-height 350ms cubic-bezier(0.22, 1, 0.36, 1),
               opacity 250ms ease 50ms,
               padding 350ms cubic-bezier(0.22, 1, 0.36, 1);
@@ -504,10 +505,7 @@ main {
 .level-row.expanded .row-detail {
   opacity: 1;
   padding: 4px 20px 28px 20px;
-}
-
-.detail-video-wrap {
-  width: 100%;
+  /* max-height set inline by JS */
 }
 
 .detail-video {
@@ -567,7 +565,7 @@ main {
   display: flex;
   flex-direction: column;
   gap: 18px;
-  padding-left: 8px;
+  padding-left: 8px; /* subtle offset for visual balance */
   box-sizing: border-box;
 }
 
@@ -718,16 +716,16 @@ main {
   .row-rank { padding-left: 8px; font-size: 13px; }
   .row-name { font-size: 14px; }
 
-  .row-detail {
-    grid-template-columns: 1fr;
-    padding: 0 16px;
+  .row-detail { 
+    grid-template-columns: 1fr; 
+    padding: 0 16px; 
   }
-  .level-row.expanded .row-detail {
-    padding: 4px 16px 24px 16px;
+  .level-row.expanded .row-detail { 
+    padding: 4px 16px 24px 16px; 
   }
-  .detail-meta {
-    grid-template-columns: 1fr 1fr;
-    gap: 14px 16px;
+  .detail-meta { 
+    grid-template-columns: 1fr 1fr; 
+    gap: 14px 16px; 
   }
   .detail-side {
     padding-left: 0;
@@ -735,15 +733,15 @@ main {
 }
 
 /* Stagger animation delays */
-.level-row:nth-child(1) { animation-delay: 0ms; }
-.level-row:nth-child(2) { animation-delay: 30ms; }
-.level-row:nth-child(3) { animation-delay: 60ms; }
-.level-row:nth-child(4) { animation-delay: 90ms; }
-.level-row:nth-child(5) { animation-delay: 120ms; }
-.level-row:nth-child(6) { animation-delay: 150ms; }
-.level-row:nth-child(7) { animation-delay: 180ms; }
-.level-row:nth-child(8) { animation-delay: 210ms; }
-.level-row:nth-child(9) { animation-delay: 240ms; }
+.level-row:nth-child(1)  { animation-delay: 0ms; }
+.level-row:nth-child(2)  { animation-delay: 30ms; }
+.level-row:nth-child(3)  { animation-delay: 60ms; }
+.level-row:nth-child(4)  { animation-delay: 90ms; }
+.level-row:nth-child(5)  { animation-delay: 120ms; }
+.level-row:nth-child(6)  { animation-delay: 150ms; }
+.level-row:nth-child(7)  { animation-delay: 180ms; }
+.level-row:nth-child(8)  { animation-delay: 210ms; }
+.level-row:nth-child(9)  { animation-delay: 240ms; }
 .level-row:nth-child(10) { animation-delay: 270ms; }
 .level-row:nth-child(11) { animation-delay: 300ms; }
 .level-row:nth-child(12) { animation-delay: 330ms; }
