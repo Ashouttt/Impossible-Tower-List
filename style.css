@@ -587,12 +587,14 @@ main {
   padding: 16px;
 }
 
+/* ===== POPRAWIONY PANEL BOCZNY ===== */
 .detail-side {
   display: flex;
   flex-direction: column;
   gap: 18px;
-  padding-left: 8px; /* subtle offset for visual balance */
+  padding-left: 20px;
   box-sizing: border-box;
+  min-height: 0; /* kluczowe dla flex overflow */
 }
 
 .detail-meta {
@@ -602,6 +604,27 @@ main {
   align-content: start;
   width: 100%;
   box-sizing: border-box;
+}
+
+/* Długie nazwy creatorów - zawijanie */
+.detail-meta .meta-item dd {
+  word-break: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+/* Scrollbar dla długich list */
+.detail-meta .meta-item dd::-webkit-scrollbar {
+  width: 4px;
+}
+.detail-meta .meta-item dd::-webkit-scrollbar-track {
+  background: transparent;
+}
+.detail-meta .meta-item dd::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
 }
 
 .place-link {
@@ -619,6 +642,8 @@ main {
   transition: transform 180ms ease, background 180ms ease;
   width: fit-content;
   box-sizing: border-box;
+  flex-shrink: 0; /* nie zmniejszaj przycisku */
+  margin-top: auto; /* wypchnij na dół */
 }
 
 .place-link:hover {
@@ -646,6 +671,7 @@ main {
 
 .meta-item {
   box-sizing: border-box;
+  min-width: 0; /* zapobiega overflow w grid */
 }
 
 .meta-item dt {
@@ -755,6 +781,7 @@ main {
   }
   .detail-side {
     padding-left: 0;
+    margin-top: 16px;
   }
 }
 
