@@ -1,6 +1,6 @@
 /* =========================================================
-   IMPOSSIBLE TOWER LIST — script.js
-   Cache-bust: v2
+   IMPOSSIBLE TOWER LIST — script.js (jQuery version)
+   Cache-bust: v2-jquery
    ========================================================= */
 
 const TIERS = [
@@ -65,13 +65,6 @@ let visibleCount = PAGE_SIZE;
 let activeTierId = "all";
 let query = "";
 
-const listEl = document.getElementById("levelList");
-const emptyStateEl = document.getElementById("emptyState");
-const loadMoreBtn = document.getElementById("loadMoreBtn");
-const searchInput = document.getElementById("searchInput");
-const tierFiltersEl = document.getElementById("tierFilters");
-const statTotal = document.getElementById("statTotal");
-
 const CHEVRON_SVG = '<svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
 
 function getFilteredLevels() {
@@ -95,9 +88,7 @@ function extractYouTubeId(input) {
 }
 
 function escapeHtml(str) {
-  const div = document.createElement("div");
-  div.textContent = str;
-  return div.innerHTML;
+  return $("<div>").text(str).html();
 }
 
 function buildDifficultyBadge(rawDifficulty) {
@@ -123,47 +114,61 @@ function buildRow(level, index) {
   const tier = tierForLevel(level);
   const diffParsed = parseDifficulty(level.difficulty);
   const diffClass = difficultyClass(diffParsed);
-  const li = document.createElement("li");
-  li.className = "level-row";
-  li.dataset.tier = tier.id;
-  li.dataset.diff = diffClass || "none";
-  li.style.animationDelay = Math.min(index, 19) * 30 + "ms";
   const rankStr = String(level.rank);
   const diffBadge = buildDifficultyBadge(level.difficulty);
-  li.innerHTML = '<button class="row-main" type="button" aria-expanded="false"><span class="row-rank">#' + rankStr + '</span><span class="row-name">' + escapeHtml(level.name || "Unnamed") + '</span>' + diffBadge + buildCreatorSummary(level.creator) + CHEVRON_SVG + '</button>';
-  const btn = li.querySelector(".row-main");
-  btn.addEventListener("click", () => toggleRow(li, level));
-  return li;
+  
+  const $li = $("<li>")
+    .addClass("level-row")
+    .attr("data-tier", tier.id)
+    .attr("data-diff", diffClass || "none")
+    .css("animationDelay", Math.min(index, 19) * 30 + "ms");
+
+  const $btn = $("<button>")
+    .addClass("row-main")
+    .attr("type", "button")
+    .attr("aria-expanded", "false")
+    .html('<span class="row-rank">#' + rankStr + '</span><span class="row-name">' + escapeHtml(level.name || "Unnamed") + '</span>' + diffBadge + buildCreatorSummary(level.creator) + CHEVRON_SVG);
+
+  $btn.on("click", () => toggleRow($li, level));
+  $li.append($btn);
+  
+  return $li;
 }
 
-function toggleRow(li, level) {
-  const btn = li.querySelector(".row-main");
-  const isExpanded = li.classList.contains("expanded");
+function toggleRow($li, level) {
+  const $btn = $li.find(".row-main");
+  const isExpanded = $li.hasClass("expanded");
+
   if (isExpanded) {
-    const detail = li.querySelector(".row-detail");
-    if (detail) {
-      const h = detail.scrollHeight;
-      detail.style.maxHeight = h + "px";
-      detail.offsetHeight;
-      detail.style.maxHeight = "0px";
-      detail.style.opacity = "0";
+    const $detail = $li.find(".row-detail");
+    if ($detail.length) {
+      const h = $detail[0].scrollHeight;
+      $detail.css("maxHeight", h + "px");
+      $detail[0].offsetHeight;
+      $detail.css({ maxHeight: "0px", opacity: "0" });
     }
-    li.classList.remove("expanded");
-    btn.setAttribute("aria-expanded", "false");
+    $li.removeClass("expanded");
+    $btn.attr("aria-expanded", "false");
     return;
   }
-  document.querySelectorAll(".level-row.expanded").forEach(other => {
-    if (other !== li) {
-      other.classList.remove("expanded");
-      other.querySelector(".row-main").setAttribute("aria-expanded", "false");
-      const d = other.querySelector(".row-detail");
-      if (d) { d.style.maxHeight = "0px"; d.style.opacity = "0"; }
+
+  $(".level-row.expanded").each(function() {
+    const $other = $(this);
+    if ($other[0] !== $li[0]) {
+      $other.removeClass("expanded");
+      $other.find(".row-main").attr("aria-expanded", "false");
+      const $d = $other.find(".row-detail");
+      if ($d.length) {
+        $d.css({ maxHeight: "0px", opacity: "0" });
+      }
     }
   });
-  li.classList.add("expanded");
-  btn.setAttribute("aria-expanded", "true");
-  let detail = li.querySelector(".row-detail");
-  if (!detail) {
+
+  $li.addClass("expanded");
+  $btn.attr("aria-expanded", "true");
+
+  let $detail = $li.find(".row-detail");
+  if (!$detail.length) {
     const videoId = extractYouTubeId(level.videoId);
     let videoMarkup;
     if (videoId) {
@@ -180,57 +185,64 @@ function toggleRow(li, level) {
     const placeMarkup = robloxLink
       ? '<a href="' + escapeHtml(robloxLink) + '" class="place-link" target="_blank" rel="noopener">' + ICON_ROBLOX + '<span>Play this tower ↗</span></a>'
       : '<div class="place-link place-link-missing">' + ICON_ROBLOX + '<span>No Roblox place link added</span></div>';
-    detail = document.createElement("div");
-    detail.className = "row-detail";
-    detail.innerHTML = '<div class="detail-video">' + videoMarkup + '</div><div class="detail-side"><dl class="detail-meta"><div class="meta-item"><dt>Creator</dt><dd>' + escapeHtml(level.creator || "—") + '</dd></div><div class="meta-item"><dt>Verifier</dt><dd>' + escapeHtml(verifierDisplay) + '</dd></div><div class="meta-item"><dt>Difficulty</dt><dd>' + escapeHtml(diffDisplay) + '</dd></div><div class="meta-item"><dt>World Record</dt><dd>' + escapeHtml(wrDisplay) + '</dd></div><div class="meta-item"><dt>Status</dt><dd>' + escapeHtml(statusDisplay) + '</dd></div></dl>' + placeMarkup + '</div>';
-    li.appendChild(detail);
+    
+    $detail = $("<div>")
+      .addClass("row-detail")
+      .html('<div class="detail-video">' + videoMarkup + '</div><div class="detail-side"><dl class="detail-meta"><div class="meta-item"><dt>Creator</dt><dd>' + escapeHtml(level.creator || "—") + '</dd></div><div class="meta-item"><dt>Verifier</dt><dd>' + escapeHtml(verifierDisplay) + '</dd></div><div class="meta-item"><dt>Difficulty</dt><dd>' + escapeHtml(diffDisplay) + '</dd></div><div class="meta-item"><dt>World Record</dt><dd>' + escapeHtml(wrDisplay) + '</dd></div><div class="meta-item"><dt>Status</dt><dd>' + escapeHtml(statusDisplay) + '</dd></div></dl>' + placeMarkup + '</div>');
+    
+    $li.append($detail);
   }
-  detail.style.maxHeight = "none";
-  detail.style.opacity = "0";
-  const targetH = detail.scrollHeight;
-  detail.style.maxHeight = "0px";
-  detail.offsetHeight;
-  detail.style.maxHeight = targetH + "px";
-  detail.style.opacity = "1";
+
+  $detail.css({ maxHeight: "none", opacity: "0" });
+  const targetH = $detail[0].scrollHeight;
+  $detail.css("maxHeight", "0px");
+  $detail[0].offsetHeight;
+  $detail.css({ maxHeight: targetH + "px", opacity: "1" });
 }
 
 function render() {
   const filtered = getFilteredLevels();
   const toShow = filtered.slice(0, visibleCount);
-  listEl.innerHTML = "";
-  const fragment = document.createDocumentFragment();
-  toShow.forEach((level, i) => fragment.appendChild(buildRow(level, i)));
-  listEl.appendChild(fragment);
-  emptyStateEl.hidden = filtered.length !== 0;
-  loadMoreBtn.hidden = filtered.length <= visibleCount;
+  
+  const $list = $("#levelList").empty();
+  const $fragment = $(document.createDocumentFragment());
+  
+  toShow.forEach((level, i) => {
+    $fragment.append(buildRow(level, i));
+  });
+  
+  $list.append($fragment);
+  $("#emptyState").prop("hidden", filtered.length !== 0);
+  $("#loadMoreBtn").prop("hidden", filtered.length <= visibleCount);
 }
 
 function setupControls() {
-  searchInput.addEventListener("input", (e) => {
-    query = e.target.value;
+  $("#searchInput").on("input", function() {
+    query = $(this).val();
     visibleCount = PAGE_SIZE;
     render();
   });
-  tierFiltersEl.addEventListener("click", (e) => {
-    const btn = e.target.closest(".tier-btn");
-    if (!btn) return;
-    tierFiltersEl.querySelectorAll(".tier-btn").forEach((b) => b.classList.remove("active"));
-    btn.classList.add("active");
-    activeTierId = btn.dataset.tier;
+
+  $("#tierFilters").on("click", ".tier-btn", function() {
+    $("#tierFilters .tier-btn").removeClass("active");
+    $(this).addClass("active");
+    activeTierId = $(this).data("tier");
     visibleCount = PAGE_SIZE;
     render();
   });
-  loadMoreBtn.addEventListener("click", () => {
+
+  $("#loadMoreBtn").on("click", function() {
     visibleCount += PAGE_SIZE;
     render();
   });
 }
 
 function setupStats() {
-  if (statTotal) statTotal.textContent = LEVELS.length;
+  const $statTotal = $("#statTotal");
+  if ($statTotal.length) $statTotal.text(LEVELS.length);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+$(document).ready(function() {
   setupControls();
   setupStats();
   render();
