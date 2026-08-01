@@ -29,6 +29,7 @@
   --diff-nil:         #888888;
   --diff-error:       #cc2222;
   --diff-high-peak:   #c084fc;
+  --diff-skyline:     #ffffff;
 
   --font-body:  'Inter', system-ui, -apple-system, sans-serif;
   --font-mono:  'JetBrains Mono', 'IBM Plex Mono', monospace;
@@ -366,6 +367,7 @@ main {
 .level-row[data-diff="nil"] .row-main::before       { background: var(--diff-nil); }
 .level-row[data-diff="error"] .row-main::before     { background: var(--diff-error); }
 .level-row[data-diff="high-peak"] .row-main::before { background: var(--diff-high-peak); }
+.level-row[data-diff="skyline"] .row-main::before   { background: var(--diff-skyline); }
 
 .row-rank {
   font-family: var(--font-mono);
@@ -380,6 +382,7 @@ main {
 .level-row[data-diff="nil"] .row-rank       { color: var(--diff-nil); }
 .level-row[data-diff="error"] .row-rank     { color: var(--diff-error); }
 .level-row[data-diff="high-peak"] .row-rank { color: var(--diff-high-peak); }
+.level-row[data-diff="skyline"] .row-rank   { color: var(--diff-skyline); }
 
 .row-name {
   font-weight: 600;
@@ -469,6 +472,16 @@ main {
 }
 .diff-high-peak .diff-icon {
   filter: drop-shadow(0 0 5px rgba(192,132,252,0.6));
+}
+
+/* Skyline — white glow, purest nil */
+.diff-skyline {
+  color: var(--diff-skyline);
+  border-color: rgba(255,255,255,0.40);
+  background: rgba(255,255,255,0.08);
+}
+.diff-skyline .diff-icon {
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.8));
 }
 
 .row-creator {
