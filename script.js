@@ -32,7 +32,7 @@ function parseDifficulty(raw) {
   if (!raw) return { prefix: "", base: "", full: "" };
   const str = String(raw).trim();
   const lowered = str.toLowerCase();
-  const prefixMatch = lowered.match(/^(low-mid|mid-high|bottom-low|baseline|bottom|low|mid|high-peak|high|peak|base)(?:\s+|-)/);
+  const prefixMatch = lowered.match(/^(low-mid|mid-high|bottom-low|baseline|bottom|low|mid|high-peak|high|peak|base|skyline)(?:\s+|-)/);
   let prefix = "";
   let base = lowered;
   if (prefixMatch) {
@@ -47,12 +47,14 @@ function parseDifficulty(raw) {
 
 function difficultyClass(parsed) {
   if (parsed.prefix === "High-Peak") return "high-peak";
+  if (parsed.prefix === "Skyline") return "skyline";
   const map = { "horrific": "horrific", "unreal": "unreal", "nil": "nil", "error": "error" };
   return map[parsed.base.toLowerCase()] || "";
 }
 
 function difficultyIcon(parsed) {
   if (parsed.prefix === "High-Peak") return ICON_UNREAL;
+  if (parsed.prefix === "Skyline") return ICON_NIL;
   const b = parsed.base.toLowerCase();
   if (b === "horrific") return ICON_HORRIFIC;
   if (b === "unreal") return ICON_UNREAL;
