@@ -43,8 +43,19 @@ const LEVELS = [
     worldRecord: "N/A",
     robloxLink: "https://www.roblox.com/games/5684674542/Chaotic-Tower-R",
   },
+
   {
     rank: 3,
+    name: "Tower of Tedious Timings",
+    creator: "sdt00",
+    verifier: "",
+    difficulty: "Low-Mid Error",
+    videoId: "",
+    worldRecord: "N/A",
+    robloxLink: "https://www.roblox.com/games/119994535255674/Tower-of-Tedious-Timings",
+  },
+  {
+    rank: 4,
     name: "Tower of Ziggle Core",
     creator: "N/A",
     verifier: "",
@@ -54,7 +65,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/89993867711798/Tower-of-Ziggle-Core",
   },
   {
-    rank: 4,
+    rank: 5,
     name: "Not Even Playable Gameplay",
     creator: "NameZerooo, SE5Y3QAY, MIXMENMIX, 10A_v, artemzartemz, benceiyibendy, kryception, MiniLagOOn, GameSion, computerboi3131, xXFighterofTimeXx",
     verifier: "",
@@ -62,17 +73,6 @@ const LEVELS = [
     videoId: "U1nDh0HO9A4",
     worldRecord: "N/A",
     robloxLink: "https://www.roblox.com/games/130670383361152/Not-Even-Playable-Gameplay",
-  },
-
-  {
-    rank: 5,
-    name: "Tower of Tedious Timings",
-    creator: "sdt00",
-    verifier: "",
-    difficulty: "Skyline Nil",
-    videoId: "",
-    worldRecord: "N/A",
-    robloxLink: "https://www.roblox.com/games/119994535255674/Tower-of-Tedious-Timings",
   },
   {
     rank: 6,
