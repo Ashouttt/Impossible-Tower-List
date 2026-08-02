@@ -186,7 +186,7 @@ const LEVELS = [
   {
     rank: 17,
     name: "Tower of Unending Unforgiveness",
-    creator: "Various Creators",
+    creator: "hhhjhjjjjijijj, shuiggAF, babypizza34",
     verifier: "",
     difficulty: "Mid-High Nil",
     videoId: "",
@@ -206,7 +206,7 @@ const LEVELS = [
   {
     rank: 19,
     name: "Tower of Veiled Prophecy",
-    creator: "Various Creators",
+    creator: "TobiasHeroofRoblox, EEEEEEEEEEGHGHI, artemzartemz, obbylordd, microwavium",
     verifier: "",
     difficulty: "Mid-High Nil",
     videoId: "ARoG4ZsKOpw",
@@ -236,7 +236,7 @@ const LEVELS = [
   {
     rank: 22,
     name: "Tower of Diabolical Strategem",
-    creator: "Various Creators",
+    creator: "ZachTheTrxhard, JohnTheTrxhard, Senztrix",
     verifier: "",
     difficulty: "Low-Mid Nil",
     videoId: "ZlIcCWCxzpk",
@@ -286,7 +286,7 @@ const LEVELS = [
   {
     rank: 27,
     name: "Steeple of Eating Snakes",
-    creator: "Various Creators",
+    creator: "Twolova, Chanlack, Dragongoldking0, KING_JIJO",
     verifier: "",
     difficulty: "Bottom Nil",
     videoId: "Oc03ZYk2cKg",
