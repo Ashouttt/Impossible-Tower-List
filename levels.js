@@ -365,7 +365,7 @@ const LEVELS = [
   },
   {
     rank: 35,
-    name: "ToV (Tower of Void)",
+    name: "Tower of Void",
     creator: "bLockerman666, IceNsalt, ciel_azulsky, popop614, Feodoric, PPtTenshi",
     verifier: "",
     difficulty: "High Unreal",
@@ -375,7 +375,7 @@ const LEVELS = [
   },
   {
     rank: 36,
-    name: "ToTQFP (Tower of The Quest For Perfection)",
+    name: "(Tower of The Quest For Perfection",
     creator: "4d9r, bLockerman666, BigScaryMonster10G",
     verifier: "",
     difficulty: "High Unreal",
@@ -395,7 +395,7 @@ const LEVELS = [
   },
   {
     rank: 38,
-    name: "Hellish Eextermination Labyrinth",
+    name: "Hellish Extermination Labyrinth",
     creator: "AddisonJudah, Tetrix_Masterll, yuienaaaa, Hyperfantasies",
     verifier: "",
     difficulty: "High Unreal",
@@ -445,7 +445,7 @@ const LEVELS = [
   },
   {
     rank: 43,
-    name: "ToID (Tower of Impending Doom)",
+    name: "Tower of Impending Doom",
     creator: "pczm1, Forstaken2008xs, mikolajole, skitsuna, walroooos, Celest_Z, Demolisher_11",
     verifier: "greenbean1421",
     difficulty: "Low-Mid Unreal",
@@ -455,7 +455,7 @@ const LEVELS = [
   },
   {
     rank: 44,
-    name: "ToW (Tower of Wigglecore)",
+    name: "Tower of Wigglecore",
     creator: "ScorpioexLOLez, kkdpracticeacc",
     verifier: "BoomSasok",
     difficulty: "Low-Mid Unreal",
@@ -465,7 +465,7 @@ const LEVELS = [
   },
   {
     rank: 45,
-    name: "ToMH (Tower of Monochromatic Haze)",
+    name: "Tower of Monochromatic Haze",
     creator: "Gehadimadm, tweet2a, Forstaken2008xs",
     verifier: "Gehadimad",
     difficulty: "Low-Mid Unreal",
@@ -485,7 +485,7 @@ const LEVELS = [
   },
   {
     rank: 47,
-    name: "ToMIH (Tower of My Inner Hatred)",
+    name: "Tower of My Inner Hatred)",
     creator: "Reimu Hakurei, Kinjiture, BFFPikachu",
     verifier: "ZePlayerSlayer",
     difficulty: "Low Unreal",
@@ -495,7 +495,7 @@ const LEVELS = [
   },
   {
     rank: 48,
-    name: "ToSF (Tower of Spiralling Fates)",
+    name: "Tower of Spiralling Fates",
     creator: "ciel_azulsky",
     verifier: "MonsterIsABlock",
     difficulty: "Low Unreal",
@@ -505,7 +505,7 @@ const LEVELS = [
   },
   {
     rank: 49,
-    name: "CoCBF (Citadel of Cold Blooded Fatality)",
+    name: "Citadel of Cold Blooded Fatality",
     creator: "n_rtex, a6iq1",
     verifier: "BlackportTransport",
     difficulty: "Low Unreal",
@@ -515,7 +515,7 @@ const LEVELS = [
   },
   {
     rank: 50,
-    name: "OoUS (Obelisk of Unrealistic Sightings)",
+    name: "Obelisk of Unrealistic Sightings",
     creator: "Apple_FlavoredWater, yuienaaaa, CamronSkilIz, Killer818616",
     verifier: "Pyuruw",
     difficulty: "Low Unreal",
@@ -525,7 +525,7 @@ const LEVELS = [
   },
   {
     rank: 51,
-    name: "ToCB (Tower of Celestial Bloom)",
+    name: "Tower of Celestial Bloom",
     creator: "zkv07, glizzygladiattorrr",
     verifier: "hyperionblades",
     difficulty: "Low Unreal",
@@ -535,7 +535,7 @@ const LEVELS = [
   },
   {
     rank: 52,
-    name: "ToQU (Tower of Qwerty Uiop)",
+    name: "Tower of Qwerty Uiop",
     creator: "Purple_BaconHair",
     verifier: "jeang4me",
     difficulty: "Bottom-Low Unreal",
@@ -545,7 +545,7 @@ const LEVELS = [
   },
   {
     rank: 53,
-    name: "CoTEC (Citadel of The Eternal Calamity)",
+    name: "Citadel of The Eternal Calamity",
     creator: "susplayerslayer",
     verifier: "Marqulitt",
     difficulty: "Bottom-Low Unreal",
@@ -555,7 +555,7 @@ const LEVELS = [
   },
   {
     rank: 54,
-    name: "CoIV (Citadel of Infinite Void)",
+    name: "Citadel of Infinite Void",
     creator: "bLockerman666, IceNsalt, popop614, ciel_azulsky, PPtTenshi, latomludo, Heksi, nott_vy, skitsuna, mrgamingpotato1",
     verifier: "skitsuna",
     difficulty: "Bottom-Low Unreal",
@@ -565,7 +565,7 @@ const LEVELS = [
   },
   {
     rank: 55,
-    name: "ToBF (Tower of Blind Fate)",
+    name: "Tower of Blind Fate",
     creator: "Nosav",
     verifier: "tinenderman",
     difficulty: "Bottom-Low Unreal",
@@ -575,7 +575,7 @@ const LEVELS = [
   },
   {
     rank: 56,
-    name: "ToP (Tower of Paradise)",
+    name: "Tower of Paradise",
     creator: "Macloux",
     verifier: "Yazmania_1m",
     difficulty: "Bottom-Low Unreal",
@@ -585,7 +585,7 @@ const LEVELS = [
   },
   {
     rank: 57,
-    name: "ToMIM (Tower of Maybe In Mumbai)",
+    name: "Tower of Maybe In Mumbai",
     creator: "Naz0dial, Stitch, Hexium, brub, arik21, az77, zkv07, asAGAIN, nortex, dom, ChillUltralight, spear, geo, twossed.173, NadiPlaysss",
     verifier: "ChillUltralight",
     difficulty: "Bottom-Low Unreal",
@@ -595,7 +595,7 @@ const LEVELS = [
   },
   {
     rank: 58,
-    name: "ToWC (Tower of Withered Consensus)",
+    name: "Tower of Withered Consensus",
     creator: "glizzygladiattorrr",
     verifier: "glizzygladiattorrr",
     difficulty: "Bottom Unreal",
@@ -605,7 +605,7 @@ const LEVELS = [
   },
   {
     rank: 59,
-    name: "TT (Target Tower)",
+    name: "Target Tower",
     creator: "DukeQD, Forstaken2008xs, Tritone246",
     verifier: "player0v0",
     difficulty: "Bottom Unreal",
@@ -615,7 +615,7 @@ const LEVELS = [
   },
   {
     rank: 60,
-    name: "ToZS (Tower of Zen Surplus)",
+    name: "Tower of Zen Surplus",
     creator: "ciel_azulsky, skitsuna",
     verifier: "SeeRyanplayroblox",
     difficulty: "Bottom Unreal",
@@ -625,7 +625,7 @@ const LEVELS = [
   },
   {
     rank: 61,
-    name: "ToTT (Tower of Twenty Two)",
+    name: "Tower of Twenty Two",
     creator: "mccatster, jeremylightbulb, zelirium, ghoned, G1adit, carmeniscool12525_2",
     verifier: "carmeniscool12525_2",
     difficulty: "Bottom Unreal",
@@ -635,7 +635,7 @@ const LEVELS = [
   },
   {
     rank: 62,
-    name: "3008-T (3008 Tower)",
+    name: "3008 Tower",
     creator: "pczm1",
     verifier: "ChillUltralight",
     difficulty: "Bottom Unreal",
@@ -645,7 +645,7 @@ const LEVELS = [
   },
   {
     rank: 63,
-    name: "IKEA (Ikea Tower)",
+    name: "Ikea Tower",
     creator: "Higherthanblox",
     verifier: "MonsterIsABlock",
     difficulty: "Bottom Unreal",
@@ -665,7 +665,7 @@ const LEVELS = [
   },
   {
     rank: 65,
-    name: "ToSD (Tower of Sudden Death)",
+    name: "Tower of Sudden Death",
     creator: "WaterMakeer, CosmikChaos",
     verifier: "skitsuna",
     difficulty: "Baseline Unreal",
