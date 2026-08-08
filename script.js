@@ -1,7 +1,26 @@
 /* =========================================================
-   IMPOSSIBLE TOWER LIST — script.js (jQuery version)
-   Cache-bust: v2-jquery
+   IMPOSSIBLE TOWER LIST — script.js (jQuery + Supabase version)
+   Cache-bust: v4-supabase-likes
    ========================================================= */
+
+/* =========================================================
+   KONFIGURACJA SUPABASE — ZMIEN TUTAJ SWOJE DANE
+   ========================================================= */
+
+// 1. Wejdź na https://supabase.com i załóż darmowe konto
+// 2. Stwórz nowy project
+// 3. Przejdź do Project Settings → API
+// 4. Skopiuj URL i anon/public key
+// 5. W SQL Editor wklej kod z pliku schema.sql i kliknij Run
+// 6. Wklej poniżej swoje dane:
+
+const SUPABASE_URL = "https://tpvtcnjvndsabtvsgsqo.supabase.co";      // <-- ZMIEŃ TO!
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwdnRjbmp2bmRzYWJ0dnNnc3FvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxNTA5MjksImV4cCI6MjEwMTcyNjkyOX0.CMMOnMYpZPF5gBfGTEeVdZ3WMq0mgG983Bt0juLnNwU";
+
+let supabase = null;
+if (typeof window.supabase !== "undefined" && SUPABASE_URL.includes("supabase.co")) {
+  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+}
 
 const TIERS = [
   { id: "verified",   label: "Verified",   max: Infinity },
@@ -27,6 +46,10 @@ const ICON_NIL = '<svg class="diff-icon" viewBox="0 0 100 100"><polygon points="
 const ICON_ERROR = '<svg class="diff-icon" viewBox="0 0 100 100"><rect x="8" y="8" width="84" height="84" rx="4" fill="#cc2222" stroke="#991111" stroke-width="6"/></svg>';
 
 const ICON_ROBLOX = '<svg class="place-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M4.24 0L0 19.76 19.76 24 24 4.24 4.24 0zM9.6 8.4l6 1.4-1.4 6-6-1.4 1.4-6z"/></svg>';
+
+const ICON_HEART_EMPTY = '<svg class="like-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+
+const ICON_HEART_FILLED = '<svg class="like-icon" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
 
 function parseDifficulty(raw) {
   if (!raw) return { prefix: "", base: "", full: "" };
@@ -66,6 +89,162 @@ let activeTierId = "all";
 let query = "";
 
 const CHEVRON_SVG = '<svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
+
+/* =========================================================
+   SYSTEM LIKÓW — Supabase (działa z GitHub Pages!)
+   ========================================================= */
+
+// Cache lokalny
+const likesCache = {};
+
+// Generuje unikalne ID użytkownika (zapamiętuje w localStorage)
+function getUserId() {
+  let uid = localStorage.getItem("tower_user_id");
+  if (!uid) {
+    uid = "user_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
+    localStorage.setItem("tower_user_id", uid);
+  }
+  return uid;
+}
+
+// Sprawdza czy użytkownik polubił dany tower
+function hasLiked(towerId) {
+  return localStorage.getItem("liked_" + towerId) === "true";
+}
+
+// Zapisuje stan polubienia
+function setLiked(towerId, liked) {
+  if (liked) {
+    localStorage.setItem("liked_" + towerId, "true");
+  } else {
+    localStorage.removeItem("liked_" + towerId);
+  }
+}
+
+// Pobiera liczbę lików z Supabase
+async function fetchLikeCount(towerId) {
+  if (likesCache[towerId] !== undefined) {
+    return likesCache[towerId];
+  }
+  if (!supabase) {
+    likesCache[towerId] = 0;
+    return 0;
+  }
+  try {
+    const { data, error } = await supabase
+      .from("tower_likes")
+      .select("count")
+      .eq("tower_id", towerId)
+      .single();
+
+    if (error && error.code !== "PGRST116") {
+      console.warn("[Likes] Supabase error:", error.message);
+      likesCache[towerId] = 0;
+      return 0;
+    }
+
+    const count = data ? data.count : 0;
+    likesCache[towerId] = count;
+    return count;
+  } catch (e) {
+    console.warn("[Likes] Failed to fetch count for", towerId, e.message);
+    likesCache[towerId] = 0;
+    return 0;
+  }
+}
+
+// Wysyła like/unlike do Supabase
+async function sendLike(towerId, liked) {
+  if (!supabase) return likesCache[towerId] || 0;
+
+  const userId = getUserId();
+
+  try {
+    if (liked) {
+      // Dodaj like
+      await supabase
+        .from("tower_likes_users")
+        .upsert({ tower_id: towerId, user_id: userId }, { onConflict: "tower_id,user_id" });
+    } else {
+      // Usuń like
+      await supabase
+        .from("tower_likes_users")
+        .delete()
+        .eq("tower_id", towerId)
+        .eq("user_id", userId);
+    }
+
+    // Pobierz zaktualizowany count
+    const { data, error } = await supabase
+      .from("tower_likes")
+      .select("count")
+      .eq("tower_id", towerId)
+      .single();
+
+    const count = data ? data.count : 0;
+    likesCache[towerId] = count;
+    return count;
+  } catch (e) {
+    console.warn("[Likes] Failed to send like for", towerId, e.message);
+    return likesCache[towerId] || 0;
+  }
+}
+
+// Aktualizuje wygląd przycisku like
+function updateLikeButton($btn, count, liked) {
+  $btn.toggleClass("liked", liked);
+  $btn.find(".like-icon").html(liked ? ICON_HEART_FILLED : ICON_HEART_EMPTY);
+  $btn.find(".like-count").text(count);
+  $btn.prop("disabled", false);
+}
+
+// Tworzy przycisk like dla wiersza
+function buildLikeButton(level) {
+  const towerId = "tower_" + level.rank;
+  const liked = hasLiked(towerId);
+  const icon = liked ? ICON_HEART_FILLED : ICON_HEART_EMPTY;
+  const $btn = $("<button>")
+    .addClass("like-btn")
+    .toggleClass("liked", liked)
+    .attr("type", "button")
+    .attr("data-tower", towerId)
+    .html(icon + '<span class="like-count">—</span>');
+
+  // Pobierz aktualny count z API
+  fetchLikeCount(towerId).then(function(count) {
+    $btn.find(".like-count").text(count);
+  });
+
+  $btn.on("click", function(e) {
+    e.stopPropagation();
+    if ($btn.prop("disabled")) return;
+
+    const currentlyLiked = hasLiked(towerId);
+    const newLiked = !currentlyLiked;
+
+    // Optymistyczna aktualizacja UI
+    const currentCount = parseInt($btn.find(".like-count").text()) || 0;
+    const newCount = newLiked ? currentCount + 1 : Math.max(0, currentCount - 1);
+
+    $btn.addClass("animating");
+    setTimeout(function() { $btn.removeClass("animating"); }, 400);
+
+    updateLikeButton($btn, newCount, newLiked);
+    setLiked(towerId, newLiked);
+    $btn.prop("disabled", true);
+
+    // Wyślij do API
+    sendLike(towerId, newLiked).then(function(serverCount) {
+      updateLikeButton($btn, serverCount, newLiked);
+    }).catch(function() {
+      // Rollback w razie błędu
+      updateLikeButton($btn, currentCount, currentlyLiked);
+      setLiked(towerId, currentlyLiked);
+    });
+  });
+
+  return $btn;
+}
 
 function getFilteredLevels() {
   const q = query.trim().toLowerCase();
@@ -116,22 +295,31 @@ function buildRow(level, index) {
   const diffClass = difficultyClass(diffParsed);
   const rankStr = String(level.rank);
   const diffBadge = buildDifficultyBadge(level.difficulty);
-  
+
   const $li = $("<li>")
     .addClass("level-row")
     .attr("data-tier", tier.id)
     .attr("data-diff", diffClass || "none")
     .css("animationDelay", Math.min(index, 19) * 30 + "ms");
 
+  const $likeBtn = buildLikeButton(level);
+
   const $btn = $("<button>")
     .addClass("row-main")
     .attr("type", "button")
     .attr("aria-expanded", "false")
-    .html('<span class="row-rank">#' + rankStr + '</span><span class="row-name">' + escapeHtml(level.name || "Unnamed") + '</span>' + diffBadge + buildCreatorSummary(level.creator) + CHEVRON_SVG);
+    .html('<span class="row-rank">#' + rankStr + '</span><span class="row-name">' + escapeHtml(level.name || "Unnamed") + '</span>' + diffBadge + buildCreatorSummary(level.creator) + '<span class="col-likes-wrap"></span>' + CHEVRON_SVG);
 
-  $btn.on("click", () => toggleRow($li, level));
+  // Wstaw przycisk like do dedykowanej kolumny
+  $btn.find(".col-likes-wrap").append($likeBtn);
+
+  $btn.on("click", function(e) {
+    // Nie rozwijaj jeśli kliknięto w przycisk like
+    if ($(e.target).closest(".like-btn").length) return;
+    toggleRow($li, level);
+  });
   $li.append($btn);
-  
+
   return $li;
 }
 
@@ -185,11 +373,11 @@ function toggleRow($li, level) {
     const placeMarkup = robloxLink
       ? '<a href="' + escapeHtml(robloxLink) + '" class="place-link" target="_blank" rel="noopener">' + ICON_ROBLOX + '<span>Play this tower ↗</span></a>'
       : '<div class="place-link place-link-missing">' + ICON_ROBLOX + '<span>No Roblox place link added</span></div>';
-    
+
     $detail = $("<div>")
       .addClass("row-detail")
       .html('<div class="detail-video">' + videoMarkup + '</div><div class="detail-side"><dl class="detail-meta"><div class="meta-item"><dt>Creator</dt><dd>' + escapeHtml(level.creator || "—") + '</dd></div><div class="meta-item"><dt>Verifier</dt><dd>' + escapeHtml(verifierDisplay) + '</dd></div><div class="meta-item"><dt>Difficulty</dt><dd>' + escapeHtml(diffDisplay) + '</dd></div><div class="meta-item"><dt>World Record</dt><dd>' + escapeHtml(wrDisplay) + '</dd></div><div class="meta-item"><dt>Status</dt><dd>' + escapeHtml(statusDisplay) + '</dd></div></dl>' + placeMarkup + '</div>');
-    
+
     $li.append($detail);
   }
 
@@ -203,14 +391,14 @@ function toggleRow($li, level) {
 function render() {
   const filtered = getFilteredLevels();
   const toShow = filtered.slice(0, visibleCount);
-  
+
   const $list = $("#levelList").empty();
   const $fragment = $(document.createDocumentFragment());
-  
+
   toShow.forEach((level, i) => {
     $fragment.append(buildRow(level, i));
   });
-  
+
   $list.append($fragment);
   $("#emptyState").prop("hidden", filtered.length !== 0);
   $("#loadMoreBtn").prop("hidden", filtered.length <= visibleCount);
