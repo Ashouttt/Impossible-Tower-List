@@ -91,14 +91,112 @@ const CHEVRON_SVG = '<svg class="row-chevron" viewBox="0 0 24 24" fill="none" st
 // Cache lokalny
 const likesCache = {};
 
-// Generuje unikalne ID użytkownika (zapamiętuje w localStorage)
+// Generuje fingerprint-based ID użytkownika (przetrwa wyczyszczenie cache)
 function getUserId() {
-  let uid = localStorage.getItem("tower_user_id");
-  if (!uid) {
-    uid = "user_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
-    localStorage.setItem("tower_user_id", uid);
+  // Sprawdź czy mamy już obliczony fingerprint
+  let fp = localStorage.getItem("tower_fp_id");
+  if (fp) return fp;
+
+  // Oblicz fingerprint z danych przeglądarki
+  fp = generateFingerprint();
+  localStorage.setItem("tower_fp_id", fp);
+  return fp;
+}
+
+// Generuje semi-unikalny fingerprint urządzenia/przeglądarki
+function generateFingerprint() {
+  const components = [];
+
+  // User agent
+  components.push(navigator.userAgent);
+
+  // Język
+  components.push(navigator.language || navigator.userLanguage);
+
+  // Rozdzielczość ekranu
+  components.push(screen.width + "x" + screen.height + "x" + screen.colorDepth);
+
+  // Strefa czasowa
+  components.push(Intl.DateTimeFormat().resolvedOptions().timeZone);
+
+  // Platforma
+  components.push(navigator.platform);
+
+  // Liczba rdzeni CPU
+  components.push(navigator.hardwareConcurrency || "unknown");
+
+  // Pamięć RAM (jeśli dostępna)
+  components.push(navigator.deviceMemory || "unknown");
+
+  // Touch support
+  components.push("ontouchstart" in window ? "touch" : "no-touch");
+
+  // Canvas fingerprint
+  try {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = 200;
+    canvas.height = 50;
+
+    // Tekst
+    ctx.textBaseline = "top";
+    ctx.font = "14px Arial";
+    ctx.fillStyle = "#f60";
+    ctx.fillRect(10, 10, 50, 20);
+    ctx.fillStyle = "#069";
+    ctx.fillText("Tower Likes FP v1", 10, 30);
+
+    // Linie
+    ctx.strokeStyle = "#c00";
+    ctx.beginPath();
+    ctx.moveTo(100, 10);
+    ctx.lineTo(150, 40);
+    ctx.stroke();
+
+    components.push(canvas.toDataURL().slice(-50));
+  } catch (e) {
+    components.push("no-canvas");
   }
-  return uid;
+
+  // WebGL vendor/renderer
+  try {
+    const gl = document.createElement("canvas").getContext("webgl");
+    if (gl) {
+      const debugInfo = gl.getExtension("WEBGL_debug_renderer_info");
+      if (debugInfo) {
+        components.push(gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL));
+        components.push(gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL));
+      }
+    }
+  } catch (e) {
+    components.push("no-webgl");
+  }
+
+  // Plugins
+  if (navigator.plugins) {
+    const plugins = [];
+    for (let i = 0; i < navigator.plugins.length; i++) {
+      plugins.push(navigator.plugins[i].name);
+    }
+    components.push(plugins.join(","));
+  }
+
+  // Hash wszystkich komponentów
+  const raw = components.join("||");
+  return "fp_" + cyrb53(raw).toString(36);
+}
+
+// Szybki hash funkcja (cyrb53)
+function cyrb53(str) {
+  let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
+  for (let i = 0; i < str.length; i++) {
+    const ch = str.charCodeAt(i);
+    h1 = Math.imul(h1 ^ ch, 2654435761);
+    h2 = Math.imul(h2 ^ ch, 1597334677);
+  }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  return 4294967296 * (2097151 & h2) + (2097151 & h1);
 }
 
 // Sprawdza czy użytkownik polubił dany tower
