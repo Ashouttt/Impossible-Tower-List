@@ -41,9 +41,9 @@ const ICON_ERROR = '<svg class="diff-icon" viewBox="0 0 100 100"><rect x="8" y="
 
 const ICON_ROBLOX = '<svg class="place-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M4.24 0L0 19.76 19.76 24 24 4.24 4.24 0zM9.6 8.4l6 1.4-1.4 6-6-1.4 1.4-6z"/></svg>';
 
-const ICON_HEART_EMPTY = '<svg class="like-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+const ICON_HEART_EMPTY = '<svg class="like-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
 
-const ICON_HEART_FILLED = '<svg class="like-icon" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+const ICON_HEART_FILLED = '<svg class="like-icon" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
 
 function parseDifficulty(raw) {
   if (!raw) return { prefix: "", base: "", full: "" };
@@ -125,19 +125,19 @@ async function fetchLikeCount(towerId) {
     return 0;
   }
   try {
+    // Pobierz wszystkie wiersze i policz je (bardziej niezawodne)
     const { data, error } = await sbClient
-      .from("tower_likes")
-      .select("count")
-      .eq("tower_id", towerId)
-      .single();
+      .from("tower_likes_users")
+      .select("user_id")
+      .eq("tower_id", towerId);
 
-    if (error && error.code !== "PGRST116") {
-      console.warn("[Likes] Supabase error:", error.message);
+    if (error) {
+      console.warn("[Likes] Fetch error:", error.message);
       likesCache[towerId] = 0;
       return 0;
     }
 
-    const count = data ? data.count : 0;
+    const count = data ? data.length : 0;
     likesCache[towerId] = count;
     return count;
   } catch (e) {
@@ -156,26 +156,38 @@ async function sendLike(towerId, liked) {
   try {
     if (liked) {
       // Dodaj like
-      await sbClient
+      const { error } = await sbClient
         .from("tower_likes_users")
         .upsert({ tower_id: towerId, user_id: userId }, { onConflict: "tower_id,user_id" });
+      if (error) {
+        console.warn("[Likes] Upsert error:", error.message, error);
+        return likesCache[towerId] || 0;
+      }
     } else {
       // Usuń like
-      await sbClient
+      const { error } = await sbClient
         .from("tower_likes_users")
         .delete()
         .eq("tower_id", towerId)
         .eq("user_id", userId);
+      if (error) {
+        console.warn("[Likes] Delete error:", error.message, error);
+        return likesCache[towerId] || 0;
+      }
     }
 
     // Pobierz zaktualizowany count
     const { data, error } = await sbClient
-      .from("tower_likes")
-      .select("count")
-      .eq("tower_id", towerId)
-      .single();
+      .from("tower_likes_users")
+      .select("user_id")
+      .eq("tower_id", towerId);
 
-    const count = data ? data.count : 0;
+    if (error) {
+      console.warn("[Likes] Count error:", error.message);
+      return likesCache[towerId] || 0;
+    }
+
+    const count = data ? data.length : 0;
     likesCache[towerId] = count;
     return count;
   } catch (e) {
@@ -219,9 +231,6 @@ function buildLikeButton(level) {
     // Optymistyczna aktualizacja UI
     const currentCount = parseInt($btn.find(".like-count").text()) || 0;
     const newCount = newLiked ? currentCount + 1 : Math.max(0, currentCount - 1);
-
-    $btn.addClass("animating");
-    setTimeout(function() { $btn.removeClass("animating"); }, 400);
 
     updateLikeButton($btn, newCount, newLiked);
     setLiked(towerId, newLiked);
