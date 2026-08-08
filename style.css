@@ -289,7 +289,7 @@ main {
 
 .list-head {
   display: grid;
-  grid-template-columns: 64px 1fr 180px 180px 40px;
+  grid-template-columns: 64px 1fr 180px 180px 100px 40px;
   align-items: center;
   padding: 12px 20px;
   font-family: var(--font-mono);
@@ -322,7 +322,7 @@ main {
 .row-main {
   width: 100%;
   display: grid;
-  grid-template-columns: 64px 1fr 180px 180px 40px;
+  grid-template-columns: 64px 1fr 180px 180px 100px 40px;
   align-items: center;
   gap: 8px;
   padding: 14px 20px;
@@ -762,7 +762,7 @@ main {
   main { padding: 0 18px 60px; }
 
   .list-head { display: none; }
-  .row-main { grid-template-columns: 52px 1fr 24px; padding: 14px 16px; }
+  .row-main { grid-template-columns: 52px 1fr 80px 24px; padding: 14px 16px; }
   .row-difficulty { display: none; }
   .row-creator { display: none; }
   .row-rank { padding-left: 8px; font-size: 13px; }
@@ -806,3 +806,72 @@ main {
 .level-row:nth-child(18) { animation-delay: 510ms; }
 .level-row:nth-child(19) { animation-delay: 540ms; }
 .level-row:nth-child(20) { animation-delay: 570ms; }
+
+/* ===== LIKE BUTTON ===== */
+.like-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 180ms ease;
+  user-select: none;
+}
+
+.like-btn:hover {
+  border-color: #ff6b8a;
+  color: #ff6b8a;
+  background: rgba(255,107,138,0.08);
+}
+
+.like-btn.liked {
+  background: rgba(255,107,138,0.15);
+  border-color: #ff6b8a;
+  color: #ff6b8a;
+}
+
+.like-btn.liked:hover {
+  background: rgba(255,107,138,0.25);
+}
+
+.like-btn .like-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.like-btn.liked .like-icon {
+  transform: scale(1.15);
+}
+
+.like-btn .like-count {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.like-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* Like animation */
+@keyframes likeBounce {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.4); }
+  60% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+.like-btn.animating .like-icon {
+  animation: likeBounce 400ms ease;
+}
