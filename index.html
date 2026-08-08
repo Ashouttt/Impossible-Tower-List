@@ -22,13 +22,15 @@
 <meta name="twitter:description" content="Unverified Towers list.">
 <meta name="twitter:image" content="https://cdn.discordapp.com/attachments/1436997331454267443/1533182105419251902/image.png?ex=6a6f8e9b&is=6a6e3d1b&hm=d37f2b54ca3c12ad294aae73a156fef20c7b0dc7e2476f04518d1a3aa3c78637&">
 
-<title>Ashout‘s Impossible Towers List</title>
+<title>Ashout's Impossible Towers List</title>
 <meta name="description" content="Unverified Towers list.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <base target="_blank">
 <base target="_blank">
 </head>
@@ -36,7 +38,7 @@
 <header class="site-header" id="siteHeader">
   <div class="header-inner">
     <div class="header-brand">
-      <h1>Ashout‘s Impossible Towers List</h1>
+      <h1>Ashout's Impossible Towers List</h1>
     </div>
     <div class="header-meta">
       <div class="meta-pill">
@@ -73,6 +75,7 @@
       <span class="col-name">Tower</span>
       <span class="col-difficulty">Difficulty</span>
       <span class="col-creator">Creator</span>
+      <span class="col-likes">Likes</span>
       <span class="col-chevron"></span>
     </div>
     <ol class="level-list" id="levelList"></ol>
