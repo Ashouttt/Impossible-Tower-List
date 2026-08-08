@@ -1,25 +1,19 @@
 /* =========================================================
    IMPOSSIBLE TOWER LIST — script.js (jQuery + Supabase version)
-   Cache-bust: v4-supabase-likes
+   Cache-bust: v5-fixed
    ========================================================= */
 
 /* =========================================================
-   KONFIGURACJA SUPABASE — ZMIEN TUTAJ SWOJE DANE
+   KONFIGURACJA SUPABASE
    ========================================================= */
 
-// 1. Wejdź na https://supabase.com i załóż darmowe konto
-// 2. Stwórz nowy project
-// 3. Przejdź do Project Settings → API
-// 4. Skopiuj URL i anon/public key
-// 5. W SQL Editor wklej kod z pliku schema.sql i kliknij Run
-// 6. Wklej poniżej swoje dane:
-
-const SUPABASE_URL = "https://tpvtcnjvndsabtvsgsqo.supabase.co";      // <-- ZMIEŃ TO!
+const SUPABASE_URL = "https://tpvtcnjvndsabtvsgsqo.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwdnRjbmp2bmRzYWJ0dnNnc3FvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxNTA5MjksImV4cCI6MjEwMTcyNjkyOX0.CMMOnMYpZPF5gBfGTEeVdZ3WMq0mgG983Bt0juLnNwU";
 
-let supabase = null;
-if (typeof window.supabase !== "undefined" && SUPABASE_URL.includes("supabase.co")) {
-  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// Inicjalizacja klienta Supabase (używamy innej nazwy zmiennej aby uniknąć konfliktu z window.supabase)
+let sbClient = null;
+if (typeof window.supabase !== "undefined") {
+  sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 }
 
 const TIERS = [
@@ -126,12 +120,12 @@ async function fetchLikeCount(towerId) {
   if (likesCache[towerId] !== undefined) {
     return likesCache[towerId];
   }
-  if (!supabase) {
+  if (!sbClient) {
     likesCache[towerId] = 0;
     return 0;
   }
   try {
-    const { data, error } = await supabase
+    const { data, error } = await sbClient
       .from("tower_likes")
       .select("count")
       .eq("tower_id", towerId)
@@ -155,19 +149,19 @@ async function fetchLikeCount(towerId) {
 
 // Wysyła like/unlike do Supabase
 async function sendLike(towerId, liked) {
-  if (!supabase) return likesCache[towerId] || 0;
+  if (!sbClient) return likesCache[towerId] || 0;
 
   const userId = getUserId();
 
   try {
     if (liked) {
       // Dodaj like
-      await supabase
+      await sbClient
         .from("tower_likes_users")
         .upsert({ tower_id: towerId, user_id: userId }, { onConflict: "tower_id,user_id" });
     } else {
       // Usuń like
-      await supabase
+      await sbClient
         .from("tower_likes_users")
         .delete()
         .eq("tower_id", towerId)
@@ -175,7 +169,7 @@ async function sendLike(towerId, liked) {
     }
 
     // Pobierz zaktualizowany count
-    const { data, error } = await supabase
+    const { data, error } = await sbClient
       .from("tower_likes")
       .select("count")
       .eq("tower_id", towerId)
