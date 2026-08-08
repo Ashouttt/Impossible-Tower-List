@@ -115,7 +115,7 @@ function setLiked(towerId, liked) {
   }
 }
 
-// Pobiera liczbę lików z Supabase
+// Pobiera liczbę lików z Supabase (z tabeli tower_likes)
 async function fetchLikeCount(towerId) {
   if (likesCache[towerId] !== undefined) {
     return likesCache[towerId];
@@ -125,19 +125,25 @@ async function fetchLikeCount(towerId) {
     return 0;
   }
   try {
-    // Pobierz wszystkie wiersze i policz je (bardziej niezawodne)
+    // Czytamy z tower_likes (tam trigger zapisuje count)
     const { data, error } = await sbClient
-      .from("tower_likes_users")
-      .select("user_id")
-      .eq("tower_id", towerId);
+      .from("tower_likes")
+      .select("count")
+      .eq("tower_id", towerId)
+      .single();
 
     if (error) {
+      // Jeśli brak wiersza (PGRST116), to znaczy że nikt jeszcze nie polubił
+      if (error.code === "PGRST116") {
+        likesCache[towerId] = 0;
+        return 0;
+      }
       console.warn("[Likes] Fetch error:", error.message);
       likesCache[towerId] = 0;
       return 0;
     }
 
-    const count = data ? data.length : 0;
+    const count = data ? (data.count || 0) : 0;
     likesCache[towerId] = count;
     return count;
   } catch (e) {
@@ -161,7 +167,7 @@ async function sendLike(towerId, liked) {
         .upsert({ tower_id: towerId, user_id: userId }, { onConflict: "tower_id,user_id" });
       if (error) {
         console.warn("[Likes] Upsert error:", error.message, error);
-        return likesCache[towerId] || 0;
+        return null; // null = błąd, nie zmieniaj UI
       }
     } else {
       // Usuń like
@@ -172,22 +178,29 @@ async function sendLike(towerId, liked) {
         .eq("user_id", userId);
       if (error) {
         console.warn("[Likes] Delete error:", error.message, error);
-        return likesCache[towerId] || 0;
+        return null; // null = błąd, nie zmieniaj UI
       }
     }
 
-    // Pobierz zaktualizowany count
+    // Poczekaj chwilę na trigger (50ms) i pobierz count z tower_likes
+    await new Promise(r => setTimeout(r, 100));
+
     const { data, error } = await sbClient
-      .from("tower_likes_users")
-      .select("user_id")
-      .eq("tower_id", towerId);
+      .from("tower_likes")
+      .select("count")
+      .eq("tower_id", towerId)
+      .single();
 
     if (error) {
+      if (error.code === "PGRST116") {
+        likesCache[towerId] = 0;
+        return 0;
+      }
       console.warn("[Likes] Count error:", error.message);
       return likesCache[towerId] || 0;
     }
 
-    const count = data ? data.length : 0;
+    const count = data ? (data.count || 0) : 0;
     likesCache[towerId] = count;
     return count;
   } catch (e) {
@@ -238,7 +251,10 @@ function buildLikeButton(level) {
 
     // Wyślij do API
     sendLike(towerId, newLiked).then(function(serverCount) {
-      updateLikeButton($btn, serverCount, newLiked);
+      if (serverCount !== null) {
+        updateLikeButton($btn, serverCount, newLiked);
+      }
+      // Jeśli null (błąd), zostawiamy optymistyczny stan
     }).catch(function() {
       // Rollback w razie błędu
       updateLikeButton($btn, currentCount, currentlyLiked);
