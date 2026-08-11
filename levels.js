@@ -245,7 +245,7 @@ const LEVELS = [
   },
   {
     rank: 23,
-    name: "Tower of Diabolical Strategem",
+    name: "Tower of Dead Grandma 2",
     creator: "ZachTheTrxhard, JohnTheTrxhard, Senztrix",
     verifier: "",
     difficulty: "Low-Mid Nil",
