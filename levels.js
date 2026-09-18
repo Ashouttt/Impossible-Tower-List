@@ -47,7 +47,7 @@ const LEVELS = [
     difficulty: "Mid-High Error",
     videoId: "B0VpzdvwrC0",
     worldRecord: "N/A",
-    quality: "S+",
+    quality: "SS+",
     robloxLink: "https://www.roblox.com/games/99982773118045/Tower-of-Jungle-Gyms-The-Big-Climb#ropro-quick-search",
   },
   {
