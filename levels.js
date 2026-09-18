@@ -36,7 +36,7 @@ const LEVELS = [
     difficulty: "High Error",
     videoId: "nJ57W9aWwD0",
     worldRecord: "N/A",
-    quality: "SS",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/101044284168858/Tower-of-Safe-White-Tower",
   },
   {
@@ -47,7 +47,7 @@ const LEVELS = [
     difficulty: "Mid-High Error",
     videoId: "B0VpzdvwrC0",
     worldRecord: "N/A",
-    quality: "S",
+    quality: "SS+",
     robloxLink: "https://www.roblox.com/games/99982773118045/Tower-of-Jungle-Gyms-The-Big-Climb#ropro-quick-search",
   },
   {
@@ -80,7 +80,7 @@ const LEVELS = [
     difficulty: "Low-Mid Error",
     videoId: "",
     worldRecord: "N/A",
-    quality: "N/A",
+    quality: "F",
     robloxLink: "https://www.roblox.com/games/119994535255674/Tower-of-Tedious-Timings",
   },
   {
@@ -91,7 +91,7 @@ const LEVELS = [
     difficulty: "Baseline Error",
     videoId: "U1nDh0HO9A4",
     worldRecord: "N/A",
-    quality: "N/A",
+    quality: "D+",
     robloxLink: "https://www.roblox.com/games/130670383361152/Not-Even-Playable-Gameplay",
   },
 
@@ -116,7 +116,7 @@ const LEVELS = [
     difficulty: "Peak Nil",
     videoId: "bJPgQlqkQxI",
     worldRecord: "Floor 7",
-    quality: "N/A",
+    quality: "A-",
     robloxLink: "https://www.roblox.com/games/4597361034/Citadel-of-Void-OFFICIAL",
   },
   {
@@ -195,7 +195,7 @@ const LEVELS = [
     difficulty: "High-Peak Nil",
     videoId: "EO_kYW30LCg",
     worldRecord: "N/A",
-    quality: "N/A",
+    quality: "B",
     robloxLink: "https://www.roblox.com/games/89993867711798/Tower-of-Ziggle-Core",
   },
 
@@ -219,7 +219,7 @@ const LEVELS = [
     difficulty: "High Nil",
     videoId: "F1ycaZp-txs",
     worldRecord: "N/A",
-    quality: "N/A",
+    quality: "B+",
     robloxLink: "",
   },
   {
@@ -276,7 +276,7 @@ const LEVELS = [
     difficulty: "Mid-High Nil",
     videoId: "heTlDt2DhLM",
     worldRecord: "N/A",
-    quality: "N/A",
+    quality: "A-",
     robloxLink: "",
   },
   {
