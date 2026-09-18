@@ -1,18 +1,17 @@
 /* =========================================================
-   IMPOSSIBLE TOWER LIST — chat.js
+   IMPOSSIBLE TOWER LIST — chat.js  (v2)
    Live chat for everyone on the page.
 
-   - Messages are delivered in real time with Supabase Realtime
-     (Broadcast) — works out of the box, no SQL needed.
-   - "Online" counter uses Supabase Presence.
-   - OPTIONAL: create the `chat_messages` table (SQL is in the
-     comment at the bottom) and new visitors will also see the
-     last 50 messages. Without the table the chat still works,
-     it just starts empty for every new visitor.
-   - The nickname lives only in memory (a JS variable), so it is
-     gone after a page refresh — as requested.
+   - Real-time messages: Supabase Realtime (Broadcast) —
+     works out of the box, no SQL needed.
+   - "Online" counter: Supabase Presence.
+   - OPTIONAL: create the `chat_messages` table (SQL at the
+     bottom of this file) and new visitors will also see the
+     last 50 messages.
+   - The nickname lives only in memory (a JS variable), so it
+     is gone after a page refresh.
 
-   Loaded AFTER script.js (uses the global `sbClient`).
+   Must be loaded AFTER script.js (uses the global `sbClient`).
    ========================================================= */
 
 (function () {
@@ -24,29 +23,29 @@
   const MAX_HISTORY  = 50;
   const MAX_DOM      = 200;    // max messages kept in the DOM
   const COOLDOWN_MS  = 1000;   // min. delay between your messages
-  const GROUP_MS     = 120000; // group messages from the same person within 2 min
-  const DOCK_MQ      = window.matchMedia("(min-width: 1280px)");
+  const GROUP_MS     = 120000; // group messages from one person within 2 min
+  const DOCK_MQ      = window.matchMedia("(min-width: 1024px)"); // same as chat.css
 
   /* ---------- DOM ---------- */
   const $ = (id) => document.getElementById(id);
-  const panel     = $("chatPanel");
-  const messages  = $("chatMessages");
-  const empty     = $("chatEmpty");
-  const newMsgBtn = $("chatNewMsg");
-  const input     = $("chatInput");
-  const sendBtn   = $("chatSend");
-  const hint      = $("chatHint");
-  const dot       = $("chatDot");
-  const onlineNum = $("chatOnlineNum");
-  const onlineBox = $("chatOnline");
-  const toggleBtn = $("chatToggle");
-  const closeBtn  = $("chatClose");
-  const backdrop  = $("chatBackdrop");
-  const badge     = $("chatBadge");
-  const modal     = $("nickModal");
-  const nickForm  = $("nickForm");
-  const nickInput = $("nickInput");
-  const nickError = $("nickError");
+  const panel      = $("chatPanel");
+  const messages   = $("chatMessages");
+  const empty      = $("chatEmpty");
+  const newMsgBtn  = $("chatNewMsg");
+  const input      = $("chatInput");
+  const sendBtn    = $("chatSend");
+  const hint       = $("chatHint");
+  const dot        = $("chatDot");
+  const onlineNum  = $("chatOnlineNum");
+  const onlineBox  = $("chatOnline");
+  const toggleBtn  = $("chatToggle");
+  const closeBtn   = $("chatClose");
+  const backdrop   = $("chatBackdrop");
+  const badge      = $("chatBadge");
+  const modal      = $("nickModal");
+  const nickForm   = $("nickForm");
+  const nickInput  = $("nickInput");
+  const nickError  = $("nickError");
   const nickCancel = $("nickCancel");
 
   if (!panel) return;
@@ -72,10 +71,10 @@
     });
   }
 
-  function nickColor(name) {
+  function hueOf(name) {
     let h = 0;
     for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
-    return "hsl(" + (h % 360) + " 75% 70%)";
+    return h % 360;
   }
 
   function fmtTime(ts) {
@@ -161,9 +160,27 @@
     lastMsg = { nick: m.nick, cid: m.cid, ts: m.ts };
 
     const wasNearBottom = nearBottom();
+    const hue = hueOf(m.nick);
 
     const el = document.createElement("div");
     el.className = "chat-msg" + (mine ? " mine" : "") + (cont ? " cont" : "") + (opts.history ? " no-anim" : "");
+
+    // left column: avatar (first message of a group) or hover-time (following ones)
+    if (cont) {
+      const g = document.createElement("span");
+      g.className = "chat-gutter";
+      g.textContent = fmtTime(m.ts);
+      el.appendChild(g);
+    } else {
+      const av = document.createElement("div");
+      av.className = "chat-avatar";
+      av.style.background = "hsl(" + hue + " 70% 66%)";
+      av.textContent = Array.from(m.nick)[0].toUpperCase();
+      el.appendChild(av);
+    }
+
+    const main = document.createElement("div");
+    main.className = "chat-msg-main";
 
     if (!cont) {
       const head = document.createElement("div");
@@ -172,7 +189,7 @@
       const n = document.createElement("span");
       n.className = "chat-nick";
       n.textContent = m.nick;
-      n.style.color = nickColor(m.nick);
+      n.style.color = "hsl(" + hue + " 75% 72%)";
 
       const t = document.createElement("span");
       t.className = "chat-time";
@@ -180,14 +197,15 @@
 
       head.appendChild(n);
       head.appendChild(t);
-      el.appendChild(head);
+      main.appendChild(head);
     }
 
     const text = document.createElement("div");
     text.className = "chat-text";
     text.textContent = m.text;
-    el.appendChild(text);
+    main.appendChild(text);
 
+    el.appendChild(main);
     messages.appendChild(el);
 
     while (messages.children.length > MAX_DOM) messages.removeChild(messages.firstChild);
@@ -219,7 +237,7 @@
       cid: String(p.cid || "").slice(0, 64),
       nick: n,
       text: t,
-      ts: Date.now() // use the receiver's clock (no clock-skew issues)
+      ts: Date.now() // receiver's clock (no clock-skew issues)
     };
   }
 
@@ -312,13 +330,17 @@
       });
   }
 
-  /* ---------- Nickname modal ---------- */
+  /* ---------- Nickname popup ---------- */
   function openNickModal() {
     nickError.textContent = "";
     nickInput.classList.remove("invalid");
-    nickInput.value = "";
+    // pre-filled suggestion, selected — just type over it, or press Enter to keep it
+    nickInput.value = "Guest" + (1000 + Math.floor(Math.random() * 9000));
     modal.classList.add("open");
-    setTimeout(function () { nickInput.focus(); }, 30);
+    setTimeout(function () {
+      nickInput.focus();
+      nickInput.select();
+    }, 30);
   }
 
   function closeNickModal() {
@@ -395,7 +417,7 @@
   });
 
   /* ---------- Input events ---------- */
-  // Clicking (focusing) the message box without a nickname opens the popup
+  // Clicking the message box without a nickname opens the popup
   input.addEventListener("focus", function () {
     if (!nick) {
       input.blur();
