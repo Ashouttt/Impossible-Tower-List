@@ -105,7 +105,11 @@
 
   <div class="chat-body">
     <div class="chat-messages" id="chatMessages" role="log" aria-live="polite" aria-label="Chat messages"></div>
-    <p class="chat-empty" id="chatEmpty">No messages yet.<br>Be the first to say something.</p>
+    <div class="chat-empty" id="chatEmpty">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <strong>No messages yet</strong>
+      <span>Click the box below, pick a nickname and say hi.</span>
+    </div>
     <button type="button" class="chat-newmsg" id="chatNewMsg" hidden>New messages ↓</button>
   </div>
 
