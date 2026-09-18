@@ -1022,4 +1022,10 @@ main {
 .level-row.shiny-gold[data-diff="error"] .row-main::before {
   background: var(--diff-error) !important;
   animation: none !important;
+  width: 3px !important; /* równa szerokość z innymi */
+}
+
+/* Poprawka: złota ramka nie wychodzi poza lewy pasek */
+.level-row.shiny-gold .row-main {
+  border-left: none !important; /* usuwa lewą krawędź złotej ramki */
 }
