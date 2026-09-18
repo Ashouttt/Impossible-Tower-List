@@ -1,6 +1,6 @@
 /* =========================================================
    IMPOSSIBLE TOWER LIST — script.js (jQuery + Supabase version)
-   Cache-bust: v6-error-fix
+   Cache-bust: v7-quality-system
    ========================================================= */
 
 /* =========================================================
@@ -10,7 +10,7 @@
 const SUPABASE_URL = "https://tpvtcnjvndsabtvsgsqo.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwdnRjbmp2bmRzYWJ0dnNnc3FvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxNTA5MjksImV4cCI6MjEwMTcyNjkyOX0.CMMOnMYpZPF5gBfGTEeVdZ3WMq0mgG983Bt0juLnNwU";
 
-// Inicjalizacja klienta Supabase (używamy innej nazwy zmiennej aby uniknąć konfliktu z window.supabase)
+// Inicjalizacja klienta Supabase
 let sbClient = null;
 if (typeof window.supabase !== "undefined") {
   sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -50,7 +50,6 @@ function parseDifficulty(raw) {
   const str = String(raw).trim();
   const lowered = str.toLowerCase();
   
-  // Rozszerzone dopasowanie prefiksów
   const prefixMatch = lowered.match(/^(low-mid|mid-high|bottom-low|baseline|bottom|low|mid|high-peak|high|peak|base|skyline)(?:\s+|-)/);
   
   let prefix = "";
@@ -89,6 +88,24 @@ function difficultyIcon(parsed) {
   return "";
 }
 
+// Funkcja do określenia klasy quality dla animacji
+function getQualityClass(quality) {
+  if (!quality) return "";
+  const q = quality.trim().toUpperCase();
+  
+  // SS+, SS, SS- → gold
+  if (q === "SS+" || q === "SS" || q === "SS-") return "quality-gold";
+  
+  // S+, S, S- → silver
+  if (q === "S+" || q === "S" || q === "S-") return "quality-silver";
+  
+  // A+, A, A- → bronze
+  if (q === "A+" || q === "A" || q === "A-") return "quality-bronze";
+  
+  // Wszystkie inne → brak specjalnej klasy (szare)
+  return "";
+}
+
 let visibleCount = PAGE_SIZE;
 let activeTierId = "all";
 let query = "";
@@ -96,80 +113,51 @@ let query = "";
 const CHEVRON_SVG = '<svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
 
 /* =========================================================
-   SYSTEM LIKÓW — Supabase (działa z GitHub Pages!)
+   SYSTEM LIKÓW — Supabase
    ========================================================= */
 
-// Cache lokalny
 const likesCache = {};
 
-// Generuje fingerprint-based ID użytkownika (przetrwa wyczyszczenie cache)
 function getUserId() {
-  // Sprawdź czy mamy już obliczony fingerprint
   let fp = localStorage.getItem("tower_fp_id");
   if (fp) return fp;
-
-  // Oblicz fingerprint z danych przeglądarki
   fp = generateFingerprint();
   localStorage.setItem("tower_fp_id", fp);
   return fp;
 }
 
-// Generuje semi-unikalny fingerprint urządzenia/przeglądarki
 function generateFingerprint() {
   const components = [];
-
-  // User agent
   components.push(navigator.userAgent);
-
-  // Język
   components.push(navigator.language || navigator.userLanguage);
-
-  // Rozdzielczość ekranu
   components.push(screen.width + "x" + screen.height + "x" + screen.colorDepth);
-
-  // Strefa czasowa
   components.push(Intl.DateTimeFormat().resolvedOptions().timeZone);
-
-  // Platforma
   components.push(navigator.platform);
-
-  // Liczba rdzeni CPU
   components.push(navigator.hardwareConcurrency || "unknown");
-
-  // Pamięć RAM (jeśli dostępna)
   components.push(navigator.deviceMemory || "unknown");
-
-  // Touch support
   components.push("ontouchstart" in window ? "touch" : "no-touch");
 
-  // Canvas fingerprint
   try {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
     canvas.width = 200;
     canvas.height = 50;
-
-    // Tekst
     ctx.textBaseline = "top";
     ctx.font = "14px Arial";
     ctx.fillStyle = "#f60";
     ctx.fillRect(10, 10, 50, 20);
     ctx.fillStyle = "#069";
     ctx.fillText("Tower Likes FP v1", 10, 30);
-
-    // Linie
     ctx.strokeStyle = "#c00";
     ctx.beginPath();
     ctx.moveTo(100, 10);
     ctx.lineTo(150, 40);
     ctx.stroke();
-
     components.push(canvas.toDataURL().slice(-50));
   } catch (e) {
     components.push("no-canvas");
   }
 
-  // WebGL vendor/renderer
   try {
     const gl = document.createElement("canvas").getContext("webgl");
     if (gl) {
@@ -183,7 +171,6 @@ function generateFingerprint() {
     components.push("no-webgl");
   }
 
-  // Plugins
   if (navigator.plugins) {
     const plugins = [];
     for (let i = 0; i < navigator.plugins.length; i++) {
@@ -192,12 +179,10 @@ function generateFingerprint() {
     components.push(plugins.join(","));
   }
 
-  // Hash wszystkich komponentów
   const raw = components.join("||");
   return "fp_" + cyrb53(raw).toString(36);
 }
 
-// Szybki hash funkcja (cyrb53)
 function cyrb53(str) {
   let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
   for (let i = 0; i < str.length; i++) {
@@ -210,12 +195,10 @@ function cyrb53(str) {
   return 4294967296 * (2097151 & h2) + (h1 >>> 0);
 }
 
-// Sprawdza czy użytkownik polubił dany tower
 function hasLiked(towerId) {
   return localStorage.getItem("liked_" + towerId) === "true";
 }
 
-// Zapisuje stan polubienia
 function setLiked(towerId, liked) {
   if (liked) {
     localStorage.setItem("liked_" + towerId, "true");
@@ -224,7 +207,6 @@ function setLiked(towerId, liked) {
   }
 }
 
-// Pobiera liczbę lików z Supabase (z tabeli tower_likes)
 async function fetchLikeCount(towerId) {
   if (likesCache[towerId] !== undefined) {
     return likesCache[towerId];
@@ -234,7 +216,6 @@ async function fetchLikeCount(towerId) {
     return 0;
   }
   try {
-    // Czytamy z tower_likes (tam trigger zapisuje count)
     const { data, error } = await sbClient
       .from("tower_likes")
       .select("count")
@@ -242,7 +223,6 @@ async function fetchLikeCount(towerId) {
       .single();
 
     if (error) {
-      // Jeśli brak wiersza (PGRST116), to znaczy że nikt jeszcze nie polubił
       if (error.code === "PGRST116") {
         likesCache[towerId] = 0;
         return 0;
@@ -262,7 +242,6 @@ async function fetchLikeCount(towerId) {
   }
 }
 
-// Wysyła like/unlike do Supabase
 async function sendLike(towerId, liked) {
   if (!sbClient) return likesCache[towerId] || 0;
 
@@ -270,16 +249,14 @@ async function sendLike(towerId, liked) {
 
   try {
     if (liked) {
-      // Dodaj like
       const { error } = await sbClient
         .from("tower_likes_users")
         .upsert({ tower_id: towerId, user_id: userId }, { onConflict: "tower_id,user_id" });
       if (error) {
         console.warn("[Likes] Upsert error:", error.message, error);
-        return null; // null = błąd, nie zmieniaj UI
+        return null;
       }
     } else {
-      // Usuń like
       const { error } = await sbClient
         .from("tower_likes_users")
         .delete()
@@ -287,11 +264,10 @@ async function sendLike(towerId, liked) {
         .eq("user_id", userId);
       if (error) {
         console.warn("[Likes] Delete error:", error.message, error);
-        return null; // null = błąd, nie zmieniaj UI
+        return null;
       }
     }
 
-    // Poczekaj chwilę na trigger (50ms) i pobierz count z tower_likes
     await new Promise(r => setTimeout(r, 100));
 
     const { data, error } = await sbClient
@@ -318,7 +294,6 @@ async function sendLike(towerId, liked) {
   }
 }
 
-// Aktualizuje wygląd przycisku like
 function updateLikeButton($btn, count, liked) {
   $btn.toggleClass("liked", liked);
   $btn.find(".like-icon").html(liked ? ICON_HEART_FILLED : ICON_HEART_EMPTY);
@@ -326,7 +301,6 @@ function updateLikeButton($btn, count, liked) {
   $btn.prop("disabled", false);
 }
 
-// Tworzy przycisk like dla wiersza
 function buildLikeButton(level) {
   const towerId = "tower_" + level.rank;
   const liked = hasLiked(towerId);
@@ -338,7 +312,6 @@ function buildLikeButton(level) {
     .attr("data-tower", towerId)
     .html(icon + '<span class="like-count">—</span>');
 
-  // Pobierz aktualny count z API
   fetchLikeCount(towerId).then(function(count) {
     $btn.find(".like-count").text(count);
   });
@@ -350,7 +323,6 @@ function buildLikeButton(level) {
     const currentlyLiked = hasLiked(towerId);
     const newLiked = !currentlyLiked;
 
-    // Optymistyczna aktualizacja UI
     const currentCount = parseInt($btn.find(".like-count").text()) || 0;
     const newCount = newLiked ? currentCount + 1 : Math.max(0, currentCount - 1);
 
@@ -358,14 +330,11 @@ function buildLikeButton(level) {
     setLiked(towerId, newLiked);
     $btn.prop("disabled", true);
 
-    // Wyślij do API
     sendLike(towerId, newLiked).then(function(serverCount) {
       if (serverCount !== null) {
         updateLikeButton($btn, serverCount, newLiked);
       }
-      // Jeśli null (błąd), zostawiamy optymistyczny stan
     }).catch(function() {
-      // Rollback w razie błędu
       updateLikeButton($btn, currentCount, currentlyLiked);
       setLiked(towerId, currentlyLiked);
     });
@@ -430,9 +399,15 @@ function buildRow(level, index) {
     .attr("data-diff", diffClass || "none")
     .css("animationDelay", Math.min(index, 19) * 30 + "ms");
 
-  // Special effects (e.g., shiny-gold)
+  // Special effects (shiny-gold)
   if (level.special) {
     $li.addClass(level.special);
+  }
+
+  // Quality-based animation (SS+/SS/SS- = gold, S+/S/S- = silver, A+/A/A- = bronze)
+  const qualityClass = getQualityClass(level.quality);
+  if (qualityClass) {
+    $li.addClass(qualityClass);
   }
 
   const $likeBtn = buildLikeButton(level);
@@ -443,11 +418,9 @@ function buildRow(level, index) {
     .attr("aria-expanded", "false")
     .html('<span class="row-rank">#' + rankStr + '</span><span class="row-name">' + escapeHtml(level.name || "Unnamed") + '</span>' + diffBadge + buildCreatorSummary(level.creator) + '<span class="col-likes-wrap"></span>' + CHEVRON_SVG);
 
-  // Wstaw przycisk like do dedykowanej kolumny
   $btn.find(".col-likes-wrap").append($likeBtn);
 
   $btn.on("click", function(e) {
-    // Nie rozwijaj jeśli kliknięto w przycisk like
     if ($(e.target).closest(".like-btn").length) return;
     toggleRow($li, level);
   });
@@ -502,6 +475,8 @@ function toggleRow($li, level) {
     const wrDisplay = level.worldRecord != null ? String(level.worldRecord) : "N/A";
     const verifierDisplay = (level.verifier || "").trim() || "—";
     const statusDisplay = verifierDisplay !== "—" ? "Verified" : "Unverified";
+    const qualityDisplay = (level.quality || "").trim() || "N/A";
+    const qualitySafeClass = qualityDisplay.toLowerCase().replace(/[^a-z0-9]/g, '');
     const robloxLink = (level.robloxLink || "").trim();
     const placeMarkup = robloxLink
       ? '<a href="' + escapeHtml(robloxLink) + '" class="place-link" target="_blank" rel="noopener">' + ICON_ROBLOX + '<span>Play this tower ↗</span></a>'
@@ -509,7 +484,7 @@ function toggleRow($li, level) {
 
     $detail = $("<div>")
       .addClass("row-detail")
-      .html('<div class="detail-video">' + videoMarkup + '</div><div class="detail-side"><dl class="detail-meta"><div class="meta-item"><dt>Creator</dt><dd>' + escapeHtml(level.creator || "—") + '</dd></div><div class="meta-item"><dt>Verifier</dt><dd>' + escapeHtml(verifierDisplay) + '</dd></div><div class="meta-item"><dt>Difficulty</dt><dd>' + escapeHtml(diffDisplay) + '</dd></div><div class="meta-item"><dt>World Record</dt><dd>' + escapeHtml(wrDisplay) + '</dd></div><div class="meta-item"><dt>Status</dt><dd>' + escapeHtml(statusDisplay) + '</dd></div></dl>' + placeMarkup + '</div>');
+      .html('<div class="detail-video">' + videoMarkup + '</div><div class="detail-side"><dl class="detail-meta"><div class="meta-item"><dt>Creator</dt><dd>' + escapeHtml(level.creator || "—") + '</dd></div><div class="meta-item"><dt>Verifier</dt><dd>' + escapeHtml(verifierDisplay) + '</dd></div><div class="meta-item"><dt>Difficulty</dt><dd>' + escapeHtml(diffDisplay) + '</dd></div><div class="meta-item"><dt>World Record</dt><dd>' + escapeHtml(wrDisplay) + '</dd></div><div class="meta-item"><dt>Quality</dt><dd class="quality-badge quality-' + qualitySafeClass + '">' + escapeHtml(qualityDisplay) + '</dd></div><div class="meta-item"><dt>Status</dt><dd>' + escapeHtml(statusDisplay) + '</dd></div></dl>' + placeMarkup + '</div>');
 
     $li.append($detail);
   }
