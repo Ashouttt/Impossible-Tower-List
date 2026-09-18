@@ -12,7 +12,9 @@
      difficulty   (optional) — EToH-style difficulty
      videoId      (optional) — YouTube link OR 11-character video ID
      worldRecord  (optional) — best completion, e.g. "Floor 7", "N/A"
-     quality      (optional) — quality rating, e.g. "High", "Mid", "N/A"
+     quality      (optional) — quality rating: "SS+", "SS", "SS-", "S+", "S", "S-",
+                                "A+", "A", "A-", "B+", "B", "B-", etc. or "N/A"
+                                SS/S/A = gold/silver/bronze animation, rest = gray
      robloxLink   (optional) — link to the Roblox place where this
                                 tower is located, e.g.
                                 "https://www.roblox.com/games/XXXXXXXX/Place-Name"
@@ -106,56 +108,8 @@ const LEVELS = [
     robloxLink: "",
     special: "shiny-gold",
   },
-
-  // High-Peak Nil (ranks 8-11)
   {
     rank: 8,
-    name: "Tower of Collecting Dust Particles",
-    creator: "Lukaye_19",
-    verifier: "",
-    difficulty: "High-Peak Nil",
-    videoId: "l72CfV-I1_Y",
-    worldRecord: "N/A",
-    quality: "N/A",
-    robloxLink: "https://www.roblox.com/games/138794791429163/Tower-of-Collected-Dust-Particles",
-  },
-  {
-    rank: 9,
-    name: "Tower of Vague Luminescence",
-    creator: "glizzygladiattorrr, Adan3842, exhaustedsleepybear, SungazedUwU",
-    verifier: "",
-    difficulty: "High-Peak Nil",
-    videoId: "s5vJ6ha2Luo",
-    worldRecord: "N/A",
-    quality: "N/A",
-    robloxLink: "https://www.roblox.com/games/9024799067/Tower-of-Vague-Luminescence",
-  },
-  {
-    rank: 10,
-    name: "Tower of Parched and Exhausted",
-    creator: "aminul2007",
-    verifier: "",
-    difficulty: "High-Peak Nil",
-    videoId: "2nQ8j79hxLI",
-    worldRecord: "N/A",
-    quality: "N/A",
-    robloxLink: "https://www.roblox.com/games/133133185725636/Tower-of-Parched-and-Exhausted",
-  },
-  {
-    rank: 11,
-    name: "Tower of Ziggle Core",
-    creator: "헤리팍",
-    verifier: "",
-    difficulty: "High-Peak Nil",
-    videoId: "EO_kYW30LCg",
-    worldRecord: "N/A",
-    quality: "N/A",
-    robloxLink: "https://www.roblox.com/games/89993867711798/Tower-of-Ziggle-Core",
-  },
-
-  // Peak Nil (ranks 12-15)
-  {
-    rank: 12,
     name: "Citadel of Void",
     creator: "bLockerman666, Karinriine, IceNsalt, ciel_azulsky, Feodoric, tintom495, PPtTenshi, popop614, latomludo, macalads, Coatesultimate1, KittenLord420, nott_vy, Heksi",
     verifier: "",
@@ -166,7 +120,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/4597361034/Citadel-of-Void-OFFICIAL",
   },
   {
-    rank: 13,
+    rank: 9,
     name: "Tower of Very Fun Obstacles",
     creator: "NoobsTheBestGuys, XxRed1ScorpionxX",
     verifier: "",
@@ -177,7 +131,7 @@ const LEVELS = [
     robloxLink: "",
   },
   {
-    rank: 14,
+    rank: 10,
     name: "EVIL TOWER '76",
     creator: "tintom495",
     verifier: "",
@@ -188,7 +142,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/17781078059/EVIL-TOWER-76",
   },
   {
-    rank: 15,
+    rank: 11,
     name: "Tower of Cruel Death",
     creator: "definetelynotTADEL",
     verifier: "",
@@ -197,6 +151,52 @@ const LEVELS = [
     worldRecord: "N/A",
     quality: "N/A",
     robloxLink: "https://www.roblox.com/games/123958186812706/Tower-of-Cruel-Death",
+  },
+
+  // High-Peak Nil
+  {
+    rank: 12,
+    name: "Tower of Collecting Dust Particles",
+    creator: "Lukaye_19",
+    verifier: "",
+    difficulty: "High-Peak Nil",
+    videoId: "l72CfV-I1_Y",
+    worldRecord: "N/A",
+    quality: "N/A",
+    robloxLink: "https://www.roblox.com/games/138794791429163/Tower-of-Collected-Dust-Particles",
+  },
+  {
+    rank: 13,
+    name: "Tower of Vague Luminescence",
+    creator: "glizzygladiattorrr, Adan3842, exhaustedsleepybear, SungazedUwU",
+    verifier: "",
+    difficulty: "High-Peak Nil",
+    videoId: "s5vJ6ha2Luo",
+    worldRecord: "N/A",
+    quality: "N/A",
+    robloxLink: "https://www.roblox.com/games/9024799067/Tower-of-Vague-Luminescence",
+  },
+  {
+    rank: 14,
+    name: "Tower of Parched and Exhausted",
+    creator: "aminul2007",
+    verifier: "",
+    difficulty: "High-Peak Nil",
+    videoId: "2nQ8j79hxLI",
+    worldRecord: "N/A",
+    quality: "N/A",
+    robloxLink: "https://www.roblox.com/games/133133185725636/Tower-of-Parched-and-Exhausted",
+  },
+  {
+    rank: 15,
+    name: "Tower of Ziggle Core",
+    creator: "헤리팍",
+    verifier: "",
+    difficulty: "High-Peak Nil",
+    videoId: "EO_kYW30LCg",
+    worldRecord: "N/A",
+    quality: "N/A",
+    robloxLink: "https://www.roblox.com/games/89993867711798/Tower-of-Ziggle-Core",
   },
 
   // High Nil
