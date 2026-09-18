@@ -30,7 +30,7 @@ const LEVELS = [
   // ========== ERROR DIFFICULTY ==========
   {
     rank: 1,
-    name: "skitsuna top 1",
+    name: "Tower of Safe White Tower",
     creator: "ju_silvestre",
     verifier: "",
     difficulty: "High Error",
@@ -584,7 +584,7 @@ const LEVELS = [
     verifier: "",
     difficulty: "Baseline Nil",
     videoId: "AceEID7TVKc",
-    worldRecord: "Floor 8",
+    worldRecord: "Floor 10",
     quality: "N/A",
     robloxLink: "https://www.roblox.com/games/125252864219980/Tower-of-The-Drive-Towards-Human-Limits",
   },
