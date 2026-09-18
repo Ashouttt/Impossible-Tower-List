@@ -9,7 +9,76 @@
 
 const SUPABASE_URL = "https://tpvtcnjvndsabtvsgsqo.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwdnRjbmp2bmRzYWJ0dnNnc3FvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxNTA5MjksImV4cCI6MjEwMTcyNjkyOX0.CMMOnMYpZPF5gBfGTEeVdZ3WMq0mgG983Bt0juLnNwU";
+/* =========================================================
+   USERNAME MODAL
+   ========================================================= */
 
+function checkAndShowUsernameModal() {
+  const savedUsername = localStorage.getItem("tower_username");
+  
+  if (!savedUsername) {
+    // Pokaż modal po krótkiej chwili (smooth)
+    setTimeout(() => {
+      $("#usernameModal").addClass("show");
+      $("#usernameInput").focus();
+    }, 300);
+  }
+}
+
+function saveUsername() {
+  const username = $("#usernameInput").val().trim();
+  
+  if (!username) {
+    // Shake animation jeśli puste
+    $("#usernameInput").css("border-color", "#ef4444");
+    $("#usernameInput")[0].animate([
+      { transform: 'translateX(0)' },
+      { transform: 'translateX(-10px)' },
+      { transform: 'translateX(10px)' },
+      { transform: 'translateX(-10px)' },
+      { transform: 'translateX(10px)' },
+      { transform: 'translateX(0)' }
+    ], {
+      duration: 400,
+      easing: 'ease-in-out'
+    });
+    
+    setTimeout(() => {
+      $("#usernameInput").css("border-color", "");
+    }, 1000);
+    
+    return;
+  }
+  
+  // Zapisz username
+  localStorage.setItem("tower_username", username);
+  
+  // Zamknij modal z animacją
+  $("#usernameModal").removeClass("show");
+  
+  console.log("Username saved:", username);
+}
+
+// Event listeners
+$(document).ready(function() {
+  // Pokaż modal jeśli brak username
+  checkAndShowUsernameModal();
+  
+  // Submit button
+  $("#usernameSubmit").on("click", saveUsername);
+  
+  // Enter key
+  $("#usernameInput").on("keypress", function(e) {
+    if (e.which === 13) { // Enter
+      saveUsername();
+    }
+  });
+  
+  // Reszta kodu...
+  setupControls();
+  setupStats();
+  render();
+});
 // Inicjalizacja klienta Supabase
 let sbClient = null;
 if (typeof window.supabase !== "undefined") {
