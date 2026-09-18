@@ -1017,3 +1017,9 @@ main {
 .level-row.shiny-gold .diff-badge.diff-error .diff-icon {
   filter: drop-shadow(0 0 5px rgba(204,34,34,0.5)) !important;
 }
+
+/* Shiny gold tower - lewy pasek czerwony (Error) zamiast złotego */
+.level-row.shiny-gold[data-diff="error"] .row-main::before {
+  background: var(--diff-error) !important;
+  animation: none !important;
+}
