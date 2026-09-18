@@ -196,7 +196,7 @@ function cyrb53(str) {
   }
   h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
   h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
-  return 4294967296 * (2097151 & h2) + (2097151 & h1);
+  return 4294967296 * (2097151 & h2) + (h1 >>> 0);
 }
 
 // Sprawdza czy użytkownik polubił dany tower
@@ -418,6 +418,11 @@ function buildRow(level, index) {
     .attr("data-tier", tier.id)
     .attr("data-diff", diffClass || "none")
     .css("animationDelay", Math.min(index, 19) * 30 + "ms");
+
+  // Special effects (e.g., shiny-gold)
+  if (level.special) {
+    $li.addClass(level.special);
+  }
 
   const $likeBtn = buildLikeButton(level);
 
