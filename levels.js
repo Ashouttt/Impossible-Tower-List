@@ -398,7 +398,7 @@ const LEVELS = [
     name: "Tower of Homent Bruh",
     creator: "Pathetism",
     verifier: "",
-    difficulty: "Higher-end Nil",
+    difficulty: "High Nil",
     videoId: "",
     worldRecord: "N/A",
     robloxLink: "https://www.roblox.com/games/95560998034174/Tower-of-Homent-Bruh",
