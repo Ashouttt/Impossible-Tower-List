@@ -104,7 +104,7 @@ const LEVELS = [
     difficulty: "Low Error",
     videoId: "",
     worldRecord: "N/A",
-    quality: "N/A",
+    quality: "D+",
     robloxLink: "",
     special: "shiny-gold",
   },
