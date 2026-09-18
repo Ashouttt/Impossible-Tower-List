@@ -82,9 +82,33 @@
     <button class="load-more" id="loadMoreBtn" hidden>Load more</button>
   </section>
 </main>
+
 <footer class="site-footer">
   <p>Impossible Tower List</p>
 </footer>
+
+<!-- USERNAME MODAL -->
+<div class="username-modal" id="usernameModal">
+  <div class="username-modal-content">
+    <div class="username-modal-header">
+      <h2>Welcome to AITL</h2>
+      <p>Enter your username to continue</p>
+    </div>
+    <div class="username-modal-body">
+      <input 
+        type="text" 
+        id="usernameInput" 
+        placeholder="Enter your username..." 
+        maxlength="20"
+        autocomplete="off"
+      >
+      <button class="username-modal-btn" id="usernameSubmit">
+        <span>OK</span>
+      </button>
+    </div>
+  </div>
+</div>
+
 <script src="levels.js"></script>
 <script src="script.js"></script>
 </body>
