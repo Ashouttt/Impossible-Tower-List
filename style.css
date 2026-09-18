@@ -944,7 +944,7 @@ main {
     #FFD700 0%,
     #FFA500 50%,
     #FFD700 100%
-  );
+  ) !important;
   width: 4px;
   animation: gold-border 2s ease-in-out infinite;
 }
@@ -963,7 +963,7 @@ main {
 }
 
 .level-row.shiny-gold .row-rank {
-  color: #FFD700;
+  color: #FFD700 !important;
   text-shadow: 0 0 10px rgba(255, 215, 0, 0.6),
                0 0 20px rgba(255, 215, 0, 0.4);
   font-weight: 900;
