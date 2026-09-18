@@ -47,7 +47,7 @@ const LEVELS = [
     difficulty: "Mid-High Error",
     videoId: "B0VpzdvwrC0",
     worldRecord: "N/A",
-    quality: "SS+",
+    quality: "S+",
     robloxLink: "https://www.roblox.com/games/99982773118045/Tower-of-Jungle-Gyms-The-Big-Climb#ropro-quick-search",
   },
   {
@@ -58,7 +58,7 @@ const LEVELS = [
     difficulty: "Mid-High Error",
     videoId: "",
     worldRecord: "N/A",
-    quality: "A",
+    quality: "B",
     robloxLink: "https://www.roblox.com/games/5684674542/Chaotic-Tower-R",
   },
   {
