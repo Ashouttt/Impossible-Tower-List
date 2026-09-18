@@ -36,7 +36,7 @@ const LEVELS = [
     difficulty: "High Error",
     videoId: "nJ57W9aWwD0",
     worldRecord: "N/A",
-    quality: "N/A",
+    quality: "SS",
     robloxLink: "https://www.roblox.com/games/101044284168858/Tower-of-Safe-White-Tower",
   },
   {
@@ -47,7 +47,7 @@ const LEVELS = [
     difficulty: "Mid-High Error",
     videoId: "B0VpzdvwrC0",
     worldRecord: "N/A",
-    quality: "N/A",
+    quality: "S",
     robloxLink: "https://www.roblox.com/games/99982773118045/Tower-of-Jungle-Gyms-The-Big-Climb#ropro-quick-search",
   },
   {
@@ -58,7 +58,7 @@ const LEVELS = [
     difficulty: "Mid-High Error",
     videoId: "",
     worldRecord: "N/A",
-    quality: "N/A",
+    quality: "A",
     robloxLink: "https://www.roblox.com/games/5684674542/Chaotic-Tower-R",
   },
   {
