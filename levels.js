@@ -146,7 +146,7 @@ const LEVELS = [
     name: "Tower of Collecting Dust Particles",
     creator: "Lukaye_19",
     verifier: "",
-    difficulty: "Peak/High-Peak Nil",
+    difficulty: "High-Peak Nil",
     videoId: "l72CfV-I1_Y",
     worldRecord: "N/A",
     robloxLink: "https://www.roblox.com/games/138794791429163/Tower-of-Collected-Dust-Particles",
