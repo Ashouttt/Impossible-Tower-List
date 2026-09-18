@@ -12,6 +12,7 @@
      difficulty   (optional) — EToH-style difficulty
      videoId      (optional) — YouTube link OR 11-character video ID
      worldRecord  (optional) — best completion, e.g. "Floor 7", "N/A"
+     quality      (optional) — quality rating, e.g. "High", "Mid", "N/A"
      robloxLink   (optional) — link to the Roblox place where this
                                 tower is located, e.g.
                                 "https://www.roblox.com/games/XXXXXXXX/Place-Name"
@@ -33,6 +34,7 @@ const LEVELS = [
     difficulty: "High Error",
     videoId: "nJ57W9aWwD0",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/101044284168858/Tower-of-Safe-White-Tower",
   },
   {
@@ -43,6 +45,7 @@ const LEVELS = [
     difficulty: "Mid-High Error",
     videoId: "B0VpzdvwrC0",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/99982773118045/Tower-of-Jungle-Gyms-The-Big-Climb#ropro-quick-search",
   },
   {
@@ -53,6 +56,7 @@ const LEVELS = [
     difficulty: "Mid-High Error",
     videoId: "",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/5684674542/Chaotic-Tower-R",
   },
   {
@@ -63,6 +67,7 @@ const LEVELS = [
     difficulty: "Mid Error",
     videoId: "",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "",
   },
   {
@@ -73,6 +78,7 @@ const LEVELS = [
     difficulty: "Low-Mid Error",
     videoId: "",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/119994535255674/Tower-of-Tedious-Timings",
   },
   {
@@ -83,6 +89,7 @@ const LEVELS = [
     difficulty: "Baseline Error",
     videoId: "U1nDh0HO9A4",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/130670383361152/Not-Even-Playable-Gameplay",
   },
 
@@ -95,6 +102,7 @@ const LEVELS = [
     difficulty: "Low Error",
     videoId: "",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "",
     special: "shiny-gold",
   },
@@ -108,6 +116,7 @@ const LEVELS = [
     difficulty: "High-Peak Nil",
     videoId: "l72CfV-I1_Y",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/138794791429163/Tower-of-Collected-Dust-Particles",
   },
   {
@@ -118,6 +127,7 @@ const LEVELS = [
     difficulty: "High-Peak Nil",
     videoId: "s5vJ6ha2Luo",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/9024799067/Tower-of-Vague-Luminescence",
   },
   {
@@ -128,6 +138,7 @@ const LEVELS = [
     difficulty: "High-Peak Nil",
     videoId: "2nQ8j79hxLI",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/133133185725636/Tower-of-Parched-and-Exhausted",
   },
   {
@@ -138,6 +149,7 @@ const LEVELS = [
     difficulty: "High-Peak Nil",
     videoId: "EO_kYW30LCg",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/89993867711798/Tower-of-Ziggle-Core",
   },
 
@@ -150,6 +162,7 @@ const LEVELS = [
     difficulty: "Peak Nil",
     videoId: "bJPgQlqkQxI",
     worldRecord: "Floor 7",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/4597361034/Citadel-of-Void-OFFICIAL",
   },
   {
@@ -160,6 +173,7 @@ const LEVELS = [
     difficulty: "Peak Nil",
     videoId: "Vj5sFQq7mKA",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "",
   },
   {
@@ -170,6 +184,7 @@ const LEVELS = [
     difficulty: "Peak Nil",
     videoId: "XFh1iB1QTho",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/17781078059/EVIL-TOWER-76",
   },
   {
@@ -180,6 +195,7 @@ const LEVELS = [
     difficulty: "Peak Nil",
     videoId: "",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/123958186812706/Tower-of-Cruel-Death",
   },
 
@@ -192,6 +208,7 @@ const LEVELS = [
     difficulty: "High Nil",
     videoId: "YUkjDZra0t8",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/10712971259/Tower-of-Existential-Crisis",
   },
   {
@@ -202,6 +219,7 @@ const LEVELS = [
     difficulty: "High Nil",
     videoId: "F1ycaZp-txs",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "",
   },
   {
@@ -212,6 +230,7 @@ const LEVELS = [
     difficulty: "High Nil",
     videoId: "w092tls5Wq0",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "",
   },
   {
@@ -222,6 +241,7 @@ const LEVELS = [
     difficulty: "High Nil",
     videoId: "L6JZNV7QveQ",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/8375008730/Tower-of-Absolute-Corruption",
   },
   {
@@ -232,6 +252,7 @@ const LEVELS = [
     difficulty: "High Nil",
     videoId: "",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/73308353782994/Tower-of-Boobawamba",
   },
   {
@@ -242,6 +263,7 @@ const LEVELS = [
     difficulty: "High Nil",
     videoId: "",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/95560998034174/Tower-of-Homent-Bruh",
   },
 
@@ -254,6 +276,7 @@ const LEVELS = [
     difficulty: "Mid-High Nil",
     videoId: "heTlDt2DhLM",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "",
   },
   {
@@ -264,6 +287,7 @@ const LEVELS = [
     difficulty: "Mid-High Nil",
     videoId: "",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "",
   },
   {
@@ -274,6 +298,7 @@ const LEVELS = [
     difficulty: "Mid-High Nil",
     videoId: "ARoG4ZsKOpw",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/121475110039668/Tower-of-Veiled-Prophecy",
   },
   {
@@ -284,6 +309,7 @@ const LEVELS = [
     difficulty: "Mid-High Nil",
     videoId: "",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/87451012470365/tower-of-sandy-dusty-windy-climb",
   },
 
@@ -296,6 +322,7 @@ const LEVELS = [
     difficulty: "Mid Nil",
     videoId: "",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/112331301926361/Tower-of-conspicuous-retribution",
   },
   {
@@ -306,6 +333,7 @@ const LEVELS = [
     difficulty: "Mid Nil",
     videoId: "DInkLVb9Ciw",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/18202705587/Tower-of-Ginga-Glory",
   },
   {
@@ -316,6 +344,7 @@ const LEVELS = [
     difficulty: "Mid Nil",
     videoId: "8AXNvlqE44w",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/7023281752/tower-of-memorization",
   },
   {
@@ -326,6 +355,7 @@ const LEVELS = [
     difficulty: "Mid Nil",
     videoId: "",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/94393197713029/wucaf-tower",
   },
   {
@@ -336,6 +366,7 @@ const LEVELS = [
     difficulty: "Mid Nil",
     videoId: "VnlBgflqkX8",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/123328980290815/Citadel-of-Wicked-Booger",
   },
 
@@ -348,6 +379,7 @@ const LEVELS = [
     difficulty: "Low-Mid Nil",
     videoId: "",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/14505962994/Tower-of-Adrifted-Behemoth",
   },
   {
@@ -358,6 +390,7 @@ const LEVELS = [
     difficulty: "Low-Mid Nil",
     videoId: "ZlIcCWCxzpk",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/10436183562/Tower-of-Dead-Grandma-2",
   },
   {
@@ -368,6 +401,7 @@ const LEVELS = [
     difficulty: "Low-Mid Nil",
     videoId: "fxHjQcPY0PM",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/120058872334027/Tower-of-Tight-Gaps",
   },
 
@@ -380,6 +414,7 @@ const LEVELS = [
     difficulty: "Low Nil",
     videoId: "",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/N/A/Tower-of-Parody",
   },
   {
@@ -390,6 +425,7 @@ const LEVELS = [
     difficulty: "Low Nil",
     videoId: "3ymZ7X8AjCk",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/121825417102850/Tower-of-Extinction",
   },
   {
@@ -400,6 +436,7 @@ const LEVELS = [
     difficulty: "Low Nil",
     videoId: "_0-6209Rl2Y",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/13723458889/Tower-of-Unrealistic-Victory",
   },
   {
@@ -410,6 +447,7 @@ const LEVELS = [
     difficulty: "Low Nil",
     videoId: "Oc03ZYk2cKg",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/121990219081062/Steeple-of-Eating-Snakes",
   },
   {
@@ -420,6 +458,7 @@ const LEVELS = [
     difficulty: "Low Nil",
     videoId: "zLYewkW3Z8o",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/109784757798231/Tower-of-Achromatic-Iridescence",
   },
   {
@@ -430,6 +469,7 @@ const LEVELS = [
     difficulty: "Low Nil",
     videoId: "iqfXceSezR8",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/11700494590/Tower-of-Sacrilegious-Jumps",
   },
   {
@@ -440,6 +480,7 @@ const LEVELS = [
     difficulty: "Low Nil",
     videoId: "",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/123891083799204/Great-Citadel-of-Example-Great-Citadel-1",
   },
   {
@@ -450,6 +491,7 @@ const LEVELS = [
     difficulty: "Low Nil",
     videoId: "",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/131865090996608/Steeple-of-Happy",
   },
 
@@ -462,6 +504,7 @@ const LEVELS = [
     difficulty: "Bottom-Low Nil",
     videoId: "sNJYG8mWeTI",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/130653473431229/tuscan-tower",
   },
   {
@@ -472,6 +515,7 @@ const LEVELS = [
     difficulty: "Bottom-Low Nil",
     videoId: "",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/86353796996046/Tower-of-The-End-P-T",
   },
   {
@@ -482,6 +526,7 @@ const LEVELS = [
     difficulty: "Bottom-Low Nil",
     videoId: "",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/109678222146884/saudi-arabia-tower",
   },
   {
@@ -492,6 +537,7 @@ const LEVELS = [
     difficulty: "Bottom-Low Nil",
     videoId: "F1ycaZp-txs",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/11379081828/Tower-of-Funny-Fish",
   },
 
@@ -504,6 +550,7 @@ const LEVELS = [
     difficulty: "Bottom Nil",
     videoId: "g7pWf5pmRHw",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "",
   },
   {
@@ -514,6 +561,7 @@ const LEVELS = [
     difficulty: "Bottom Nil",
     videoId: "ptD3kDhzu0g",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/135243516239639/100M-Vengeance",
   },
   {
@@ -524,6 +572,7 @@ const LEVELS = [
     difficulty: "Bottom Nil",
     videoId: "Ri-OPkVGzxo",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/83578010472722/LC-Waikiki-Tower",
   },
 
@@ -536,6 +585,7 @@ const LEVELS = [
     difficulty: "Baseline Nil",
     videoId: "AceEID7TVKc",
     worldRecord: "Floor 8",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/125252864219980/Tower-of-The-Drive-Towards-Human-Limits",
   },
   {
@@ -546,6 +596,7 @@ const LEVELS = [
     difficulty: "Baseline Nil",
     videoId: "",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/118250523983734/tower-of-generation-succes",
   },
   {
@@ -556,6 +607,7 @@ const LEVELS = [
     difficulty: "Baseline Nil",
     videoId: "oLTNVsQjJxE",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/100153787759422/tower-of-Popsicle-Tower",
   },
   {
@@ -566,6 +618,7 @@ const LEVELS = [
     difficulty: "Baseline Nil",
     videoId: "",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/18395822264/Tower-of-Chewing-Gum",
   },
   {
@@ -576,6 +629,7 @@ const LEVELS = [
     difficulty: "Baseline Nil",
     videoId: "",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/71644854306627/Tower-of-Extended-Difficulty-Chart",
   },
   {
@@ -586,6 +640,7 @@ const LEVELS = [
     difficulty: "Baseline Nil",
     videoId: "",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/132152244035380/Really-Impossible-Platforming",
   },
   {
@@ -596,6 +651,7 @@ const LEVELS = [
     difficulty: "Nil",
     videoId: "",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/11233156764/Tower-of-Inordinately-Deceptional-Arduous-Mishap",
   },
 
@@ -609,6 +665,7 @@ const LEVELS = [
     difficulty: "Peak Unreal",
     videoId: "5El1ZYt0zNA",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/91634804321932/Tower-of-Insane-Zodiac",
   },
 
@@ -621,6 +678,7 @@ const LEVELS = [
     difficulty: "High-Peak Unreal",
     videoId: "adSiolrNJjY",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/11857764752/Tower-of-Mushroom#ropro-quick-play",
   },
 
@@ -633,6 +691,7 @@ const LEVELS = [
     difficulty: "High Unreal",
     videoId: "T-kOe8L6uw8",
     worldRecord: "Floor 9",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/88462999400021/Tower-of-Void-practice",
   },
   {
@@ -643,6 +702,7 @@ const LEVELS = [
     difficulty: "High Unreal",
     videoId: "vMOpTTcdIVk",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/14860104753/Tower-of-The-Quest-For-Perfection-Fixed",
   },
   {
@@ -653,6 +713,7 @@ const LEVELS = [
     difficulty: "High Unreal",
     videoId: "aayo6JJA0FM",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "",
   },
   {
@@ -663,6 +724,7 @@ const LEVELS = [
     difficulty: "High Unreal",
     videoId: "kLb26I6PKNo",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "",
   },
 
@@ -675,6 +737,7 @@ const LEVELS = [
     difficulty: "Mid-High Unreal",
     videoId: "zeW5kxeKLk8",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "",
   },
   {
@@ -685,6 +748,7 @@ const LEVELS = [
     difficulty: "Mid-High Unreal",
     videoId: "IONOfb8s9xs",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/109123863452692/Tower-of-Multiversal-Dream-Archive",
   },
 
@@ -697,6 +761,7 @@ const LEVELS = [
     difficulty: "Mid Unreal",
     videoId: "bwDpQOuQaGg",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/107705095969573/tower-of-IT-NEVER-ENDS",
   },
   {
@@ -707,6 +772,7 @@ const LEVELS = [
     difficulty: "Mid Unreal",
     videoId: "N4B9qvfS8qQ",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/5711190403/The-S-T-O-N-E-Facility",
   },
 
@@ -719,6 +785,7 @@ const LEVELS = [
     difficulty: "Low-Mid Unreal",
     videoId: "DRGmoqF1T_E",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/15177865210/Tower-of-Impending-Doom#!/about",
   },
   {
@@ -729,6 +796,7 @@ const LEVELS = [
     difficulty: "Low-Mid Unreal",
     videoId: "nj2vwu0LeG8",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/15873244701/JToH-The-Eternal-Abyss",
   },
   {
@@ -739,6 +807,7 @@ const LEVELS = [
     difficulty: "Low-Mid Unreal",
     videoId: "HxCV-_zrLW0",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/117307574423766/Tower-of-Monochromatic-Haze-List-Version",
   },
   {
@@ -749,6 +818,7 @@ const LEVELS = [
     difficulty: "Low-Mid Unreal",
     videoId: "eKYZ4g6Mfkw",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/70581657896182/Tower-of-Rebirth-the-End",
   },
 
@@ -761,6 +831,7 @@ const LEVELS = [
     difficulty: "Low Unreal",
     videoId: "CZzEPcEtwNU",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/119663832848907/Tower-of-My-Inner-Hatred",
   },
   {
@@ -771,6 +842,7 @@ const LEVELS = [
     difficulty: "Low Unreal",
     videoId: "Wc3IJivXjfE",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/130741996193452/Tower-of-Spiralling-Fates",
   },
   {
@@ -781,6 +853,7 @@ const LEVELS = [
     difficulty: "Low Unreal",
     videoId: "foOtLcnyII0",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/71138470084002/Citadel-of-Cold-Blooded-Fatality",
   },
   {
@@ -791,6 +864,7 @@ const LEVELS = [
     difficulty: "Low Unreal",
     videoId: "C2J7jaC-pt0",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/4777161742/Obelisk-of-Unrealistic-Sightings",
   },
   {
@@ -801,6 +875,7 @@ const LEVELS = [
     difficulty: "Low Unreal",
     videoId: "I5QVrxvPaXY",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/140232542804431/Tower-of-Celestial-Bloom",
   },
 
@@ -813,6 +888,7 @@ const LEVELS = [
     difficulty: "Bottom-Low Unreal",
     videoId: "v5f32f4Poks",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/7769438539/Tower-of-Qwerty-Uiop",
   },
   {
@@ -823,6 +899,7 @@ const LEVELS = [
     difficulty: "Bottom-Low Unreal",
     videoId: "cZefNeSBC40",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/12121834605/The-Eternal-Calamity-ULTIMATE",
   },
   {
@@ -833,6 +910,7 @@ const LEVELS = [
     difficulty: "Bottom-Low Unreal",
     videoId: "Mtcliw0KJ4w",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/10199085458/Citadel-of-Infinite-Void",
   },
   {
@@ -843,6 +921,7 @@ const LEVELS = [
     difficulty: "Bottom-Low Unreal",
     videoId: "6xzPARlwnio",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/3100988051/Tower-of-Blind-Fate",
   },
   {
@@ -853,6 +932,7 @@ const LEVELS = [
     difficulty: "Bottom-Low Unreal",
     videoId: "NkRtXvFl-lA",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/10541580790/Tower-of-Paradise",
   },
   {
@@ -863,6 +943,7 @@ const LEVELS = [
     difficulty: "Bottom-Low Unreal",
     videoId: "_e93li9cdDE",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/83052485504037/Tower-of-Maybe-in-Mumbai",
   },
 
@@ -875,6 +956,7 @@ const LEVELS = [
     difficulty: "Bottom Unreal",
     videoId: "DLKMIGM6mS8",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/85794013389625/Tower-of-Withered-Consensus",
   },
   {
@@ -885,6 +967,7 @@ const LEVELS = [
     difficulty: "Bottom Unreal",
     videoId: "UiK6pKgHGpU",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/16730891689/",
   },
   {
@@ -895,6 +978,7 @@ const LEVELS = [
     difficulty: "Bottom Unreal",
     videoId: "AT90nqEX0NE",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "",
   },
   {
@@ -905,6 +989,7 @@ const LEVELS = [
     difficulty: "Bottom Unreal",
     videoId: "beqUfnw8dGQ",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "",
   },
   {
@@ -915,6 +1000,7 @@ const LEVELS = [
     difficulty: "Bottom Unreal",
     videoId: "rO8Czv0HcNk",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/17401926899/3008-Tower",
   },
   {
@@ -925,6 +1011,7 @@ const LEVELS = [
     difficulty: "Bottom Unreal",
     videoId: "fpJmckiIzFw",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/17379816541/Sweden-Tower",
   },
   {
@@ -935,6 +1022,7 @@ const LEVELS = [
     difficulty: "Bottom Unreal",
     videoId: "ow9Dcpf61f0",
     worldRecord: "finale stretch",
+    quality: "N/A",
     robloxLink: "",
   },
 
@@ -947,6 +1035,7 @@ const LEVELS = [
     difficulty: "Baseline Unreal",
     videoId: "75VZzOgVyHc",
     worldRecord: "N/A",
+    quality: "N/A",
     robloxLink: "https://www.roblox.com/games/18603968759/Community-Top-Towers",
   },
 ];
