@@ -15,6 +15,7 @@
      robloxLink   (optional) — link to the Roblox place where this
                                 tower is located, e.g.
                                 "https://www.roblox.com/games/XXXXXXXX/Place-Name"
+     special      (optional) — "shiny-gold" for special animation
 
    Order of objects in the array doesn't matter — the page
    sorts them by "rank". You can have unlimited entries.
@@ -33,6 +34,17 @@ const LEVELS = [
     videoId: "nJ57W9aWwD0",
     worldRecord: "N/A",
     robloxLink: "https://www.roblox.com/games/101044284168858/Tower-of-Safe-White-Tower",
+  },
+  {
+    rank: 1.5,
+    name: "Tower of Kill Rick",
+    creator: "bLockerman666, skitsuna, mrgamingpotato1",
+    verifier: "",
+    difficulty: "Low Error",
+    videoId: "",
+    worldRecord: "N/A",
+    robloxLink: "",
+    special: "shiny-gold",
   },
   {
     rank: 2,
