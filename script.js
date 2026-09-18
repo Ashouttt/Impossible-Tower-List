@@ -1,6 +1,6 @@
 /* =========================================================
    IMPOSSIBLE TOWER LIST — script.js (jQuery + Supabase version)
-   Cache-bust: v5-fixed
+   Cache-bust: v6-error-fix
    ========================================================= */
 
 /* =========================================================
@@ -49,22 +49,33 @@ function parseDifficulty(raw) {
   if (!raw) return { prefix: "", base: "", full: "" };
   const str = String(raw).trim();
   const lowered = str.toLowerCase();
+  
+  // Rozszerzone dopasowanie prefiksów
   const prefixMatch = lowered.match(/^(low-mid|mid-high|bottom-low|baseline|bottom|low|mid|high-peak|high|peak|base|skyline)(?:\s+|-)/);
+  
   let prefix = "";
   let base = lowered;
+  
   if (prefixMatch) {
     prefix = prefixMatch[1];
     base = lowered.slice(prefixMatch[0].length).trim();
   }
+  
   const capPrefix = prefix ? prefix.charAt(0).toUpperCase() + prefix.slice(1) : "";
   const capBase = base.charAt(0).toUpperCase() + base.slice(1);
   const full = capPrefix ? capPrefix + " " + capBase : capBase;
+  
   return { prefix: capPrefix, base: capBase, full };
 }
 
 function difficultyClass(parsed) {
   if (parsed.prefix === "High-Peak") return "high-peak";
-  const map = { "horrific": "horrific", "unreal": "unreal", "nil": "nil", "error": "error" };
+  const map = { 
+    "horrific": "horrific", 
+    "unreal": "unreal", 
+    "nil": "nil", 
+    "error": "error" 
+  };
   return map[parsed.base.toLowerCase()] || "";
 }
 
