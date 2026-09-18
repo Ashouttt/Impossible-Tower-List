@@ -1006,3 +1006,14 @@ main {
     background-size: 300% 100%;
   }
 }
+/* Shiny gold tower - ale badge Error pozostaje czerwony */
+.level-row.shiny-gold .diff-badge.diff-error {
+  background: rgba(204,34,34,0.10) !important;
+  border-color: rgba(204,34,34,0.40) !important;
+  color: #ff5555 !important;
+  box-shadow: 0 0 10px rgba(204,34,34,0.3) !important;
+}
+
+.level-row.shiny-gold .diff-badge.diff-error .diff-icon {
+  filter: drop-shadow(0 0 5px rgba(204,34,34,0.5)) !important;
+}
