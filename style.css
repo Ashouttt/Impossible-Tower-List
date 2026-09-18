@@ -875,3 +875,134 @@ main {
   transform: scale(1.12);
   filter: drop-shadow(0 0 3px rgba(255,107,138,0.5));
 }
+
+/* ===== SHINY GOLD ANIMATION ===== */
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(240, 192, 64, 0.3),
+                0 0 30px rgba(240, 192, 64, 0.2),
+                inset 0 0 20px rgba(240, 192, 64, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(240, 192, 64, 0.5),
+                0 0 45px rgba(240, 192, 64, 0.3),
+                inset 0 0 30px rgba(240, 192, 64, 0.15);
+  }
+}
+
+@keyframes gold-border {
+  0%, 100% {
+    border-color: rgba(240, 192, 64, 0.4);
+  }
+  50% {
+    border-color: rgba(240, 192, 64, 0.8);
+  }
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.level-row.shiny-gold {
+  position: relative;
+  overflow: hidden;
+}
+
+.level-row.shiny-gold .row-main {
+  background: linear-gradient(
+    110deg,
+    rgba(240, 192, 64, 0.08) 0%,
+    rgba(240, 192, 64, 0.15) 25%,
+    rgba(255, 215, 0, 0.25) 50%,
+    rgba(240, 192, 64, 0.15) 75%,
+    rgba(240, 192, 64, 0.08) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite,
+             glow-pulse 2s ease-in-out infinite;
+  border: 1px solid rgba(240, 192, 64, 0.4);
+  border-radius: var(--radius);
+}
+
+.level-row.shiny-gold .row-main::before {
+  background: linear-gradient(
+    180deg,
+    #FFD700 0%,
+    #FFA500 50%,
+    #FFD700 100%
+  );
+  width: 4px;
+  animation: gold-border 2s ease-in-out infinite;
+}
+
+.level-row.shiny-gold .row-main:hover {
+  background: linear-gradient(
+    110deg,
+    rgba(240, 192, 64, 0.12) 0%,
+    rgba(240, 192, 64, 0.2) 25%,
+    rgba(255, 215, 0, 0.35) 50%,
+    rgba(240, 192, 64, 0.2) 75%,
+    rgba(240, 192, 64, 0.12) 100%
+  );
+  background-size: 200% 100%;
+  box-shadow: 0 4px 20px rgba(240, 192, 64, 0.25);
+}
+
+.level-row.shiny-gold .row-rank {
+  color: #FFD700;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.6),
+               0 0 20px rgba(255, 215, 0, 0.4);
+  font-weight: 900;
+}
+
+.level-row.shiny-gold .row-name {
+  color: #FFD700;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+  font-weight: 700;
+}
+
+.level-row.shiny-gold .diff-badge {
+  background: rgba(240, 192, 64, 0.15);
+  border-color: rgba(240, 192, 64, 0.5);
+  color: #FFD700;
+  box-shadow: 0 0 10px rgba(240, 192, 64, 0.3);
+}
+
+/* Sparkles effect */
+.level-row.shiny-gold::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle, rgba(255, 215, 0, 0.4) 1px, transparent 1px),
+    radial-gradient(circle, rgba(255, 215, 0, 0.3) 1px, transparent 1px);
+  background-size: 50px 50px, 80px 80px;
+  background-position: 0 0, 40px 40px;
+  opacity: 0;
+  animation: sparkle 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Mobile adjustments */
+@media (max-width: 720px) {
+  .level-row.shiny-gold .row-main {
+    background-size: 300% 100%;
+  }
+}
