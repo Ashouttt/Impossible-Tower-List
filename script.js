@@ -1,155 +1,24 @@
 /* =========================================================
    IMPOSSIBLE TOWER LIST — script.js (jQuery + Supabase version)
-   Safe storage + modal fix
+   Cache-bust: v7-quality-system
    ========================================================= */
 
 /* =========================================================
-   SAFE STORAGE
-   ========================================================= */
-
-const memoryStorage = {};
-let canUseLocalStorage = false;
-
-try {
-  const testKey = "__tower_storage_test__";
-  localStorage.setItem(testKey, "1");
-  localStorage.removeItem(testKey);
-  canUseLocalStorage = true;
-} catch (error) {
-  console.warn("[Storage] localStorage is unavailable; using memory storage.");
-}
-
-function storageGet(key) {
-  if (canUseLocalStorage) {
-    try {
-      return localStorage.getItem(key);
-    } catch (error) {
-      console.warn("[Storage] Failed to read:", key);
-    }
-  }
-
-  return Object.prototype.hasOwnProperty.call(memoryStorage, key)
-    ? memoryStorage[key]
-    : null;
-}
-
-function storageSet(key, value) {
-  if (canUseLocalStorage) {
-    try {
-      localStorage.setItem(key, value);
-      return;
-    } catch (error) {
-      console.warn("[Storage] Failed to save:", key);
-    }
-  }
-
-  memoryStorage[key] = String(value);
-}
-
-function storageRemove(key) {
-  if (canUseLocalStorage) {
-    try {
-      localStorage.removeItem(key);
-    } catch (error) {
-      console.warn("[Storage] Failed to remove:", key);
-    }
-  }
-
-  delete memoryStorage[key];
-}
-
-/* =========================================================
-   SUPABASE CONFIG
+   KONFIGURACJA SUPABASE
    ========================================================= */
 
 const SUPABASE_URL = "https://tpvtcnjvndsabtvsgsqo.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwdnRjbmp2bmRzYWJ0dnNnc3FvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxNTA5MjksImV4cCI6MjEwMTcyNjkyOX0.CMMOnMYpZPF5g[...]" ;
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwdnRjbmp2bmRzYWJ0dnNnc3FvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxNTA5MjksImV4cCI6MjEwMTcyNjkyOX0.CMMOnMYpZPF5gBfGTEeVdZ3WMq0mgG983Bt0juLnNwU";
 
-/* =========================================================
-   USERNAME MODAL
-   ========================================================= */
-
-function checkAndShowUsernameModal() {
-  setTimeout(() => {
-    const $modal = $("#usernameModal");
-    const $input = $("#usernameInput");
-
-    if ($modal.length) {
-      $modal.addClass("show");
-    }
-
-    if ($input.length) {
-      $input.trigger("focus");
-    }
-  }, 300);
-}
-
-function saveUsername() {
-  const $input = $("#usernameInput");
-  const username = String($input.val() || "").trim();
-
-  if (!username) {
-    $input.css("border-color", "#ef4444");
-
-    if ($input[0] && typeof $input[0].animate === "function") {
-      $input[0].animate([
-        { transform: "translateX(0)" },
-        { transform: "translateX(-10px)" },
-        { transform: "translateX(10px)" },
-        { transform: "translateX(-10px)" },
-        { transform: "translateX(10px)" },
-        { transform: "translateX(0)" }
-      ], {
-        duration: 400,
-        easing: "ease-in-out"
-      });
-    }
-
-    setTimeout(() => {
-      $input.css("border-color", "");
-    }, 1000);
-
-    return;
-  }
-
-  storageSet("tower_username", username);
-  $("#usernameModal").removeClass("show");
-  console.log("Username saved:", username);
-}
-
-// Event listeners
-$(document).ready(function() {
-  checkAndShowUsernameModal();
-
-  $("#usernameSubmit").on("click", saveUsername);
-
-  $("#usernameInput").on("keypress", function(e) {
-    if (e.which === 13) {
-      saveUsername();
-    }
-  });
-
-  setupControls();
-  setupStats();
-  render();
-});
-
-/* =========================================================
-   SUPABASE CLIENT
-   ========================================================= */
-
+// Inicjalizacja klienta Supabase
 let sbClient = null;
 if (typeof window.supabase !== "undefined") {
   sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 }
 
-/* =========================================================
-   TIER + DIFFICULTY HELPERS
-   ========================================================= */
-
 const TIERS = [
-  { id: "verified", label: "Verified", max: Infinity },
-  { id: "unverified", label: "Unverified", max: Infinity }
+  { id: "verified",   label: "Verified",   max: Infinity },
+  { id: "unverified", label: "Unverified", max: Infinity },
 ];
 
 const PAGE_SIZE = 50;
@@ -162,42 +31,56 @@ function tierForLevel(level) {
   return TIERS.find(t => t.id === "unverified");
 }
 
+const ICON_HORRIFIC = '<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="7" stroke-linejoin="round"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38"/></svg>';
+
+const ICON_UNREAL = '<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"><polygon points="50,2 60,35 98,35 68,56 78,90 50,70 22,90 32,56 2,35 40,35"/></svg>';
+
+const ICON_NIL = '<svg class="diff-icon" viewBox="0 0 100 100"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38" fill="#0a0a0a" stroke="#555555" stroke-width="5" stroke-linejoin="round"/><g transform="translate(50,50) rotate(45) translate(-50,-50)"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38" fill="#0a0a0a" stroke="#999999" stroke-width="5" stroke-linejoin="round"/></g></svg>';
+
+const ICON_ERROR = '<svg class="diff-icon" viewBox="0 0 100 100"><rect x="8" y="8" width="84" height="84" rx="4" fill="#cc2222" stroke="#991111" stroke-width="6"/></svg>';
+
+const ICON_ROBLOX = '<svg class="place-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M4.24 0L0 19.76 19.76 24 24 4.24 4.24 0zM9.6 8.4l6 1.4-1.4 6-6-1.4 1.4-6z"/></svg>';
+
+const ICON_HEART_EMPTY = '<svg class="like-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+
+const ICON_HEART_FILLED = '<svg class="like-icon" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+
 function parseDifficulty(raw) {
   if (!raw) return { prefix: "", base: "", full: "" };
   const str = String(raw).trim();
   const lowered = str.toLowerCase();
-
+  
   const prefixMatch = lowered.match(/^(low-mid|mid-high|bottom-low|baseline|bottom|low|mid|high-peak|high|peak|base|skyline)(?:\s+|-)/);
-
+  
   let prefix = "";
   let base = lowered;
-
+  
   if (prefixMatch) {
     prefix = prefixMatch[1];
     base = lowered.slice(prefixMatch[0].length).trim();
   }
-
+  
   const capPrefix = prefix ? prefix.charAt(0).toUpperCase() + prefix.slice(1) : "";
   const capBase = base.charAt(0).toUpperCase() + base.slice(1);
   const full = capPrefix ? capPrefix + " " + capBase : capBase;
-
+  
   return { prefix: capPrefix, base: capBase, full };
 }
 
 function difficultyClass(parsed) {
   if (parsed.prefix === "High-Peak") return "high-peak";
-  const map = {
-    horrific: "horrific",
-    unreal: "unreal",
-    nil: "nil",
-    error: "error"
+  const map = { 
+    "horrific": "horrific", 
+    "unreal": "unreal", 
+    "nil": "nil", 
+    "error": "error" 
   };
-  return map[(parsed.base || "").toLowerCase()] || "";
+  return map[parsed.base.toLowerCase()] || "";
 }
 
 function difficultyIcon(parsed) {
   if (parsed.prefix === "High-Peak") return ICON_UNREAL;
-  const b = (parsed.base || "").toLowerCase();
+  const b = parsed.base.toLowerCase();
   if (b === "horrific") return ICON_HORRIFIC;
   if (b === "unreal") return ICON_UNREAL;
   if (b === "nil") return ICON_NIL;
@@ -205,42 +88,41 @@ function difficultyIcon(parsed) {
   return "";
 }
 
+// Funkcja do określenia klasy quality dla animacji
 function getQualityClass(quality) {
   if (!quality) return "";
   const q = quality.trim().toUpperCase();
-
+  
+  // SS+, SS, SS- → gold
   if (q === "SS+" || q === "SS" || q === "SS-") return "quality-gold";
+  
+  // S+, S, S- → silver
   if (q === "S+" || q === "S" || q === "S-") return "quality-silver";
+  
+  // A+, A, A- → bronze
   if (q === "A+" || q === "A" || q === "A-") return "quality-bronze";
-
+  
+  // Wszystkie inne → brak specjalnej klasy (szare)
   return "";
 }
 
-/* =========================================================
-   ICONS
-   ========================================================= */
+let visibleCount = PAGE_SIZE;
+let activeTierId = "all";
+let query = "";
 
-const ICON_HORRIFIC = '<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="7" stroke-linejoin="round"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38" /></svg>';
-const ICON_UNREAL = '<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"><polygon points="50,2 60,35 98,35 68,56 78,90 50,70 22,90 3,56 35,35 2,35" /></svg>';
-const ICON_NIL = '<svg class="diff-icon" viewBox="0 0 100 100"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38" fill="#0a0a0a" stroke="#555555" stroke-width="5" stroke-linejoin="round"/></svg>';
-const ICON_ERROR = '<svg class="diff-icon" viewBox="0 0 100 100"><rect x="8" y="8" width="84" height="84" rx="4" fill="#cc2222" stroke="#991111" stroke-width="6"/></svg>';
-const ICON_ROBLOX = '<svg class="place-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M4.24 0L0 19.76 19.76 24 24 4.24 4.24 0zM9.6 8.4l6 1.4-1.4 6-6-1.4 1.4-6z"/></svg>';
-const ICON_HEART_EMPTY = '<svg class="like-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M12 20.25s-7.5-4.35-9.75-8.27C.3 9.13 2.2 4.5 6.38 4.5c2.15 0 3.37 1.06 4.12 2.17.75-1.11 1.97-2.17 4.12-2.17 4.18 0 6.08 4.63 4.13 7.48-2.25 3.92-9.75 8.27-9.75 8.27z"/></svg>';
-const ICON_HEART_FILLED = '<svg class="like-icon" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M12 20.25s-7.5-4.35-9.75-8.27C.3 9.13 2.2 4.5 6.38 4.5c2.15 0 3.37 1.06 4.12 2.17.75-1.11 1.97-2.17 4.12-2.17 4.18 0 6.08 4.63 4.13 7.48-2.25 3.92-9.75 8.27-9.75 8.27z"/></svg>';
 const CHEVRON_SVG = '<svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
 
 /* =========================================================
-   STORAGE FOR LIKES
+   SYSTEM LIKÓW — Supabase
    ========================================================= */
 
 const likesCache = {};
 
 function getUserId() {
-  let fp = storageGet("tower_fp_id");
+  let fp = localStorage.getItem("tower_fp_id");
   if (fp) return fp;
-
   fp = generateFingerprint();
-  storageSet("tower_fp_id", fp);
+  localStorage.setItem("tower_fp_id", fp);
   return fp;
 }
 
@@ -314,20 +196,16 @@ function cyrb53(str) {
 }
 
 function hasLiked(towerId) {
-  return storageGet("liked_" + towerId) === "true";
+  return localStorage.getItem("liked_" + towerId) === "true";
 }
 
 function setLiked(towerId, liked) {
   if (liked) {
-    storageSet("liked_" + towerId, "true");
+    localStorage.setItem("liked_" + towerId, "true");
   } else {
-    storageRemove("liked_" + towerId);
+    localStorage.removeItem("liked_" + towerId);
   }
 }
-
-/* =========================================================
-   LIKE SYSTEM — SUPABASE
-   ========================================================= */
 
 async function fetchLikeCount(towerId) {
   if (likesCache[towerId] !== undefined) {
@@ -465,31 +343,17 @@ function buildLikeButton(level) {
   return $btn;
 }
 
-/* =========================================================
-   LIST RENDERING
-   ========================================================= */
-
-let visibleCount = PAGE_SIZE;
-let activeTierId = "all";
-let query = "";
-
 function getFilteredLevels() {
-  const q = (query || "").trim().toLowerCase();
-
-  return LEVELS.slice()
-    .sort((a, b) => a.rank - b.rank)
-    .filter((lvl) => {
-      const tier = tierForLevel(lvl);
-      if (activeTierId !== "all" && tier.id !== activeTierId) return false;
-
-      if (!q) return true;
-
-      const name = (lvl.name || "").toLowerCase();
-      const creator = (lvl.creator || "").toLowerCase();
-      const diff = (lvl.difficulty || "").toLowerCase();
-
-      return name.includes(q) || creator.includes(q) || diff.includes(q);
-    });
+  const q = query.trim().toLowerCase();
+  return LEVELS.slice().sort((a, b) => a.rank - b.rank).filter((lvl) => {
+    const tier = tierForLevel(lvl);
+    if (activeTierId !== "all" && tier.id !== activeTierId) return false;
+    if (!q) return true;
+    const name = (lvl.name || "").toLowerCase();
+    const creator = (lvl.creator || "").toLowerCase();
+    const diff = (lvl.difficulty || "").toLowerCase();
+    return name.includes(q) || creator.includes(q) || diff.includes(q);
+  });
 }
 
 function extractYouTubeId(input) {
@@ -500,13 +364,12 @@ function extractYouTubeId(input) {
 }
 
 function escapeHtml(str) {
-  return $("<div>").text(String(str || "")).html();
+  return $("<div>").text(str).html();
 }
 
 function buildDifficultyBadge(rawDifficulty) {
   const parsed = parseDifficulty(rawDifficulty);
   if (!parsed.base) return '<span class="row-difficulty">—</span>';
-
   const cls = difficultyClass(parsed);
   const icon = difficultyIcon(parsed);
   const badgeClass = cls ? 'diff-' + cls : "";
@@ -516,11 +379,9 @@ function buildDifficultyBadge(rawDifficulty) {
 function buildCreatorSummary(creatorStr) {
   const raw = (creatorStr || "").trim();
   if (!raw) return '<span class="row-creator">—</span>';
-
   const names = raw.split(",").map(n => n.trim()).filter(Boolean);
   const first = escapeHtml(names[0] || raw);
   const extra = names.length - 1;
-
   if (extra <= 0) return '<span class="row-creator">' + first + '</span>';
   return '<span class="row-creator"><span class="creator-first">' + first + '</span><span class="creator-more">+' + extra + '</span></span>';
 }
@@ -538,10 +399,12 @@ function buildRow(level, index) {
     .attr("data-diff", diffClass || "none")
     .css("animationDelay", Math.min(index, 19) * 30 + "ms");
 
+  // Special effects (shiny-gold)
   if (level.special) {
     $li.addClass(level.special);
   }
 
+  // Quality-based animation (SS+/SS/SS- = gold, S+/S/S- = silver, A+/A/A- = bronze)
   const qualityClass = getQualityClass(level.quality);
   if (qualityClass) {
     $li.addClass(qualityClass);
@@ -553,7 +416,7 @@ function buildRow(level, index) {
     .addClass("row-main")
     .attr("type", "button")
     .attr("aria-expanded", "false")
-    .html('<span class="row-rank">#' + rankStr + '</span><span class="row-name">' + escapeHtml(level.name || "Unnamed") + '</span>' + diffBadge + buildCreatorSummary(level.creator) + '<span class="col-likes-wrap"></span><span class="row-chevron">' + CHEVRON_SVG + '</span>');
+    .html('<span class="row-rank">#' + rankStr + '</span><span class="row-name">' + escapeHtml(level.name || "Unnamed") + '</span>' + diffBadge + buildCreatorSummary(level.creator) + '<span class="col-likes-wrap"></span>' + CHEVRON_SVG);
 
   $btn.find(".col-likes-wrap").append($likeBtn);
 
@@ -561,8 +424,8 @@ function buildRow(level, index) {
     if ($(e.target).closest(".like-btn").length) return;
     toggleRow($li, level);
   });
-
   $li.append($btn);
+
   return $li;
 }
 
@@ -602,20 +465,18 @@ function toggleRow($li, level) {
   if (!$detail.length) {
     const videoId = extractYouTubeId(level.videoId);
     let videoMarkup;
-
     if (videoId) {
-      videoMarkup = '<iframe src="https://www.youtube.com/embed/' + videoId + '" title="Verification: ' + escapeHtml(level.name || "") + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+      videoMarkup = '<iframe src="https://www.youtube.com/embed/' + videoId + '" title="Verification: ' + escapeHtml(level.name || "") + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><a href="https://www.youtube.com/watch?v=' + videoId + '" class="video-fallback" target="_blank" rel="noopener">Watch on YouTube ↗</a>';
     } else {
       videoMarkup = '<div class="detail-video-missing">No video added for this tower.</div>';
     }
-
     const diffParsed = parseDifficulty(level.difficulty);
     const diffDisplay = diffParsed.full || "—";
     const wrDisplay = level.worldRecord != null ? String(level.worldRecord) : "N/A";
     const verifierDisplay = (level.verifier || "").trim() || "—";
     const statusDisplay = verifierDisplay !== "—" ? "Verified" : "Unverified";
     const qualityDisplay = (level.quality || "").trim() || "N/A";
-    const qualitySafeClass = qualityDisplay.toLowerCase().replace(/[^a-z0-9]/g, "");
+    const qualitySafeClass = qualityDisplay.toLowerCase().replace(/[^a-z0-9]/g, '');
     const robloxLink = (level.robloxLink || "").trim();
     const placeMarkup = robloxLink
       ? '<a href="' + escapeHtml(robloxLink) + '" class="place-link" target="_blank" rel="noopener">' + ICON_ROBLOX + '<span>Play this tower ↗</span></a>'
@@ -623,20 +484,7 @@ function toggleRow($li, level) {
 
     $detail = $("<div>")
       .addClass("row-detail")
-      .html(
-        '<div class="detail-video">' + videoMarkup + '</div>' +
-        '<div class="detail-side">' +
-          '<dl class="detail-meta">' +
-            '<div class="meta-item"><dt>Creator</dt><dd>' + escapeHtml(level.creator || "—") + '</dd></div>' +
-            '<div class="meta-item"><dt>Difficulty</dt><dd>' + escapeHtml(diffDisplay) + '</dd></div>' +
-            '<div class="meta-item"><dt>Verifier</dt><dd>' + escapeHtml(verifierDisplay) + '</dd></div>' +
-            '<div class="meta-item"><dt>Status</dt><dd>' + escapeHtml(statusDisplay) + '</dd></div>' +
-            '<div class="meta-item"><dt>WR</dt><dd>' + escapeHtml(wrDisplay) + '</dd></div>' +
-            '<div class="meta-item"><dt>Quality</dt><dd class="quality-' + qualitySafeClass + '">' + escapeHtml(qualityDisplay) + '</dd></div>' +
-          '</dl>' +
-          placeMarkup +
-        '</div>'
-      );
+      .html('<div class="detail-video">' + videoMarkup + '</div><div class="detail-side"><dl class="detail-meta"><div class="meta-item"><dt>Creator</dt><dd>' + escapeHtml(level.creator || "—") + '</dd></div><div class="meta-item"><dt>Verifier</dt><dd>' + escapeHtml(verifierDisplay) + '</dd></div><div class="meta-item"><dt>Difficulty</dt><dd>' + escapeHtml(diffDisplay) + '</dd></div><div class="meta-item"><dt>World Record</dt><dd>' + escapeHtml(wrDisplay) + '</dd></div><div class="meta-item"><dt>Quality</dt><dd class="quality-badge quality-' + qualitySafeClass + '">' + escapeHtml(qualityDisplay) + '</dd></div><div class="meta-item"><dt>Status</dt><dd>' + escapeHtml(statusDisplay) + '</dd></div></dl>' + placeMarkup + '</div>');
 
     $li.append($detail);
   }
@@ -656,15 +504,11 @@ function render() {
   const $fragment = $(document.createDocumentFragment());
 
   toShow.forEach((level, i) => {
-    try {
-      $fragment.append(buildRow(level, i));
-    } catch (error) {
-      console.error("[Render] Failed to render tower:", level, error);
-    }
+    $fragment.append(buildRow(level, i));
   });
 
   $list.append($fragment);
-  $("#emptyState").prop("hidden", $list.children().length !== 0);
+  $("#emptyState").prop("hidden", filtered.length !== 0);
   $("#loadMoreBtn").prop("hidden", filtered.length <= visibleCount);
 }
 
@@ -694,6 +538,8 @@ function setupStats() {
   if ($statTotal.length) $statTotal.text(LEVELS.length);
 }
 
-/* =========================================================
-   END
-   ========================================================= */
+$(document).ready(function() {
+  setupControls();
+  setupStats();
+  render();
+});
