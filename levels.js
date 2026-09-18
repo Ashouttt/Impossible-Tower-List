@@ -445,7 +445,7 @@ const LEVELS = [
   },
   {
     rank: 43,
-    name: "(Tower of The Quest For Perfection",
+    name: "Tower of The Quest For Perfection",
     creator: "4d9r, bLockerman666, BigScaryMonster10G",
     verifier: "Gehadimad",
     difficulty: "High Unreal",
