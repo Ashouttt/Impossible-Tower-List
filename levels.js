@@ -30,7 +30,7 @@ const LEVELS = [
   // ========== ERROR DIFFICULTY ==========
   {
     rank: 1,
-    name: "Tower of Safe White Tower",
+    name: "skitsuna top 1",
     creator: "ju_silvestre",
     verifier: "",
     difficulty: "High Error",
