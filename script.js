@@ -1,34 +1,42 @@
 /* =========================================================
    IMPOSSIBLE TOWER LIST — script.js (jQuery + Supabase version)
-   Cache-bust: v8-dual-projects
+   Cache-bust: v10-new-api-keys
    ========================================================= */
 
 /* =========================================================
-   KONFIGURACJA SUPABASE - DWA PROJEKTY
+   KONFIGURACJA SUPABASE - DWA PROJEKTY (NOWE KLUCZE!)
    ========================================================= */
 
 // PROJEKT 1: Feedback + Online counter
 const SUPABASE_URL_MAIN = "https://xcemcdyjgmdzbbdleypt.supabase.co";
-const SUPABASE_KEY_MAIN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhjZW1jZHlqZ21kemJiZGxleXB0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzgwMDg1NTgsImV4cCI6MjA1MzU4NDU1OH0.wzfNuTNN1O-zvKjZDA-DxA_Y7MMmmd1"; // WSTAW WŁAŚCIWY KLUCZ!
+const SUPABASE_KEY_MAIN = "sb_publishable_wzfNuTNN1O-zvKjZDA-DxA_Y7MMmmd1";
 
 // PROJEKT 2: Likes
 const SUPABASE_URL_LIKES = "https://tpvtcnjvndsabtvsgsqo.supabase.co";
-const SUPABASE_KEY_LIKES = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwdnRjbmp2bmRzYWJ0dnNnc3FvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxNTA5MjksImV4cCI6MjEwMTcyNjkyOX0.CMMOnMYpZPF5gBfGTEeVdZ3WMq0mgG983Bt0juLnNwU";
+const SUPABASE_KEY_LIKES = "sb_publishable_EG7GAcecDH63HYLMjRIfYA_4TcYSFuw";
 
 // Inicjalizacja klientów Supabase
-window.sbClient = null;      // Dla feedback + online
-let sbClientLikes = null;    // Dla likes
+window.sbClient = null;      // Dla feedback + online (projekt 1)
+let sbClientLikes = null;    // Dla likes (projekt 2)
 
 if (typeof window.supabase !== "undefined") {
-  // Klient główny (feedback + online counter)
-  window.sbClient = window.supabase.createClient(SUPABASE_URL_MAIN, SUPABASE_KEY_MAIN);
-  
-  // Klient dla likes (osobny projekt)
-  sbClientLikes = window.supabase.createClient(SUPABASE_URL_LIKES, SUPABASE_KEY_LIKES);
+  try {
+    // Klient główny (feedback + online counter)
+    window.sbClient = window.supabase.createClient(SUPABASE_URL_MAIN, SUPABASE_KEY_MAIN);
+    console.log("[Supabase] Main client (feedback) initialized ✅");
+    
+    // Klient dla likes (osobny projekt)
+    sbClientLikes = window.supabase.createClient(SUPABASE_URL_LIKES, SUPABASE_KEY_LIKES);
+    console.log("[Supabase] Likes client initialized ✅");
+  } catch (e) {
+    console.error("[Supabase] Initialization failed:", e);
+  }
+} else {
+  console.warn("[Supabase] SDK not loaded!");
 }
 
 /* =========================================================
-   RESZTA KODU
+   RESZTA KODU (bez zmian)
    ========================================================= */
 
 const TIERS = [
