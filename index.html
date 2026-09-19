@@ -334,17 +334,6 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <!-- Supabase SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-
-<!-- Supabase connection -->
-<script>
-  const SUPABASE_URL = "https://xcemcdyjgmdzbbdleypt.supabase.co";
-  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_wzfNuTNN1O-zvKjZDA-DxA_Y7MMmmd1";
-
-  const sbClient = supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-  );
-</script>
 <base target="_blank">
 </head>
 <body>
@@ -481,11 +470,11 @@
 <script src="levels.js"></script>
 <script src="script.js"></script>
 <script>
-/* Online users counter (Supabase Presence) — needs script.js loaded above (uses sbClient) */
+/* Online users counter (Supabase Presence) — needs script.js loaded above (uses window.sbClient) */
 (function () {
   var dot = document.getElementById("onlineDot");
   var num = document.getElementById("onlineCount");
-  var sb = (typeof sbClient !== "undefined") ? sbClient : null;
+  var sb = (typeof window.sbClient !== "undefined") ? window.sbClient : null;
   if (!sb) { dot.className = "online-dot off"; return; }
 
   // One ID per browser (shared by all its tabs) -> many tabs = 1 visitor
@@ -525,7 +514,7 @@
 (function () {
   "use strict";
 
-  var sb = (typeof sbClient !== "undefined") ? sbClient : null;
+  var sb = (typeof window.sbClient !== "undefined") ? window.sbClient : null;
 
   var COOLDOWN_MS = 5 * 60 * 1000;
   var LS_LAST = "fb_last_sent";
