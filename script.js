@@ -1,21 +1,35 @@
 /* =========================================================
    IMPOSSIBLE TOWER LIST — script.js (jQuery + Supabase version)
-   Cache-bust: v7-quality-system
+   Cache-bust: v8-dual-projects
    ========================================================= */
 
 /* =========================================================
-   KONFIGURACJA SUPABASE
+   KONFIGURACJA SUPABASE - DWA PROJEKTY
    ========================================================= */
 
-const SUPABASE_URL = "https://tpvtcnjvndsabtvsgsqo.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwdnRjbmp2bmRzYWJ0dnNnc3FvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxNTA5MjksImV4cCI6MjEwMTcyNjkyOX0.CMMOnMYpZPF5gBfGTEeVdZ3WMq0mgG983Bt0juLnNwU";
+// PROJEKT 1: Feedback + Online counter
+const SUPABASE_URL_MAIN = "https://xcemcdyjgmdzbbdleypt.supabase.co";
+const SUPABASE_KEY_MAIN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhjZW1jZHlqZ21kemJiZGxleXB0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzgwMDg1NTgsImV4cCI6MjA1MzU4NDU1OH0.wzfNuTNN1O-zvKjZDA-DxA_Y7MMmmd1"; // WSTAW WŁAŚCIWY KLUCZ!
 
-// Inicjalizacja klienta Supabase
-window.sbClient = null;
+// PROJEKT 2: Likes
+const SUPABASE_URL_LIKES = "https://tpvtcnjvndsabtvsgsqo.supabase.co";
+const SUPABASE_KEY_LIKES = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwdnRjbmp2bmRzYWJ0dnNnc3FvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxNTA5MjksImV4cCI6MjEwMTcyNjkyOX0.CMMOnMYpZPF5gBfGTEeVdZ3WMq0mgG983Bt0juLnNwU";
+
+// Inicjalizacja klientów Supabase
+window.sbClient = null;      // Dla feedback + online
+let sbClientLikes = null;    // Dla likes
+
 if (typeof window.supabase !== "undefined") {
-  window.sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  // Klient główny (feedback + online counter)
+  window.sbClient = window.supabase.createClient(SUPABASE_URL_MAIN, SUPABASE_KEY_MAIN);
+  
+  // Klient dla likes (osobny projekt)
+  sbClientLikes = window.supabase.createClient(SUPABASE_URL_LIKES, SUPABASE_KEY_LIKES);
 }
-let sbClient = window.sbClient; // alias dla kompatybilności
+
+/* =========================================================
+   RESZTA KODU
+   ========================================================= */
 
 const TIERS = [
   { id: "verified",   label: "Verified",   max: Infinity },
@@ -89,21 +103,14 @@ function difficultyIcon(parsed) {
   return "";
 }
 
-// Funkcja do określenia klasy quality dla animacji
 function getQualityClass(quality) {
   if (!quality) return "";
   const q = quality.trim().toUpperCase();
   
-  // SS+, SS, SS- → gold
   if (q === "SS+" || q === "SS" || q === "SS-") return "quality-gold";
-  
-  // S+, S, S- → silver
   if (q === "S+" || q === "S" || q === "S-") return "quality-silver";
-  
-  // A+, A, A- → bronze
   if (q === "A+" || q === "A" || q === "A-") return "quality-bronze";
   
-  // Wszystkie inne → brak specjalnej klasy (szare)
   return "";
 }
 
@@ -114,7 +121,7 @@ let query = "";
 const CHEVRON_SVG = '<svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
 
 /* =========================================================
-   SYSTEM LIKÓW — Supabase
+   SYSTEM LIKÓW — używa sbClientLikes (PROJEKT 2)
    ========================================================= */
 
 const likesCache = {};
@@ -212,12 +219,12 @@ async function fetchLikeCount(towerId) {
   if (likesCache[towerId] !== undefined) {
     return likesCache[towerId];
   }
-  if (!sbClient) {
+  if (!sbClientLikes) {
     likesCache[towerId] = 0;
     return 0;
   }
   try {
-    const { data, error } = await sbClient
+    const { data, error } = await sbClientLikes
       .from("tower_likes")
       .select("count")
       .eq("tower_id", towerId)
@@ -244,13 +251,13 @@ async function fetchLikeCount(towerId) {
 }
 
 async function sendLike(towerId, liked) {
-  if (!sbClient) return likesCache[towerId] || 0;
+  if (!sbClientLikes) return likesCache[towerId] || 0;
 
   const userId = getUserId();
 
   try {
     if (liked) {
-      const { error } = await sbClient
+      const { error } = await sbClientLikes
         .from("tower_likes_users")
         .upsert({ tower_id: towerId, user_id: userId }, { onConflict: "tower_id,user_id" });
       if (error) {
@@ -258,7 +265,7 @@ async function sendLike(towerId, liked) {
         return null;
       }
     } else {
-      const { error } = await sbClient
+      const { error } = await sbClientLikes
         .from("tower_likes_users")
         .delete()
         .eq("tower_id", towerId)
@@ -271,7 +278,7 @@ async function sendLike(towerId, liked) {
 
     await new Promise(r => setTimeout(r, 100));
 
-    const { data, error } = await sbClient
+    const { data, error } = await sbClientLikes
       .from("tower_likes")
       .select("count")
       .eq("tower_id", towerId)
@@ -344,6 +351,10 @@ function buildLikeButton(level) {
   return $btn;
 }
 
+/* =========================================================
+   RESZTA KODU (rendering, filtering, etc.)
+   ========================================================= */
+
 function getFilteredLevels() {
   const q = query.trim().toLowerCase();
   return LEVELS.slice().sort((a, b) => a.rank - b.rank).filter((lvl) => {
@@ -400,12 +411,10 @@ function buildRow(level, index) {
     .attr("data-diff", diffClass || "none")
     .css("animationDelay", Math.min(index, 19) * 30 + "ms");
 
-  // Special effects (shiny-gold)
   if (level.special) {
     $li.addClass(level.special);
   }
 
-  // Quality-based animation (SS+/SS/SS- = gold, S+/S/S- = silver, A+/A/A- = bronze)
   const qualityClass = getQualityClass(level.quality);
   if (qualityClass) {
     $li.addClass(qualityClass);
