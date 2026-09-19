@@ -28,6 +28,18 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<style>
+  /* Online users counter */
+  .online-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    transition: background 200ms ease, box-shadow 200ms ease;
+  }
+  .online-dot.on  { background: var(--tier-verified);   box-shadow: 0 0 8px rgba(74, 222, 128, 0.6); }
+  .online-dot.off { background: var(--tier-unverified); box-shadow: 0 0 8px rgba(248, 113, 113, 0.5); }
+</style>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <!-- Supabase SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -43,6 +55,11 @@
       <div class="meta-pill">
         <span class="meta-num" id="statTotal">0</span>
         <span class="meta-label">towers</span>
+      </div>
+      <div class="meta-pill" id="onlinePill" title="Users online right now">
+        <span class="online-dot" id="onlineDot"></span>
+        <span class="meta-num" id="onlineCount">–</span>
+        <span class="meta-label">online</span>
       </div>
       <a href="https://discord.gg/wVUaj6CSFJ" class="meta-pill discord-pill" target="_blank" rel="noopener noreferrer">
         <svg class="discord-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -85,7 +102,37 @@
 <footer class="site-footer">
   <p>Impossible Tower List</p>
 </footer>
+
 <script src="levels.js"></script>
 <script src="script.js"></script>
+<script>
+/* Online users counter (Supabase Presence) — needs script.js loaded above (uses sbClient) */
+(function () {
+  var dot = document.getElementById("onlineDot");
+  var num = document.getElementById("onlineCount");
+  var sb = (typeof sbClient !== "undefined") ? sbClient : null;
+  if (!sb) { dot.className = "online-dot off"; return; }
+
+  var key = (window.crypto && crypto.randomUUID) ? crypto.randomUUID()
+          : "u" + Date.now() + Math.random().toString(36).slice(2);
+
+  var ch = sb.channel("tower-list-online", { config: { presence: { key: key } } });
+
+  function update() {
+    num.textContent = Math.max(1, Object.keys(ch.presenceState()).length);
+  }
+
+  ch.on("presence", { event: "sync" }, update)
+    .subscribe(function (status) {
+      if (status === "SUBSCRIBED") {
+        dot.className = "online-dot on";
+        ch.track({ online_at: new Date().toISOString() });
+        update();
+      } else if (status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED") {
+        dot.className = "online-dot off";
+      }
+    });
+})();
+</script>
 </body>
 </html>
