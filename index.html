@@ -28,7 +28,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="chat.css">
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <!-- Supabase SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -86,68 +85,7 @@
 <footer class="site-footer">
   <p>Impossible Tower List</p>
 </footer>
-
-<!-- =====================  LIVE CHAT  ===================== -->
-<aside class="chat-panel" id="chatPanel" aria-label="Live chat">
-  <div class="chat-head">
-    <div class="chat-title">
-      <h2>Live Chat</h2>
-      <span class="chat-online" id="chatOnline" title="Connecting…">
-        <span class="chat-dot" id="chatDot"></span>
-        <span class="chat-online-num" id="chatOnlineNum">0</span>
-        <span class="chat-online-label">online</span>
-      </span>
-    </div>
-    <button type="button" class="chat-close" id="chatClose" aria-label="Close chat">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
-    </button>
-  </div>
-
-  <div class="chat-body">
-    <div class="chat-messages" id="chatMessages" role="log" aria-live="polite" aria-label="Chat messages"></div>
-    <div class="chat-empty" id="chatEmpty">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      <strong>No messages yet</strong>
-      <span>Click the box below, pick a nickname and say hi.</span>
-    </div>
-    <button type="button" class="chat-newmsg" id="chatNewMsg" hidden>New messages ↓</button>
-  </div>
-
-  <div class="chat-composer">
-    <div class="chat-form">
-      <input type="text" id="chatInput" placeholder="Write a message..." maxlength="300" autocomplete="off" enterkeyhint="send" aria-label="Message">
-      <button type="button" class="chat-send" id="chatSend" aria-label="Send message">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg>
-      </button>
-    </div>
-    <p class="chat-hint" id="chatHint"></p>
-  </div>
-</aside>
-
-<div class="chat-backdrop" id="chatBackdrop"></div>
-
-<button type="button" class="chat-toggle" id="chatToggle" aria-label="Open chat">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-  <span>Chat</span>
-  <span class="chat-badge" id="chatBadge">0</span>
-</button>
-
-<!-- Nickname popup -->
-<div class="nick-modal" id="nickModal" role="dialog" aria-modal="true" aria-labelledby="nickTitle">
-  <form class="nick-card" id="nickForm" autocomplete="off" target="_self" novalidate>
-    <h3 id="nickTitle">Choose a nickname</h3>
-    <p class="nick-sub">This is how others will see you in the chat. It stays until you refresh the page.</p>
-    <input type="text" id="nickInput" placeholder="Your nickname" maxlength="20" autocomplete="off" spellcheck="false" aria-label="Nickname">
-    <p class="nick-error" id="nickError" role="alert"></p>
-    <div class="nick-actions">
-      <button type="button" class="nick-cancel" id="nickCancel">Cancel</button>
-      <button type="submit" class="nick-join">Join chat</button>
-    </div>
-  </form>
-</div>
-
 <script src="levels.js"></script>
 <script src="script.js"></script>
-<script src="chat.js"></script>
 </body>
 </html>
