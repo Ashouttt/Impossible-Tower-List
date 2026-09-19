@@ -113,8 +113,14 @@
   var sb = (typeof sbClient !== "undefined") ? sbClient : null;
   if (!sb) { dot.className = "online-dot off"; return; }
 
-  var key = (window.crypto && crypto.randomUUID) ? crypto.randomUUID()
-          : "u" + Date.now() + Math.random().toString(36).slice(2);
+  // One ID per browser (shared by all its tabs) -> many tabs = 1 visitor
+  var key = null;
+  try { key = localStorage.getItem("tower_online_id"); } catch (e) {}
+  if (!key) {
+    key = (window.crypto && crypto.randomUUID) ? crypto.randomUUID()
+        : "u" + Date.now() + Math.random().toString(36).slice(2);
+    try { localStorage.setItem("tower_online_id", key); } catch (e) {}
+  }
 
   var ch = sb.channel("tower-list-online", { config: { presence: { key: key } } });
 
