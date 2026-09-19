@@ -11,10 +11,11 @@ const SUPABASE_URL = "https://tpvtcnjvndsabtvsgsqo.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwdnRjbmp2bmRzYWJ0dnNnc3FvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxNTA5MjksImV4cCI6MjEwMTcyNjkyOX0.CMMOnMYpZPF5gBfGTEeVdZ3WMq0mgG983Bt0juLnNwU";
 
 // Inicjalizacja klienta Supabase
-let sbClient = null;
+window.sbClient = null;
 if (typeof window.supabase !== "undefined") {
-  sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  window.sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 }
+let sbClient = window.sbClient; // alias dla kompatybilności
 
 const TIERS = [
   { id: "verified",   label: "Verified",   max: Infinity },
