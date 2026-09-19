@@ -334,6 +334,17 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <!-- Supabase SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+<!-- Supabase connection -->
+<script>
+  const SUPABASE_URL = "https://xcemcdyjgmdzbbdleypt.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_wzfNuTNN1O-zvKjZDA-DxA_Y7MMmmd1";
+
+  const sbClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+</script>
 <base target="_blank">
 </head>
 <body>
