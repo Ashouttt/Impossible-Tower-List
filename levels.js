@@ -772,8 +772,8 @@ const LEVELS = [
     difficulty: "Mid Unreal",
     videoId: "v3xyGx6oO44",
     worldRecord: "Floor 8",
-    quality: "N/A",
-    robloxLink: "",
+    quality: "A+",
+    robloxLink: "https://www.roblox.com/games/85719009364726/My-Emotional-Compass",
   },
   {
     rank: 66,
