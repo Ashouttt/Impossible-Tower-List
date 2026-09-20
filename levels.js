@@ -755,6 +755,17 @@ const LEVELS = [
   // Mid Unreal
   {
     rank: 64,
+    name: "Tower of My Emotional Compass",
+    creator: "a1ien_ation, HydridLevitation",
+    verifier: "",
+    difficulty: "Mid Unreal",
+    videoId: "v3xyGx6oO44",
+    worldRecord: "Floor 8",
+    quality: "N/A",
+    robloxLink: "",
+  },
+  {
+    rank: 65,
     name: "Tower of It Never Ends",
     creator: "ciel_azulsky",
     verifier: "MonsterIsABlock",
@@ -763,17 +774,6 @@ const LEVELS = [
     worldRecord: "N/A",
     quality: "N/A",
     robloxLink: "https://www.roblox.com/games/107705095969573/tower-of-IT-NEVER-ENDS",
-  },
-  {
-    rank: 65,
-    name: "Tower of My Emotional Compass",
-    creator: "a1ien_ation, HydridLevitation",
-    verifier: "",
-    difficulty: "Mid Unreal",
-    videoId: "v3xyGx6oO44",
-    worldRecord: "Floor 8",
-    quality: "A+",
-    robloxLink: "https://www.roblox.com/games/85719009364726/My-Emotional-Compass",
   },
   {
     rank: 66,
