@@ -143,60 +143,12 @@ function getUserId() {
 }
 
 function generateFingerprint() {
-  const components = [];
-  components.push(navigator.userAgent);
-  components.push(navigator.language || navigator.userLanguage);
-  components.push(screen.width + "x" + screen.height + "x" + screen.colorDepth);
-  components.push(Intl.DateTimeFormat().resolvedOptions().timeZone);
-  components.push(navigator.platform);
-  components.push(navigator.hardwareConcurrency || "unknown");
-  components.push(navigator.deviceMemory || "unknown");
-  components.push("ontouchstart" in window ? "touch" : "no-touch");
-
-  try {
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    canvas.width = 200;
-    canvas.height = 50;
-    ctx.textBaseline = "top";
-    ctx.font = "14px Arial";
-    ctx.fillStyle = "#f60";
-    ctx.fillRect(10, 10, 50, 20);
-    ctx.fillStyle = "#069";
-    ctx.fillText("Tower Likes FP v1", 10, 30);
-    ctx.strokeStyle = "#c00";
-    ctx.beginPath();
-    ctx.moveTo(100, 10);
-    ctx.lineTo(150, 40);
-    ctx.stroke();
-    components.push(canvas.toDataURL().slice(-50));
-  } catch (e) {
-    components.push("no-canvas");
+  // Prosty losowy identyfikator zamiast zbierania danych o urządzeniu/przeglądarce
+  // (canvas/WebGL fingerprinting bywa oznaczane jako podejrzane śledzenie przez skanery bezpieczeństwa)
+  if (window.crypto && crypto.randomUUID) {
+    return "fp_" + crypto.randomUUID();
   }
-
-  try {
-    const gl = document.createElement("canvas").getContext("webgl");
-    if (gl) {
-      const debugInfo = gl.getExtension("WEBGL_debug_renderer_info");
-      if (debugInfo) {
-        components.push(gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL));
-        components.push(gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL));
-      }
-    }
-  } catch (e) {
-    components.push("no-webgl");
-  }
-
-  if (navigator.plugins) {
-    const plugins = [];
-    for (let i = 0; i < navigator.plugins.length; i++) {
-      plugins.push(navigator.plugins[i].name);
-    }
-    components.push(plugins.join(","));
-  }
-
-  const raw = components.join("||");
-  return "fp_" + cyrb53(raw).toString(36);
+  return "fp_" + Date.now().toString(36) + Math.random().toString(36).slice(2);
 }
 
 function cyrb53(str) {
