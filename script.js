@@ -92,13 +92,27 @@ function parseDifficulty(raw) {
 
 function difficultyClass(parsed) {
   if (parsed.prefix === "High-Peak") return "high-peak";
+  const base = parsed.base.toLowerCase();
+  
   const map = { 
     "horrific": "horrific", 
     "unreal": "unreal", 
     "nil": "nil", 
-    "error": "error" 
+    "error": "error",
+    "literal": "literal",
+    "why": "why",
+    "no": "no",
+    "death": "death",
+    "hell": "hell",
+    "tartarus": "tartarus",
+    "unimaginable": "unimaginable",
+    "aleph-null": "aleph-null",
+    "immeasurable": "immeasurable",
+    "malicious": "malicious",
+    "roorxd": "roorxd"
   };
-  return map[parsed.base.toLowerCase()] || "";
+  
+  return map[base] || "";
 }
 
 function difficultyIcon(parsed) {
