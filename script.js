@@ -36,7 +36,7 @@ if (typeof window.supabase !== "undefined") {
 }
 
 /* =========================================================
-   RESZTA KODU (bez zmian)
+   KONFIGURACJA
    ========================================================= */
 
 const TIERS = [
@@ -54,9 +54,19 @@ function tierForLevel(level) {
   return TIERS.find(t => t.id === "unverified");
 }
 
+/* =========================================================
+   IKONY SVG
+   ========================================================= */
+
+const ICON_HORRIFIC = '<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="7" stroke-linejoin="round"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38"/></svg>';
+
+const ICON_UNREAL = '<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"><polygon points="50,2 60,35 98,35 68,56 78,90 50,70 22,90 32,56 2,35 40,35"/></svg>';
+
+const ICON_NIL = '<svg class="diff-icon" viewBox="0 0 100 100"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38" fill="#0a0a0a" stroke="#555555" stroke-width="5" stroke-linejoin="round"/><g transform="translate(50,50) rotate(45) translate(-50,-50)"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38" fill="#0a0a0a" stroke="#999999" stroke-width="5" stroke-linejoin="round"/></g></svg>';
+
 const ICON_ERROR = '<svg class="diff-icon" viewBox="0 0 100 100"><rect x="8" y="8" width="84" height="84" rx="4" fill="#cc2222" stroke="#991111" stroke-width="6"/></svg>';
 
-// ========== IKONY DLA NOWYCH DIFFICULTY ==========
+// IKONY DLA NOWYCH DIFFICULTY
 const ICON_LITERAL = '<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"><circle cx="50" cy="50" r="40"/></svg>';
 
 const ICON_WHY = '<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"><path d="M50 20 L50 60 M50 75 L50 80"/></svg>';
@@ -78,6 +88,17 @@ const ICON_IMMEASURABLE = '<svg class="diff-icon" viewBox="0 0 100 100" fill="cu
 const ICON_MALICIOUS = '<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="8"><polygon points="50,15 85,85 15,85"/></svg>';
 
 const ICON_ROORXD = '<svg class="diff-icon" viewBox="0 0 100 100" fill="currentColor"><path d="M50 10 A40 40 0 1 1 50 90 A40 40 0 1 1 50 10 M50 30 A20 20 0 1 0 50 70 A20 20 0 1 0 50 30"/></svg>';
+
+const ICON_ROBLOX = '<svg class="place-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M4.24 0L0 19.76 19.76 24 24 4.24 4.24 0zM9.6 8.4l6 1.4-1.4 6-6-1.4 1.4-6z"/></svg>';
+
+const ICON_HEART_EMPTY = '<svg class="like-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+
+const ICON_HEART_FILLED = '<svg class="like-icon" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+
+/* =========================================================
+   PARSOWANIE DIFFICULTY
+   ========================================================= */
+
 function parseDifficulty(raw) {
   if (!raw) return { prefix: "", base: "", full: "" };
   const str = String(raw).trim();
@@ -183,24 +204,10 @@ function getUserId() {
 }
 
 function generateFingerprint() {
-  // Prosty losowy identyfikator zamiast zbierania danych o urządzeniu/przeglądarce
-  // (canvas/WebGL fingerprinting bywa oznaczane jako podejrzane śledzenie przez skanery bezpieczeństwa)
   if (window.crypto && crypto.randomUUID) {
     return "fp_" + crypto.randomUUID();
   }
   return "fp_" + Date.now().toString(36) + Math.random().toString(36).slice(2);
-}
-
-function cyrb53(str) {
-  let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
-  for (let i = 0; i < str.length; i++) {
-    const ch = str.charCodeAt(i);
-    h1 = Math.imul(h1 ^ ch, 2654435761);
-    h2 = Math.imul(h2 ^ ch, 1597334677);
-  }
-  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
-  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
-  return 4294967296 * (2097151 & h2) + (h1 >>> 0);
 }
 
 function hasLiked(towerId) {
@@ -352,7 +359,7 @@ function buildLikeButton(level) {
 }
 
 /* =========================================================
-   RESZTA KODU (rendering, filtering, etc.)
+   RENDERING
    ========================================================= */
 
 function getFilteredLevels() {
