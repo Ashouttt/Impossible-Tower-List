@@ -128,10 +128,26 @@ function difficultyClass(parsed) {
 function difficultyIcon(parsed) {
   if (parsed.prefix === "High-Peak") return ICON_UNREAL;
   const b = parsed.base.toLowerCase();
+  
+  // Istniejące
   if (b === "horrific") return ICON_HORRIFIC;
   if (b === "unreal") return ICON_UNREAL;
   if (b === "nil") return ICON_NIL;
   if (b === "error") return ICON_ERROR;
+  
+  // Nowe difficulty
+  if (b === "literal") return ICON_LITERAL;
+  if (b === "why") return ICON_WHY;
+  if (b === "no") return ICON_NO;
+  if (b === "death") return ICON_DEATH;
+  if (b === "hell") return ICON_HELL;
+  if (b === "tartarus") return ICON_TARTARUS;
+  if (b === "unimaginable") return ICON_UNIMAGINABLE;
+  if (b === "aleph-null") return ICON_ALEPH;
+  if (b === "immeasurable") return ICON_IMMEASURABLE;
+  if (b === "malicious") return ICON_MALICIOUS;
+  if (b === "roorxd") return ICON_ROORXD;
+  
   return "";
 }
 
