@@ -149,7 +149,7 @@ const LEVELS = [
     difficulty: "Peak Nil",
     videoId: "",
     worldRecord: "N/A",
-    quality: "N/A",
+    quality: "Z",
     robloxLink: "https://www.roblox.com/games/126948324066981/Tower-of-Frutiger-Aero",
   },
   {
