@@ -1345,3 +1345,182 @@ main {
     background-size: 300% 100%;
   }
 }
+
+
+/* ========== NOWE DIFFICULTY ========== */
+
+/* Literal */
+.diff-literal {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.08);
+}
+.diff-literal .diff-icon {
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.5));
+}
+.level-row[data-diff="literal"] .row-main::before {
+  background: #ffffff;
+}
+.level-row[data-diff="literal"] .row-rank {
+  color: #ffffff;
+}
+
+/* WHY */
+.diff-why {
+  color: #00ffff;
+  border-color: rgba(0, 255, 255, 0.35);
+  background: rgba(0, 255, 255, 0.08);
+}
+.diff-why .diff-icon {
+  filter: drop-shadow(0 0 4px rgba(0, 255, 255, 0.5));
+}
+.level-row[data-diff="why"] .row-main::before {
+  background: #00ffff;
+}
+.level-row[data-diff="why"] .row-rank {
+  color: #00ffff;
+}
+
+/* NO */
+.diff-no {
+  color: #ff00ff;
+  border-color: rgba(255, 0, 255, 0.35);
+  background: rgba(255, 0, 255, 0.08);
+}
+.diff-no .diff-icon {
+  filter: drop-shadow(0 0 4px rgba(255, 0, 255, 0.5));
+}
+.level-row[data-diff="no"] .row-main::before {
+  background: #ff00ff;
+}
+.level-row[data-diff="no"] .row-rank {
+  color: #ff00ff;
+}
+
+/* DEATH */
+.diff-death {
+  color: #8b0000;
+  border-color: rgba(139, 0, 0, 0.35);
+  background: rgba(139, 0, 0, 0.08);
+}
+.diff-death .diff-icon {
+  filter: drop-shadow(0 0 4px rgba(139, 0, 0, 0.5));
+}
+.level-row[data-diff="death"] .row-main::before {
+  background: #8b0000;
+}
+.level-row[data-diff="death"] .row-rank {
+  color: #8b0000;
+}
+
+/* HELL */
+.diff-hell {
+  color: #ff4500;
+  border-color: rgba(255, 69, 0, 0.35);
+  background: rgba(255, 69, 0, 0.08);
+}
+.diff-hell .diff-icon {
+  filter: drop-shadow(0 0 4px rgba(255, 69, 0, 0.5));
+}
+.level-row[data-diff="hell"] .row-main::before {
+  background: #ff4500;
+}
+.level-row[data-diff="hell"] .row-rank {
+  color: #ff4500;
+}
+
+/* TARTARUS */
+.diff-tartarus {
+  color: #4b0082;
+  border-color: rgba(75, 0, 130, 0.35);
+  background: rgba(75, 0, 130, 0.08);
+}
+.diff-tartarus .diff-icon {
+  filter: drop-shadow(0 0 4px rgba(75, 0, 130, 0.5));
+}
+.level-row[data-diff="tartarus"] .row-main::before {
+  background: #4b0082;
+}
+.level-row[data-diff="tartarus"] .row-rank {
+  color: #4b0082;
+}
+
+/* Unimaginable */
+.diff-unimaginable {
+  color: #ffd700;
+  border-color: rgba(255, 215, 0, 0.35);
+  background: rgba(255, 215, 0, 0.08);
+}
+.diff-unimaginable .diff-icon {
+  filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.5));
+}
+.level-row[data-diff="unimaginable"] .row-main::before {
+  background: #ffd700;
+}
+.level-row[data-diff="unimaginable"] .row-rank {
+  color: #ffd700;
+}
+
+/* Aleph-Null */
+.diff-aleph-null {
+  color: #00ced1;
+  border-color: rgba(0, 206, 209, 0.35);
+  background: rgba(0, 206, 209, 0.08);
+}
+.diff-aleph-null .diff-icon {
+  filter: drop-shadow(0 0 4px rgba(0, 206, 209, 0.5));
+}
+.level-row[data-diff="aleph-null"] .row-main::before {
+  background: #00ced1;
+}
+.level-row[data-diff="aleph-null"] .row-rank {
+  color: #00ced1;
+}
+
+/* Immeasurable */
+.diff-immeasurable {
+  color: #ff1493;
+  border-color: rgba(255, 20, 147, 0.35);
+  background: rgba(255, 20, 147, 0.08);
+}
+.diff-immeasurable .diff-icon {
+  filter: drop-shadow(0 0 4px rgba(255, 20, 147, 0.5));
+}
+.level-row[data-diff="immeasurable"] .row-main::before {
+  background: #ff1493;
+}
+.level-row[data-diff="immeasurable"] .row-rank {
+  color: #ff1493;
+}
+
+/* Malicious */
+.diff-malicious {
+  color: #9400d3;
+  border-color: rgba(148, 0, 211, 0.35);
+  background: rgba(148, 0, 211, 0.08);
+}
+.diff-malicious .diff-icon {
+  filter: drop-shadow(0 0 4px rgba(148, 0, 211, 0.5));
+}
+.level-row[data-diff="malicious"] .row-main::before {
+  background: #9400d3;
+}
+.level-row[data-diff="malicious"] .row-rank {
+  color: #9400d3;
+}
+
+/* RoorXD */
+.diff-roorxd {
+  color: #32cd32;
+  border-color: rgba(50, 205, 50, 0.35);
+  background: rgba(50, 205, 50, 0.08);
+}
+.diff-roorxd .diff-icon {
+  filter: drop-shadow(0 0 4px rgba(50, 205, 50, 0.5));
+}
+.level-row[data-diff="roorxd"] .row-main::before {
+  background: #32cd32;
+}
+.level-row[data-diff="roorxd"] .row-rank {
+  color: #32cd32;
+}
