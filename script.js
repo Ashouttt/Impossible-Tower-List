@@ -55,7 +55,7 @@ function tierForLevel(level) {
 }
 
 /* =========================================================
-   IKONY SVG
+   IKONY SVG I OBRAZKI
    ========================================================= */
 
 const ICON_HORRIFIC = '<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="7" stroke-linejoin="round"><polygon points="50,5 62,38 95,50 62,62 50,95 38,62 5,50 38,38"/></svg>';
@@ -66,28 +66,28 @@ const ICON_NIL = '<svg class="diff-icon" viewBox="0 0 100 100"><polygon points="
 
 const ICON_ERROR = '<svg class="diff-icon" viewBox="0 0 100 100"><rect x="8" y="8" width="84" height="84" rx="4" fill="#cc2222" stroke="#991111" stroke-width="6"/></svg>';
 
-// IKONY DLA NOWYCH DIFFICULTY
-const ICON_LITERAL = '<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"><circle cx="50" cy="50" r="40"/></svg>';
+// TWOJE WŁASNE IKONKI Z WIKIA
+const ICON_LITERAL = '<img class="diff-icon" src="https://static.wikia.nocookie.net/jtohs-hardest-towers/images/0/06/L5.png/revision/latest?cb=20260514110329" alt="">';
 
-const ICON_WHY = '<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"><path d="M50 20 L50 60 M50 75 L50 80"/></svg>';
+const ICON_WHY = '<img class="diff-icon" src="https://static.wikia.nocookie.net/jtohs-hardest-towers/images/6/65/Why.png/revision/latest?cb=20231025155110" alt="">';
 
-const ICON_NO = '<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"><path d="M20 20 L80 80 M80 20 L20 80"/></svg>';
+const ICON_NO = '<img class="diff-icon" src="https://static.wikia.nocookie.net/jtohs-hardest-towers/images/0/04/No.png/revision/latest/scale-to-width-down/1000?cb=20260423143720" alt="">';
 
-const ICON_DEATH = '<svg class="diff-icon" viewBox="0 0 100 100" fill="currentColor"><path d="M50 10 L30 40 L10 40 L25 60 L15 90 L50 70 L85 90 L75 60 L90 40 L70 40 Z"/></svg>';
+const ICON_DEATH = '<img class="diff-icon" src="https://static.wikia.nocookie.net/jtohs-hardest-towers/images/9/90/DEATHrevamp.png/revision/latest?cb=20240420012614" alt="">';
 
-const ICON_HELL = '<svg class="diff-icon" viewBox="0 0 100 100" fill="currentColor"><path d="M50 5 L60 35 L90 35 L65 55 L75 85 L50 65 L25 85 L35 55 L10 35 L40 35 Z"/></svg>';
+const ICON_HELL = '<img class="diff-icon" src="https://static.wikia.nocookie.net/jtohs-hardest-towers/images/d/d7/HELL.png/revision/latest?cb=20231025155246" alt="">';
 
-const ICON_TARTARUS = '<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="7"><polygon points="50,10 70,30 90,30 75,50 85,75 50,55 15,75 25,50 10,30 30,30"/></svg>';
+const ICON_TARTARUS = '<img class="diff-icon" src="https://static.wikia.nocookie.net/jtohs-hardest-towers/images/7/7e/TARTARUS.png/revision/latest?cb=20231025155305" alt="">';
 
-const ICON_UNIMAGINABLE = '<svg class="diff-icon" viewBox="0 0 100 100" fill="currentColor"><circle cx="50" cy="50" r="8"/><circle cx="50" cy="25" r="5"/><circle cx="50" cy="75" r="5"/><circle cx="25" cy="50" r="5"/><circle cx="75" cy="50" r="5"/></svg>';
+const ICON_UNIMAGINABLE = '<img class="diff-icon" src="https://static.wikia.nocookie.net/jtohs-hardest-towers/images/c/c2/Shouldn%E2%80%99t_Be_Possible.png/revision/latest?cb=20231025155359" alt="">';
 
-const ICON_ALEPH = '<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6"><path d="M30 80 L50 20 L70 80"/></svg>';
+const ICON_ALEPH = '<img class="diff-icon" src="https://static.wikia.nocookie.net/jtohs-hardest-towers/images/b/ba/Alephnull2.png/revision/latest/scale-to-width-down/1000?cb=20260921221110" alt="">';
 
-const ICON_IMMEASURABLE = '<svg class="diff-icon" viewBox="0 0 100 100" fill="currentColor"><rect x="20" y="20" width="60" height="60" rx="8"/></svg>';
+const ICON_IMMEASURABLE = '<img class="diff-icon" src="https://static.wikia.nocookie.net/jtohs-hardest-towers/images/6/63/Immeasurable-0.png/revision/latest?cb=20231025155432" alt="">';
 
-const ICON_MALICIOUS = '<svg class="diff-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="8"><polygon points="50,15 85,85 15,85"/></svg>';
+const ICON_MALICIOUS = '<img class="diff-icon" src="https://static.wikia.nocookie.net/jtohs-hardest-towers/images/6/65/Malicious.4.png/revision/latest/scale-to-width-down/1000?cb=20260618172840" alt="">';
 
-const ICON_ROORXD = '<svg class="diff-icon" viewBox="0 0 100 100" fill="currentColor"><path d="M50 10 A40 40 0 1 1 50 90 A40 40 0 1 1 50 10 M50 30 A20 20 0 1 0 50 70 A20 20 0 1 0 50 30"/></svg>';
+const ICON_ROORXD = '<img class="diff-icon" src="https://static.wikia.nocookie.net/jtohs-hardest-towers/images/0/0f/Roorxd2.png/revision/latest/scale-to-width-down/1000?cb=20260618173912" alt="">';
 
 const ICON_ROBLOX = '<svg class="place-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M4.24 0L0 19.76 19.76 24 24 4.24 4.24 0zM9.6 8.4l6 1.4-1.4 6-6-1.4 1.4-6z"/></svg>';
 
