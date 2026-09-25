@@ -1,10 +1,10 @@
 /* =========================================================
    IMPOSSIBLE TOWER LIST — script.js (jQuery + Supabase version)
-   Cache-bust: v10-new-api-keys
+   Cache-bust: v11-spam-likes
    ========================================================= */
 
 /* =========================================================
-   KONFIGURACJA SUPABASE - DWA PROJEKTY (NOWE KLUCZE!)
+   KONFIGURACJA SUPABASE - DWA PROJEKTY
    ========================================================= */
 
 // PROJEKT 1: Feedback + Online counter
@@ -16,16 +16,14 @@ const SUPABASE_URL_LIKES = "https://tpvtcnjvndsabtvsgsqo.supabase.co";
 const SUPABASE_KEY_LIKES = "sb_publishable_EG7GAcecDH63HYLMjRIfYA_4TcYSFuw";
 
 // Inicjalizacja klientów Supabase
-window.sbClient = null;      // Dla feedback + online (projekt 1)
-let sbClientLikes = null;    // Dla likes (projekt 2)
+window.sbClient = null;
+let sbClientLikes = null;
 
 if (typeof window.supabase !== "undefined") {
   try {
-    // Klient główny (feedback + online counter)
     window.sbClient = window.supabase.createClient(SUPABASE_URL_MAIN, SUPABASE_KEY_MAIN);
     console.log("[Supabase] Main client (feedback) initialized ✅");
     
-    // Klient dla likes (osobny projekt)
     sbClientLikes = window.supabase.createClient(SUPABASE_URL_LIKES, SUPABASE_KEY_LIKES);
     console.log("[Supabase] Likes client initialized ✅");
   } catch (e) {
@@ -66,7 +64,6 @@ const ICON_NIL = '<svg class="diff-icon" viewBox="0 0 100 100"><polygon points="
 
 const ICON_ERROR = '<svg class="diff-icon" viewBox="0 0 100 100"><rect x="8" y="8" width="84" height="84" rx="4" fill="#cc2222" stroke="#991111" stroke-width="6"/></svg>';
 
-// TWOJE WŁASNE IKONKI Z WIKIA
 const ICON_LITERAL = '<img class="diff-icon" src="https://static.wikia.nocookie.net/jtohs-hardest-towers/images/0/06/L5.png/revision/latest?cb=20260514110329" alt="">';
 
 const ICON_WHY = '<img class="diff-icon" src="https://static.wikia.nocookie.net/jtohs-hardest-towers/images/6/65/Why.png/revision/latest?cb=20231025155110" alt="">';
@@ -150,13 +147,10 @@ function difficultyIcon(parsed) {
   if (parsed.prefix === "High-Peak") return ICON_UNREAL;
   const b = parsed.base.toLowerCase();
   
-  // Istniejące
   if (b === "horrific") return ICON_HORRIFIC;
   if (b === "unreal") return ICON_UNREAL;
   if (b === "nil") return ICON_NIL;
   if (b === "error") return ICON_ERROR;
-  
-  // Nowe difficulty
   if (b === "literal") return ICON_LITERAL;
   if (b === "why") return ICON_WHY;
   if (b === "no") return ICON_NO;
@@ -190,10 +184,11 @@ let query = "";
 const CHEVRON_SVG = '<svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
 
 /* =========================================================
-   SYSTEM LIKÓW — używa sbClientLikes (PROJEKT 2)
+   SYSTEM LIKÓW — SPAM MODE (unlimited clicks)
    ========================================================= */
 
-const likesCache = {};
+const likesCache = {};  // cache lokalny (tower_id -> count z serwera)
+const localLikes = {};  // lokalne polubienia (tower_id -> count)
 
 function getUserId() {
   let fp = localStorage.getItem("tower_fp_id");
@@ -210,18 +205,19 @@ function generateFingerprint() {
   return "fp_" + Date.now().toString(36) + Math.random().toString(36).slice(2);
 }
 
-function hasLiked(towerId) {
-  return localStorage.getItem("liked_" + towerId) === "true";
+// Pobierz liczbę lokalnych lików z localStorage
+function getLocalLikes(towerId) {
+  const stored = localStorage.getItem("likes_" + towerId);
+  return stored ? parseInt(stored, 10) || 0 : 0;
 }
 
-function setLiked(towerId, liked) {
-  if (liked) {
-    localStorage.setItem("liked_" + towerId, "true");
-  } else {
-    localStorage.removeItem("liked_" + towerId);
-  }
+// Zapisz liczbę lokalnych lików do localStorage
+function setLocalLikes(towerId, count) {
+  localStorage.setItem("likes_" + towerId, String(count));
+  localLikes[towerId] = count;
 }
 
+// Pobierz aktualny count z serwera
 async function fetchLikeCount(towerId) {
   if (likesCache[towerId] !== undefined) {
     return likesCache[towerId];
@@ -257,47 +253,45 @@ async function fetchLikeCount(towerId) {
   }
 }
 
-async function sendLike(towerId, liked) {
-  if (!sbClientLikes) return likesCache[towerId] || 0;
+// Wyślij like do bazy (dodaj jeden wpis do tower_likes_users)
+async function sendLike(towerId) {
+  if (!sbClientLikes) return null;
 
   const userId = getUserId();
+  
+  // Generuj unikalny timestamp dla każdego kliknięcia
+  const uniqueId = userId + "_" + Date.now() + "_" + Math.random().toString(36).slice(2);
 
   try {
-    if (liked) {
-      const { error } = await sbClientLikes
-        .from("tower_likes_users")
-        .upsert({ tower_id: towerId, user_id: userId }, { onConflict: "tower_id,user_id" });
-      if (error) {
-        console.warn("[Likes] Upsert error:", error.message, error);
-        return null;
-      }
-    } else {
-      const { error } = await sbClientLikes
-        .from("tower_likes_users")
-        .delete()
-        .eq("tower_id", towerId)
-        .eq("user_id", userId);
-      if (error) {
-        console.warn("[Likes] Delete error:", error.message, error);
-        return null;
-      }
+    const { error } = await sbClientLikes
+      .from("tower_likes_users")
+      .insert({ 
+        tower_id: towerId, 
+        user_id: uniqueId  // każde kliknięcie = nowy rekord
+      });
+      
+    if (error) {
+      console.warn("[Likes] Insert error:", error.message, error);
+      return null;
     }
 
+    // Poczekaj chwilę na trigger
     await new Promise(r => setTimeout(r, 100));
 
-    const { data, error } = await sbClientLikes
+    // Pobierz zaktualizowany count
+    const { data, error: fetchError } = await sbClientLikes
       .from("tower_likes")
       .select("count")
       .eq("tower_id", towerId)
       .single();
 
-    if (error) {
-      if (error.code === "PGRST116") {
+    if (fetchError) {
+      if (fetchError.code === "PGRST116") {
         likesCache[towerId] = 0;
         return 0;
       }
-      console.warn("[Likes] Count error:", error.message);
-      return likesCache[towerId] || 0;
+      console.warn("[Likes] Count fetch error:", fetchError.message);
+      return null;
     }
 
     const count = data ? (data.count || 0) : 0;
@@ -305,28 +299,32 @@ async function sendLike(towerId, liked) {
     return count;
   } catch (e) {
     console.warn("[Likes] Failed to send like for", towerId, e.message);
-    return likesCache[towerId] || 0;
+    return null;
   }
 }
 
-function updateLikeButton($btn, count, liked) {
-  $btn.toggleClass("liked", liked);
-  $btn.find(".like-icon").html(liked ? ICON_HEART_FILLED : ICON_HEART_EMPTY);
+function updateLikeButton($btn, count, localCount) {
+  const hasLikes = localCount > 0;
+  $btn.toggleClass("liked", hasLikes);
+  $btn.find(".like-icon").html(hasLikes ? ICON_HEART_FILLED : ICON_HEART_EMPTY);
   $btn.find(".like-count").text(count);
   $btn.prop("disabled", false);
 }
 
 function buildLikeButton(level) {
   const towerId = "tower_" + level.rank;
-  const liked = hasLiked(towerId);
-  const icon = liked ? ICON_HEART_FILLED : ICON_HEART_EMPTY;
+  const localCount = getLocalLikes(towerId);
+  const hasLikes = localCount > 0;
+  const icon = hasLikes ? ICON_HEART_FILLED : ICON_HEART_EMPTY;
+  
   const $btn = $("<button>")
     .addClass("like-btn")
-    .toggleClass("liked", liked)
+    .toggleClass("liked", hasLikes)
     .attr("type", "button")
     .attr("data-tower", towerId)
     .html(icon + '<span class="like-count">—</span>');
 
+  // Załaduj count z serwera
   fetchLikeCount(towerId).then(function(count) {
     $btn.find(".like-count").text(count);
   });
@@ -335,23 +333,28 @@ function buildLikeButton(level) {
     e.stopPropagation();
     if ($btn.prop("disabled")) return;
 
-    const currentlyLiked = hasLiked(towerId);
-    const newLiked = !currentlyLiked;
+    // Zwiększ lokalny licznik
+    const newLocalCount = localCount + 1;
+    setLocalLikes(towerId, newLocalCount);
 
+    // Pokaż natychmiastowy feedback (optimistic update)
     const currentCount = parseInt($btn.find(".like-count").text()) || 0;
-    const newCount = newLiked ? currentCount + 1 : Math.max(0, currentCount - 1);
-
-    updateLikeButton($btn, newCount, newLiked);
-    setLiked(towerId, newLiked);
+    updateLikeButton($btn, currentCount + 1, newLocalCount);
     $btn.prop("disabled", true);
 
-    sendLike(towerId, newLiked).then(function(serverCount) {
+    // Wyślij like do serwera
+    sendLike(towerId).then(function(serverCount) {
       if (serverCount !== null) {
-        updateLikeButton($btn, serverCount, newLiked);
+        updateLikeButton($btn, serverCount, newLocalCount);
+      } else {
+        // Błąd - przywróć poprzedni stan
+        updateLikeButton($btn, currentCount, newLocalCount - 1);
+        setLocalLikes(towerId, newLocalCount - 1);
       }
     }).catch(function() {
-      updateLikeButton($btn, currentCount, currentlyLiked);
-      setLiked(towerId, currentlyLiked);
+      // Błąd - przywróć poprzedni stan
+      updateLikeButton($btn, currentCount, newLocalCount - 1);
+      setLocalLikes(towerId, newLocalCount - 1);
     });
   });
 
