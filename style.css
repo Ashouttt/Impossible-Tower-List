@@ -33,7 +33,7 @@
   /* NOWE DIFFICULTY KOLORY */
   --diff-literal:     #2d5a3d;
   --diff-why:         #2a2a2e;
-  --diff-no:          #c084fc;
+  --diff-no:          #5a5a5a;
   --diff-death:       #8b0000;
   --diff-hell:        #4a9eff;
   --diff-tartarus:    #4b0082;
@@ -532,14 +532,14 @@ main {
   filter: drop-shadow(0 0 4px rgba(232, 232, 232, 0.3));
 }
 
-/* NO - fioletowy jasny */
+/* NO - szary ciemny */
 .diff-no {
-  color: #c084fc;
-  border-color: rgba(192, 132, 252, 0.4);
-  background: rgba(192, 132, 252, 0.1);
+  color: #a0a0a0;
+  border-color: rgba(90, 90, 90, 0.5);
+  background: rgba(90, 90, 90, 0.15);
 }
 .diff-no .diff-icon {
-  filter: drop-shadow(0 0 4px rgba(192, 132, 252, 0.5));
+  filter: drop-shadow(0 0 3px rgba(160, 160, 160, 0.4));
 }
 
 /* DEATH - ciemny czerwony */
