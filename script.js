@@ -1,10 +1,10 @@
 /* =========================================================
    IMPOSSIBLE TOWER LIST — script.js (jQuery + Supabase version)
-   Cache-bust: v10-new-api-keys
+   Cache-bust: v12-rate-limit-protection
    ========================================================= */
 
 /* =========================================================
-   KONFIGURACJA SUPABASE - DWA PROJEKTY (NOWE KLUCZE!)
+   KONFIGURACJA SUPABASE - DWA PROJEKTY
    ========================================================= */
 
 // PROJEKT 1: Feedback + Online counter
@@ -186,10 +186,30 @@ let query = "";
 const CHEVRON_SVG = '<svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
 
 /* =========================================================
-   SYSTEM LIKÓW — używa sbClientLikes (PROJEKT 2)
+   SYSTEM LIKÓW — z RATE LIMITING
    ========================================================= */
 
 const likesCache = {};
+
+// Rate limiter (client-side protection)
+const rateLimiter = {
+  clicks: [],
+  maxPerMinute: 10,
+  
+  canClick() {
+    const now = Date.now();
+    // Usuń kliknięcia starsze niż 1 minuta
+    this.clicks = this.clicks.filter(t => now - t < 60000);
+    
+    if (this.clicks.length >= this.maxPerMinute) {
+      console.warn("[Rate Limit] Too many clicks! Max 10 per minute.");
+      return false;
+    }
+    
+    this.clicks.push(now);
+    return true;
+  }
+};
 
 function getUserId() {
   let fp = localStorage.getItem("tower_fp_id");
@@ -255,6 +275,12 @@ async function fetchLikeCount(towerId) {
 
 async function sendLike(towerId, liked) {
   if (!sbClientLikes) return likesCache[towerId] || 0;
+
+  // CLIENT-SIDE RATE LIMIT CHECK
+  if (!rateLimiter.canClick()) {
+    console.warn("[Likes] Rate limit exceeded (client-side)");
+    return null;
+  }
 
   const userId = getUserId();
 
