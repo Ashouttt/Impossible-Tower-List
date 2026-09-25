@@ -1,6 +1,6 @@
 /* =========================================================
    IMPOSSIBLE TOWER LIST — script.js (jQuery + Supabase version)
-   Cache-bust: v11-fixed-icons
+   Cache-bust: v12-fixed-like-animation
    ========================================================= */
 
 /* =========================================================
@@ -77,7 +77,7 @@ const ICON_UNIMAGINABLE = '<img class="diff-icon" src="https://i.imgur.com/T9BTv
 const ICON_ALEPH = '<img class="diff-icon" src="https://i.imgur.com/cAKdch2.png" alt="">';
 const ICON_IMMEASURABLE = '<img class="diff-icon" src="https://i.imgur.com/zpLMCz0.png" alt="">';
 const ICON_MALICIOUS = '<img class="diff-icon" src="https://i.imgur.com/xITLLi3.png" alt="">';
-const ICON_ROORXD = '<img class="diff-icon" src="https://i.imgur.com/BRAKUJE_TEGO.png" alt="">'; // ⚠️ NIE PODAŁEŚ TEGO!
+const ICON_ROORXD = '<img class="diff-icon" src="https://i.imgur.com/BRAKUJE_TEGO.png" alt="">'; // ⚠️ DODAJ LINK!
 
 const ICON_ROBLOX = '<svg class="place-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M4.24 0L0 19.76 19.76 24 24 4.24 4.24 0zM9.6 8.4l6 1.4-1.4 6-6-1.4 1.4-6z"/></svg>';
 
@@ -334,6 +334,12 @@ function buildLikeButton(level) {
     updateLikeButton($btn, newCount, newLiked);
     setLiked(towerId, newLiked);
     $btn.prop("disabled", true);
+
+    // ✅ NAPRAWIONA ANIMACJA - dodaj klasę i usuń po zakończeniu
+    $btn.addClass("like-animate");
+    setTimeout(function() {
+      $btn.removeClass("like-animate");
+    }, 380); // Tyle trwa animacja (zgodnie z CSS)
 
     sendLike(towerId, newLiked).then(function(serverCount) {
       if (serverCount !== null) {
