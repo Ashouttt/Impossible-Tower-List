@@ -1,6 +1,6 @@
 /* =========================================================
    IMPOSSIBLE TOWER LIST — script.js (jQuery + Supabase version)
-   Cache-bust: v12-fixed-like-animation
+   Cache-bust: v13-no-like-animation
    ========================================================= */
 
 /* =========================================================
@@ -66,7 +66,7 @@ const ICON_NIL = '<svg class="diff-icon" viewBox="0 0 100 100"><polygon points="
 
 const ICON_ERROR = '<svg class="diff-icon" viewBox="0 0 100 100"><rect x="8" y="8" width="84" height="84" rx="4" fill="#cc2222" stroke="#991111" stroke-width="6"/></svg>';
 
-// ========== IKONY DIFFICULTY (IMGUR - NAPRAWIONE) ==========
+// ========== IKONY DIFFICULTY (IMGUR) ==========
 const ICON_LITERAL = '<img class="diff-icon" src="https://i.imgur.com/1D7vy3V.png" alt="">';
 const ICON_WHY = '<img class="diff-icon" src="https://i.imgur.com/p0RyBgd.png" alt="">';
 const ICON_NO = '<img class="diff-icon" src="https://i.imgur.com/GdKvmTl.png" alt="">';
@@ -334,12 +334,6 @@ function buildLikeButton(level) {
     updateLikeButton($btn, newCount, newLiked);
     setLiked(towerId, newLiked);
     $btn.prop("disabled", true);
-
-    // ✅ NAPRAWIONA ANIMACJA - dodaj klasę i usuń po zakończeniu
-    $btn.addClass("like-animate");
-    setTimeout(function() {
-      $btn.removeClass("like-animate");
-    }, 380); // Tyle trwa animacja (zgodnie z CSS)
 
     sendLike(towerId, newLiked).then(function(serverCount) {
       if (serverCount !== null) {
