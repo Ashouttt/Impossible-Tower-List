@@ -126,6 +126,17 @@ const LEVELS = [
   // WHY DIFFICULTY
   {
     rank: 8,
+    name: "Tower of Absolutely Destroyed Human's Difficulties",
+    creator: "Tordesillias",
+    verifier: "",
+    difficulty: "Bottom WHY",
+    videoId: "59Fc1rkOBe8",
+    worldRecord: "N/A",
+    quality: "N/A",
+    robloxLink: "https://www.roblox.com/games/118859191200145/Tower-of-Absolutely-Destroyed-Humans-Difficulties",
+  },
+  {
+    rank: 9,
     name: "Tower of Monochromatic Symmetry",
     creator: "LukiP4wss, Findabletag",
     verifier: "",
@@ -138,7 +149,7 @@ const LEVELS = [
 
   // LITERAL DIFFICULTY
   {
-    rank: 9,
+    rank: 10,
     name: "Tower of Boring Wallwalks",
     creator: "msdyc",
     verifier: "",
@@ -151,7 +162,7 @@ const LEVELS = [
 
   // ERROR DIFFICULTY
   {
-    rank: 10,
+    rank: 11,
     name: "Tower of Safe White Tower",
     creator: "ju_silvestre",
     verifier: "",
@@ -162,7 +173,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/101044284168858/Tower-of-Safe-White-Tower",
   },
   {
-    rank: 11,
+    rank: 12,
     name: "Tower of Jungle Gyms",
     creator: "Macloux, Higherthanblox, D_yni, Eccapin, Findabletag, Kinjiture, Melvinalsgamer, PoptartPunt, Empyrae, pacovepowered5, rohanmishrr, Yellow78Dog, SungazedUwU, Exhaustedsleepybear, Delukes51, CUGASTheLooney",
     verifier: "",
@@ -173,7 +184,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/99982773118045/Tower-of-Jungle-Gyms-The-Big-Climb#ropro-quick-search",
   },
   {
-    rank: 12,
+    rank: 13,
     name: "Chaotic Tower",
     creator: "zorloth1, vipsem, RagingEngineer, CreationIsntGood, D_yni, FindableTag, PoptartPunt, Delukes51, SungazedUwU",
     verifier: "",
@@ -184,7 +195,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/5684674542/Chaotic-Tower-R",
   },
   {
-    rank: 13,
+    rank: 14,
     name: "Tower of Crazy Snakes",
     creator: "megabruhfart",
     verifier: "",
@@ -195,7 +206,7 @@ const LEVELS = [
     robloxLink: "",
   },
   {
-    rank: 14,
+    rank: 15,
     name: "Tower of Tedious Timings",
     creator: "sdt00",
     verifier: "",
@@ -206,7 +217,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/119994535255674/Tower-of-Tedious-Timings",
   },
   {
-    rank: 15,
+    rank: 16,
     name: "Not Even Playable Gameplay",
     creator: "NameZerooo, SE5Y3QAY, MIXMENMIX, 10A_v, artemzartemz, benceiyibendy, kryception, MiniLagOOn, GameSion, computerboi3131, xXFighterofTimeXx",
     verifier: "",
@@ -217,7 +228,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/130670383361152/Not-Even-Playable-Gameplay",
   },
   {
-    rank: 16,
+    rank: 17,
     name: "Tower of Kill Rick",
     creator: "bLockerman666, skitsuna, mrgamingpotato1",
     verifier: "",
@@ -231,7 +242,7 @@ const LEVELS = [
 
   // NIL DIFFICULTY
   {
-    rank: 17,
+    rank: 18,
     name: "Citadel of Void",
     creator: "bLockerman666, Karinriine, IceNsalt, ciel_azulsky, Feodoric, tintom495, PPtTenshi, popop614, latomludo, macalads, Coatesultimate1, KittenLord420, nott_vy, Heksi",
     verifier: "",
@@ -242,7 +253,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/4597361034/Citadel-of-Void-OFFICIAL",
   },
   {
-    rank: 18,
+    rank: 19,
     name: "Tower of Very Fun Obstacles",
     creator: "NoobsTheBestGuys, XxRed1ScorpionxX",
     verifier: "",
@@ -253,7 +264,7 @@ const LEVELS = [
     robloxLink: "",
   },
   {
-    rank: 19,
+    rank: 20,
     name: "EVIL TOWER '76",
     creator: "tintom495",
     verifier: "",
@@ -264,7 +275,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/17781078059/EVIL-TOWER-76",
   },
   {
-    rank: 20,
+    rank: 21,
     name: "Steeple of Frutiger Aero",
     creator: "Engel_theobbyist, TearonQ",
     verifier: "",
@@ -275,7 +286,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/126948324066981/Tower-of-Frutiger-Aero",
   },
   {
-    rank: 21,
+    rank: 22,
     name: "Tower of Cruel Death",
     creator: "definetelynotTADEL",
     verifier: "",
@@ -286,7 +297,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/123958186812706/Tower-of-Cruel-Death",
   },
   {
-    rank: 22,
+    rank: 23,
     name: "Tower of Collecting Dust Particles",
     creator: "Lukaye_19",
     verifier: "",
@@ -297,7 +308,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/138794791429163/Tower-of-Collected-Dust-Particles",
   },
   {
-    rank: 23,
+    rank: 24,
     name: "Tower of Vague Luminescence",
     creator: "glizzygladiattorrr, Adan3842, exhaustedsleepybear, SungazedUwU",
     verifier: "",
@@ -308,7 +319,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/9024799067/Tower-of-Vague-Luminescence",
   },
   {
-    rank: 24,
+    rank: 25,
     name: "Tower of Parched and Exhausted",
     creator: "aminul2007",
     verifier: "",
@@ -319,7 +330,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/133133185725636/Tower-of-Parched-and-Exhausted",
   },
   {
-    rank: 25,
+    rank: 26,
     name: "Tower of Ziggle Core",
     creator: "헤리팍",
     verifier: "",
@@ -330,7 +341,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/89993867711798/Tower-of-Ziggle-Core",
   },
   {
-    rank: 26,
+    rank: 27,
     name: "Tower of Existential Crisis",
     creator: "Kinjiture, dogwithabome, 4Nuln, pacovepowered5, Dasiohh",
     verifier: "",
@@ -341,7 +352,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/10712971259/Tower-of-Existential-Crisis",
   },
   {
-    rank: 27,
+    rank: 28,
     name: "The Eternal Final Stretch",
     creator: "NameZerooo, mintiestgvm, MIXMENMIX, darts_andmonkeys, sawgamer2235, abogahaz, kryception, Twjsjwk, pickleboy53, SE5Y3QAY, CCemirCCC564",
     verifier: "",
@@ -352,7 +363,7 @@ const LEVELS = [
     robloxLink: "",
   },
   {
-    rank: 28,
+    rank: 29,
     name: "Tower of Top Jumps Community Never Clear",
     creator: "N/A",
     verifier: "",
@@ -363,7 +374,7 @@ const LEVELS = [
     robloxLink: "",
   },
   {
-    rank: 29,
+    rank: 30,
     name: "Tower of Absolute Corruption",
     creator: "AbyssalChaos",
     verifier: "",
@@ -374,7 +385,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/8375008730/Tower-of-Absolute-Corruption",
   },
   {
-    rank: 30,
+    rank: 31,
     name: "Tower of Boobawamba",
     creator: "redguy_1202",
     verifier: "",
@@ -385,7 +396,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/73308353782994/Tower-of-Boobawamba",
   },
   {
-    rank: 31,
+    rank: 32,
     name: "Tower of Homent Bruh",
     creator: "Pathetism",
     verifier: "",
@@ -396,7 +407,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/95560998034174/Tower-of-Homent-Bruh",
   },
   {
-    rank: 32,
+    rank: 33,
     name: "Tower of Spiralling Fates: Side-B",
     creator: "ciel_azulsky, Nerve2X",
     verifier: "",
@@ -407,7 +418,7 @@ const LEVELS = [
     robloxLink: "",
   },
   {
-    rank: 33,
+    rank: 34,
     name: "Tower of Unending Unforgiveness",
     creator: "hhhjhjjjjijijj, shuiggAF, babypizza34",
     verifier: "",
@@ -418,7 +429,7 @@ const LEVELS = [
     robloxLink: "",
   },
   {
-    rank: 34,
+    rank: 35,
     name: "Tower of Veiled Prophecy",
     creator: "TobiasHeroofRoblox, EEEEEEEEEEGHGHI, artemzartemz, obbylordd, microwavium",
     verifier: "",
@@ -429,7 +440,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/121475110039668/Tower-of-Veiled-Prophecy",
   },
   {
-    rank: 35,
+    rank: 36,
     name: "tower of sandy dusty windy climb",
     creator: "definetelynotTADEL",
     verifier: "",
@@ -440,7 +451,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/87451012470365/tower-of-sandy-dusty-windy-climb",
   },
   {
-    rank: 36,
+    rank: 37,
     name: "Tower of Conspicuous Retribution",
     creator: "laivure",
     verifier: "",
@@ -451,7 +462,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/112331301926361/Tower-of-conspicuous-retribution",
   },
   {
-    rank: 37,
+    rank: 38,
     name: "Tower of Ginga Glory",
     creator: "Nerve2X",
     verifier: "",
@@ -462,7 +473,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/18202705587/Tower-of-Ginga-Glory",
   },
   {
-    rank: 38,
+    rank: 39,
     name: "Tower of Memorization",
     creator: "LaimeRX",
     verifier: "",
@@ -473,7 +484,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/7023281752/tower-of-memorization",
   },
   {
-    rank: 39,
+    rank: 40,
     name: "wucaf tower",
     creator: "chicken",
     verifier: "",
@@ -484,7 +495,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/94393197713029/wucaf-tower",
   },
   {
-    rank: 40,
+    rank: 41,
     name: "Citadel of Wicked Boogers",
     creator: "PoptartPunt, Jschirtzer, Higherthanblox, Adan3842, SungazedUwU, Macloux, Findable, D_yni",
     verifier: "",
@@ -495,7 +506,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/123328980290815/Citadel-of-Wicked-Booger",
   },
   {
-    rank: 41,
+    rank: 42,
     name: "Tower of Adrifted Behemoth",
     creator: "Ice2900, LanyWorId, coconutHair7, GAMAGORA22, huddca",
     verifier: "",
@@ -506,7 +517,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/14505962994/Tower-of-Adrifted-Behemoth",
   },
   {
-    rank: 42,
+    rank: 43,
     name: "Tower of Dead Grandma 2",
     creator: "ZachTheTrxhard, JohnTheTrxhard, Senztrix",
     verifier: "",
@@ -517,7 +528,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/10436183562/Tower-of-Dead-Grandma-2",
   },
   {
-    rank: 43,
+    rank: 44,
     name: "Tower of Tight Gaps",
     creator: "jabohappy",
     verifier: "",
@@ -528,7 +539,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/120058872334027/Tower-of-Tight-Gaps",
   },
   {
-    rank: 44,
+    rank: 45,
     name: "Tower of Parody",
     creator: "benceiyibendy",
     verifier: "",
@@ -539,7 +550,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/N/A/Tower-of-Parody",
   },
   {
-    rank: 45,
+    rank: 46,
     name: "Tower of Extinction",
     creator: "ZePlayerSlayer, Skitsuna",
     verifier: "",
@@ -550,7 +561,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/121825417102850/Tower-of-Extinction",
   },
   {
-    rank: 46,
+    rank: 47,
     name: "Tower of Unrealistic Victory",
     creator: "One_GuestDream",
     verifier: "",
@@ -561,7 +572,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/13723458889/Tower-of-Unrealistic-Victory",
   },
   {
-    rank: 47,
+    rank: 48,
     name: "Steeple of Eating Snakes",
     creator: "Twolova, Chanlack, Dragongoldking0, KING_JIJO",
     verifier: "",
@@ -572,7 +583,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/121990219081062/Steeple-of-Eating-Snakes",
   },
   {
-    rank: 48,
+    rank: 49,
     name: "Tower of Achromatic Iridescence",
     creator: "N/A",
     verifier: "",
@@ -583,7 +594,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/109784757798231/Tower-of-Achromatic-Iridescence",
   },
   {
-    rank: 49,
+    rank: 50,
     name: "Tower of Sacrilegious Jumps",
     creator: "AbyssalChaos, brandchaos0001",
     verifier: "",
@@ -594,7 +605,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/11700494590/Tower-of-Sacrilegious-Jumps",
   },
   {
-    rank: 50,
+    rank: 51,
     name: "Great Citadel of Example Great Citadel 1",
     creator: "avergex, fish",
     verifier: "",
@@ -605,7 +616,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/123891083799204/Great-Citadel-of-Example-Great-Citadel-1",
   },
   {
-    rank: 51,
+    rank: 52,
     name: "Steeple of Happy",
     creator: "aspen",
     verifier: "",
@@ -616,7 +627,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/131865090996608/Steeple-of-Happy",
   },
   {
-    rank: 52,
+    rank: 53,
     name: "Tuscan Tower",
     creator: "Satrrn",
     verifier: "",
@@ -627,7 +638,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/130653473431229/tuscan-tower",
   },
   {
-    rank: 53,
+    rank: 54,
     name: "Tower of The End",
     creator: "Loftproft, grindman11116",
     verifier: "",
@@ -638,7 +649,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/86353796996046/Tower-of-The-End-P-T",
   },
   {
-    rank: 54,
+    rank: 55,
     name: "Saudi Arabia Tower",
     creator: "dfwhank",
     verifier: "",
@@ -649,7 +660,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/109678222146884/saudi-arabia-tower",
   },
   {
-    rank: 55,
+    rank: 56,
     name: "Tower of Funny Fish",
     creator: "D_yni",
     verifier: "",
@@ -660,7 +671,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/11379081828/Tower-of-Funny-Fish",
   },
   {
-    rank: 56,
+    rank: 57,
     name: "Machine Girl Tower",
     creator: "wqntrr",
     verifier: "",
@@ -671,7 +682,7 @@ const LEVELS = [
     robloxLink: "",
   },
   {
-    rank: 57,
+    rank: 58,
     name: "100M Vengeance",
     creator: "arturKlng",
     verifier: "",
@@ -682,7 +693,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/135243516239639/100M-Vengeance",
   },
   {
-    rank: 58,
+    rank: 59,
     name: "LC Waikiki Tower",
     creator: "Goat, Saltykidsaretoxic, _lyuri",
     verifier: "",
@@ -693,7 +704,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/83578010472722/LC-Waikiki-Tower",
   },
   {
-    rank: 59,
+    rank: 60,
     name: "Tower of The Drive Towards Human Limits",
     creator: "Adan3842, Findabletag, MonsterIsABlock",
     verifier: "",
@@ -704,7 +715,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/125252864219980/Tower-of-The-Drive-Towards-Human-Limits",
   },
   {
-    rank: 60,
+    rank: 61,
     name: "Tower of False Confidence",
     creator: "ashoutdev2, cristololo",
     verifier: "",
@@ -715,7 +726,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/118250523983734/tower-of-generation-succes",
   },
   {
-    rank: 61,
+    rank: 62,
     name: "Popsicle Tower",
     creator: "SouIIev",
     verifier: "",
@@ -726,7 +737,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/100153787759422/tower-of-Popsicle-Tower",
   },
   {
-    rank: 62,
+    rank: 63,
     name: "Tower of Chewing Gum",
     creator: "Subang_Jaya",
     verifier: "",
@@ -737,7 +748,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/18395822264/Tower-of-Chewing-Gum",
   },
   {
-    rank: 63,
+    rank: 64,
     name: "Tower of Extended Difficulty Chart",
     creator: "sagway, sikooo22, maxiuns, Misha_M12M",
     verifier: "",
@@ -748,7 +759,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/71644854306627/Tower-of-Extended-Difficulty-Chart",
   },
   {
-    rank: 64,
+    rank: 65,
     name: "Really Impossible Platforming Tower",
     creator: "ssolarig",
     verifier: "",
@@ -759,7 +770,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/132152244035380/Really-Impossible-Platforming",
   },
   {
-    rank: 65,
+    rank: 66,
     name: "Tower of Inordinately Deceptional Arduous Mishap",
     creator: "callenceruleancerise",
     verifier: "",
@@ -772,7 +783,7 @@ const LEVELS = [
 
   // UNREAL DIFFICULTY
   {
-    rank: 66,
+    rank: 67,
     name: "Tower of Insane Zodiac",
     creator: "bilmoment",
     verifier: "",
@@ -783,7 +794,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/91634804321932/Tower-of-Insane-Zodiac",
   },
   {
-    rank: 67,
+    rank: 68,
     name: "Tower of Mushroom",
     creator: "Taste_Pepsi1, canteloupe3727",
     verifier: "",
@@ -794,7 +805,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/11857764752/Tower-of-Mushroom#ropro-quick-play",
   },
   {
-    rank: 68,
+    rank: 69,
     name: "Tower of Void",
     creator: "bLockerman666, IceNsalt, ciel_azulsky, popop614, Feodoric, PPtTenshi",
     verifier: "",
@@ -805,7 +816,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/88462999400021/Tower-of-Void-practice",
   },
   {
-    rank: 69,
+    rank: 70,
     name: "Tower of The Quest For Perfection",
     creator: "4d9r, bLockerman666, BigScaryMonster10G",
     verifier: "Gehadimad",
@@ -816,7 +827,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/14860104753/Tower-of-The-Quest-For-Perfection-Fixed",
   },
   {
-    rank: 70,
+    rank: 71,
     name: "Tower of The Concluding Run",
     creator: "sokol50",
     verifier: "GlizzyGladiator",
@@ -827,7 +838,7 @@ const LEVELS = [
     robloxLink: "",
   },
   {
-    rank: 71,
+    rank: 72,
     name: "Hellish Extermination Labyrinth",
     creator: "AddisonJudah, Tetrix_Masterll, yuienaaaa, Hyperfantasies",
     verifier: "",
@@ -838,7 +849,7 @@ const LEVELS = [
     robloxLink: "",
   },
   {
-    rank: 72,
+    rank: 73,
     name: "Tower of Flotage",
     creator: "cIoverdove",
     verifier: "",
@@ -849,7 +860,7 @@ const LEVELS = [
     robloxLink: "",
   },
   {
-    rank: 73,
+    rank: 74,
     name: "Tower of Multiversal Dream Archive",
     creator: "ZePlayerSlayer",
     verifier: "",
@@ -860,7 +871,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/109123863452692/Tower-of-Multiversal-Dream-Archive",
   },
   {
-    rank: 74,
+    rank: 75,
     name: "Tower of My Emotional Compass",
     creator: "a1ien_ation, HydridLevitation",
     verifier: "",
@@ -871,7 +882,7 @@ const LEVELS = [
     robloxLink: "",
   },
   {
-    rank: 75,
+    rank: 76,
     name: "Tower of It Never Ends",
     creator: "ciel_azulsky",
     verifier: "MonsterIsABlock",
@@ -882,7 +893,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/107705095969573/tower-of-IT-NEVER-ENDS",
   },
   {
-    rank: 76,
+    rank: 77,
     name: "STONE: Reborn",
     creator: "IceNsalt, Zakki",
     verifier: "MonsterIsABlock",
@@ -893,7 +904,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/5711190403/The-S-T-O-N-E-Facility",
   },
   {
-    rank: 77,
+    rank: 78,
     name: "Tower of Impending Doom",
     creator: "pczm1, Forstaken2008xs, mikolajole, skitsuna, walroooos, Celest_Z, Demolisher_11",
     verifier: "greenbean1421",
@@ -904,7 +915,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/15177865210/Tower-of-Impending-Doom#!/about",
   },
   {
-    rank: 78,
+    rank: 79,
     name: "Tower of Wigglecore",
     creator: "ScorpioexLOLez, kkdpracticeacc",
     verifier: "BoomSasok",
@@ -915,7 +926,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/15873244701/JToH-The-Eternal-Abyss",
   },
   {
-    rank: 79,
+    rank: 80,
     name: "Tower of Monochromatic Haze",
     creator: "Gehadimadm, tweet2a, Forstaken2008xs",
     verifier: "Gehadimad",
@@ -926,7 +937,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/117307574423766/Tower-of-Monochromatic-Haze-List-Version",
   },
   {
-    rank: 80,
+    rank: 81,
     name: "Tower of Rebirth The End",
     creator: "Polovnik30, Sokol50",
     verifier: "",
@@ -937,7 +948,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/70581657896182/Tower-of-Rebirth-the-End",
   },
   {
-    rank: 81,
+    rank: 82,
     name: "Tower of My Inner Hatred",
     creator: "Reimu Hakurei, Kinjiture, BFFPikachu",
     verifier: "ZePlayerSlayer",
@@ -948,7 +959,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/119663832848907/Tower-of-My-Inner-Hatred",
   },
   {
-    rank: 82,
+    rank: 83,
     name: "Tower of Spiralling Fates",
     creator: "ciel_azulsky",
     verifier: "MonsterIsABlock",
@@ -959,7 +970,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/130741996193452/Tower-of-Spiralling-Fates",
   },
   {
-    rank: 83,
+    rank: 84,
     name: "Citadel of Cold Blooded Fatality",
     creator: "n_rtex, a6iq1",
     verifier: "BlackportTransport",
@@ -970,7 +981,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/71138470084002/Citadel-of-Cold-Blooded-Fatality",
   },
   {
-    rank: 84,
+    rank: 85,
     name: "Obelisk of Unrealistic Sightings",
     creator: "Apple_FlavoredWater, yuienaaaa, CamronSkilIz, Killer818616",
     verifier: "Pyuruw",
@@ -981,7 +992,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/4777161742/Obelisk-of-Unrealistic-Sightings",
   },
   {
-    rank: 85,
+    rank: 86,
     name: "Tower of Celestial Bloom",
     creator: "zkv07, glizzygladiattorrr",
     verifier: "hyperionblades",
@@ -992,7 +1003,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/140232542804431/Tower-of-Celestial-Bloom",
   },
   {
-    rank: 86,
+    rank: 87,
     name: "Tower of Qwerty Uiop",
     creator: "Purple_BaconHair",
     verifier: "jeang4me",
@@ -1003,7 +1014,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/7769438539/Tower-of-Qwerty-Uiop",
   },
   {
-    rank: 87,
+    rank: 88,
     name: "Citadel of The Eternal Calamity",
     creator: "susplayerslayer",
     verifier: "Marqulitt",
@@ -1014,7 +1025,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/12121834605/The-Eternal-Calamity-ULTIMATE",
   },
   {
-    rank: 88,
+    rank: 89,
     name: "Citadel of Infinite Void",
     creator: "bLockerman666, IceNsalt, popop614, ciel_azulsky, PPtTenshi, latomludo, Heksi, nott_vy, skitsuna, mrgamingpotato1",
     verifier: "skitsuna",
@@ -1025,7 +1036,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/10199085458/Citadel-of-Infinite-Void",
   },
   {
-    rank: 89,
+    rank: 90,
     name: "Tower of Blind Fate",
     creator: "Nosav",
     verifier: "tinenderman",
@@ -1036,7 +1047,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/3100988051/Tower-of-Blind-Fate",
   },
   {
-    rank: 90,
+    rank: 91,
     name: "Tower of Paradise",
     creator: "Macloux",
     verifier: "Yazmania_1m",
@@ -1047,7 +1058,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/10541580790/Tower-of-Paradise",
   },
   {
-    rank: 91,
+    rank: 92,
     name: "Tower of Maybe In Mumbai",
     creator: "Naz0dial, Stitch, Hexium, brub, arik21, az77, zkv07, asAGAIN, nortex, dom, ChillUltralight, spear, geo, twossed.173, NadiPlaysss",
     verifier: "ChillUltralight",
@@ -1058,7 +1069,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/83052485504037/Tower-of-Maybe-in-Mumbai",
   },
   {
-    rank: 92,
+    rank: 93,
     name: "Tower of Withered Consensus",
     creator: "glizzygladiattorrr",
     verifier: "glizzygladiattorrr",
@@ -1069,7 +1080,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/85794013389625/Tower-of-Withered-Consensus",
   },
   {
-    rank: 93,
+    rank: 94,
     name: "Target Tower",
     creator: "DukeQD, Forstaken2008xs, Tritone246",
     verifier: "player0v0",
@@ -1080,7 +1091,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/16730891689/",
   },
   {
-    rank: 94,
+    rank: 95,
     name: "Tower of Zen Surplus",
     creator: "ciel_azulsky, skitsuna",
     verifier: "SeeRyanplayroblox",
@@ -1091,7 +1102,7 @@ const LEVELS = [
     robloxLink: "",
   },
   {
-    rank: 95,
+    rank: 96,
     name: "Tower of Twenty Two",
     creator: "mccatster, jeremylightbulb, zelirium, ghoned, G1adit, carmeniscool12525_2",
     verifier: "carmeniscool12525_2",
@@ -1102,7 +1113,7 @@ const LEVELS = [
     robloxLink: "",
   },
   {
-    rank: 96,
+    rank: 97,
     name: "3008 Tower",
     creator: "pczm1",
     verifier: "ChillUltralight",
@@ -1113,7 +1124,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/17401926899/3008-Tower",
   },
   {
-    rank: 97,
+    rank: 98,
     name: "Ikea Tower",
     creator: "Higherthanblox",
     verifier: "MonsterIsABlock",
@@ -1124,7 +1135,7 @@ const LEVELS = [
     robloxLink: "https://www.roblox.com/games/17379816541/Sweden-Tower",
   },
   {
-    rank: 98,
+    rank: 99,
     name: "Mini and Not Great Obelisk of Mini and Not Great Obelisk",
     creator: "joelkoot, Tomasklimt, damadman11, Renzovanhooren, fedde201, rutra6665, Wesleytjes",
     verifier: "",
@@ -1135,7 +1146,7 @@ const LEVELS = [
     robloxLink: "",
   },
   {
-    rank: 99,
+    rank: 100,
     name: "Tower of Sudden Death",
     creator: "WaterMakeer, CosmikChaos",
     verifier: "skitsuna",
