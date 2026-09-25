@@ -1,10 +1,10 @@
 /* =========================================================
    IMPOSSIBLE TOWER LIST — script.js (jQuery + Supabase version)
-   Cache-bust: v12-rate-limit-protection
+   Cache-bust: v10-new-api-keys
    ========================================================= */
 
 /* =========================================================
-   KONFIGURACJA SUPABASE - DWA PROJEKTY
+   KONFIGURACJA SUPABASE - DWA PROJEKTY (NOWE KLUCZE!)
    ========================================================= */
 
 // PROJEKT 1: Feedback + Online counter
@@ -66,6 +66,7 @@ const ICON_NIL = '<svg class="diff-icon" viewBox="0 0 100 100"><polygon points="
 
 const ICON_ERROR = '<svg class="diff-icon" viewBox="0 0 100 100"><rect x="8" y="8" width="84" height="84" rx="4" fill="#cc2222" stroke="#991111" stroke-width="6"/></svg>';
 
+// TWOJE WŁASNE IKONKI Z WIKIA
 const ICON_LITERAL = '<img class="diff-icon" src="https://static.wikia.nocookie.net/jtohs-hardest-towers/images/0/06/L5.png/revision/latest?cb=20260514110329" alt="">';
 
 const ICON_WHY = '<img class="diff-icon" src="https://static.wikia.nocookie.net/jtohs-hardest-towers/images/6/65/Why.png/revision/latest?cb=20231025155110" alt="">';
@@ -149,10 +150,13 @@ function difficultyIcon(parsed) {
   if (parsed.prefix === "High-Peak") return ICON_UNREAL;
   const b = parsed.base.toLowerCase();
   
+  // Istniejące
   if (b === "horrific") return ICON_HORRIFIC;
   if (b === "unreal") return ICON_UNREAL;
   if (b === "nil") return ICON_NIL;
   if (b === "error") return ICON_ERROR;
+  
+  // Nowe difficulty
   if (b === "literal") return ICON_LITERAL;
   if (b === "why") return ICON_WHY;
   if (b === "no") return ICON_NO;
@@ -186,30 +190,10 @@ let query = "";
 const CHEVRON_SVG = '<svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
 
 /* =========================================================
-   SYSTEM LIKÓW — z RATE LIMITING
+   SYSTEM LIKÓW — używa sbClientLikes (PROJEKT 2)
    ========================================================= */
 
 const likesCache = {};
-
-// Rate limiter (client-side protection)
-const rateLimiter = {
-  clicks: [],
-  maxPerMinute: 10,
-  
-  canClick() {
-    const now = Date.now();
-    // Usuń kliknięcia starsze niż 1 minuta
-    this.clicks = this.clicks.filter(t => now - t < 60000);
-    
-    if (this.clicks.length >= this.maxPerMinute) {
-      console.warn("[Rate Limit] Too many clicks! Max 10 per minute.");
-      return false;
-    }
-    
-    this.clicks.push(now);
-    return true;
-  }
-};
 
 function getUserId() {
   let fp = localStorage.getItem("tower_fp_id");
@@ -275,12 +259,6 @@ async function fetchLikeCount(towerId) {
 
 async function sendLike(towerId, liked) {
   if (!sbClientLikes) return likesCache[towerId] || 0;
-
-  // CLIENT-SIDE RATE LIMIT CHECK
-  if (!rateLimiter.canClick()) {
-    console.warn("[Likes] Rate limit exceeded (client-side)");
-    return null;
-  }
 
   const userId = getUserId();
 
