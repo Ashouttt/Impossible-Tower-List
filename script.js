@@ -1,10 +1,10 @@
 /* =========================================================
    IMPOSSIBLE TOWER LIST — script.js (jQuery + Supabase version)
-   Cache-bust: v10-new-api-keys
+   Cache-bust: v11-fixed-icons
    ========================================================= */
 
 /* =========================================================
-   KONFIGURACJA SUPABASE - DWA PROJEKTY (NOWE KLUCZE!)
+   KONFIGURACJA SUPABASE - DWA PROJEKTY
    ========================================================= */
 
 // PROJEKT 1: Feedback + Online counter
@@ -66,28 +66,18 @@ const ICON_NIL = '<svg class="diff-icon" viewBox="0 0 100 100"><polygon points="
 
 const ICON_ERROR = '<svg class="diff-icon" viewBox="0 0 100 100"><rect x="8" y="8" width="84" height="84" rx="4" fill="#cc2222" stroke="#991111" stroke-width="6"/></svg>';
 
-// TWOJE WŁASNE IKONKI Z WIKIA
-const ICON_LITERAL = '<img class="diff-icon" src="https://static.wikia.nocookie.net/jtohs-hardest-towers/images/0/06/L5.png/revision/latest?cb=20260514110329" alt="">';
-
-const ICON_WHY = '<img class="diff-icon" src="https://static.wikia.nocookie.net/jtohs-hardest-towers/images/6/65/Why.png/revision/latest?cb=20231025155110" alt="">';
-
-const ICON_NO = '<img class="diff-icon" src="https://static.wikia.nocookie.net/jtohs-hardest-towers/images/0/04/No.png/revision/latest/scale-to-width-down/1000?cb=20260423143720" alt="">';
-
-const ICON_DEATH = '<img class="diff-icon" src="https://static.wikia.nocookie.net/jtohs-hardest-towers/images/9/90/DEATHrevamp.png/revision/latest?cb=20240420012614" alt="">';
-
-const ICON_HELL = '<img class="diff-icon" src="https://static.wikia.nocookie.net/jtohs-hardest-towers/images/d/d7/HELL.png/revision/latest?cb=20231025155246" alt="">';
-
-const ICON_TARTARUS = '<img class="diff-icon" src="https://static.wikia.nocookie.net/jtohs-hardest-towers/images/7/7e/TARTARUS.png/revision/latest?cb=20231025155305" alt="">';
-
-const ICON_UNIMAGINABLE = '<img class="diff-icon" src="https://static.wikia.nocookie.net/jtohs-hardest-towers/images/c/c2/Shouldn%E2%80%99t_Be_Possible.png/revision/latest?cb=20231025155359" alt="">';
-
-const ICON_ALEPH = '<img class="diff-icon" src="https://static.wikia.nocookie.net/jtohs-hardest-towers/images/b/ba/Alephnull2.png/revision/latest/scale-to-width-down/1000?cb=20260921221110" alt="">';
-
-const ICON_IMMEASURABLE = '<img class="diff-icon" src="https://static.wikia.nocookie.net/jtohs-hardest-towers/images/6/63/Immeasurable-0.png/revision/latest?cb=20231025155432" alt="">';
-
-const ICON_MALICIOUS = '<img class="diff-icon" src="https://static.wikia.nocookie.net/jtohs-hardest-towers/images/6/65/Malicious.4.png/revision/latest/scale-to-width-down/1000?cb=20260618172840" alt="">';
-
-const ICON_ROORXD = '<img class="diff-icon" src="https://static.wikia.nocookie.net/jtohs-hardest-towers/images/0/0f/Roorxd2.png/revision/latest/scale-to-width-down/1000?cb=20260618173912" alt="">';
+// ========== IKONY DIFFICULTY (IMGUR - NAPRAWIONE) ==========
+const ICON_LITERAL = '<img class="diff-icon" src="https://i.imgur.com/1D7vy3V.png" alt="">';
+const ICON_WHY = '<img class="diff-icon" src="https://i.imgur.com/p0RyBgd.png" alt="">';
+const ICON_NO = '<img class="diff-icon" src="https://i.imgur.com/GdKvmTl.png" alt="">';
+const ICON_DEATH = '<img class="diff-icon" src="https://i.imgur.com/qy37t7y.png" alt="">';
+const ICON_HELL = '<img class="diff-icon" src="https://i.imgur.com/QJMlFZC.png" alt="">';
+const ICON_TARTARUS = '<img class="diff-icon" src="https://i.imgur.com/JOZcqpe.png" alt="">';
+const ICON_UNIMAGINABLE = '<img class="diff-icon" src="https://i.imgur.com/T9BTvyJ.png" alt="">';
+const ICON_ALEPH = '<img class="diff-icon" src="https://i.imgur.com/cAKdch2.png" alt="">';
+const ICON_IMMEASURABLE = '<img class="diff-icon" src="https://i.imgur.com/zpLMCz0.png" alt="">';
+const ICON_MALICIOUS = '<img class="diff-icon" src="https://i.imgur.com/xITLLi3.png" alt="">';
+const ICON_ROORXD = '<img class="diff-icon" src="https://i.imgur.com/BRAKUJE_TEGO.png" alt="">'; // ⚠️ NIE PODAŁEŚ TEGO!
 
 const ICON_ROBLOX = '<svg class="place-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M4.24 0L0 19.76 19.76 24 24 4.24 4.24 0zM9.6 8.4l6 1.4-1.4 6-6-1.4 1.4-6z"/></svg>';
 
@@ -156,7 +146,7 @@ function difficultyIcon(parsed) {
   if (b === "nil") return ICON_NIL;
   if (b === "error") return ICON_ERROR;
   
-  // Nowe difficulty
+  // Nowe difficulty (IMGUR)
   if (b === "literal") return ICON_LITERAL;
   if (b === "why") return ICON_WHY;
   if (b === "no") return ICON_NO;
